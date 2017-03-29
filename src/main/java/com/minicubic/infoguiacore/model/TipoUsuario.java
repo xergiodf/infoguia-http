@@ -2,10 +2,12 @@ package com.minicubic.infoguiacore.model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,8 +15,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -29,57 +35,47 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "TipoUsuario.findByDescripcion", query = "SELECT t FROM TipoUsuario t WHERE t.descripcion = :descripcion")
 })
 public class TipoUsuario implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
+    @Getter
+    @Setter
     private Integer id;
 
     @Basic(optional = false)
     @Column(name = "descripcion")
+    @Getter
+    @Setter
     private String descripcion;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoUsuario")
-    private Collection<Usuario> usuarioCollection;
+    @Column(name = "audit_usuario")
+    @Getter
+    @Setter
+    private String auditUsuario;
 
-    public TipoUsuario() {
-    }
+    @Column(name = "audit_fecha_insert", insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Getter
+    @Setter
+    private Date auditFechaInsert;
+    
+    @Column(name = "audit_fecha_update", insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Getter
+    @Setter
+    private Date auditFechaUpdate;
 
-    public TipoUsuario(Integer id) {
-        this.id = id;
-    }
-
-    public TipoUsuario(Integer id, String descripcion) {
-        this.id = id;
-        this.descripcion = descripcion;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoUsuario", fetch = FetchType.LAZY)
+    private Collection<Usuario> usuarios;
 
     @XmlTransient
     public Collection<Usuario> getUsuarioCollection() {
-        return usuarioCollection;
+        return usuarios;
     }
-
-    public void setUsuarioCollection(Collection<Usuario> usuarioCollection) {
-        this.usuarioCollection = usuarioCollection;
+    public void setUsuarios(Collection<Usuario> usuarios) {
+        this.usuarios = usuarios;
     }
 
     @Override
@@ -106,5 +102,4 @@ public class TipoUsuario implements Serializable {
     public String toString() {
         return "com.minicubic.infoguiaserver.model.TipoUsuario[ id=" + id + " ]";
     }
-
 }

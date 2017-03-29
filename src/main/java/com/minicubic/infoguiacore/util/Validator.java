@@ -1,10 +1,9 @@
 package com.minicubic.infoguiacore.util;
 
+import com.minicubic.infoguiacore.dto.CategoriaDto;
 import com.minicubic.infoguiacore.dto.ClienteDto;
 import com.minicubic.infoguiacore.dto.ClientePublicacionDto;
 import com.minicubic.infoguiacore.dto.ClienteSucursalDto;
-import com.minicubic.infoguiacore.dto.Response;
-import com.minicubic.infoguiacore.dto.SucursalContactoDto;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.dto.ValidatorResponse;
 
@@ -33,6 +32,11 @@ public class Validator {
     public ValidatorResponse<Boolean> validateAddUsuario(UsuarioDto usuarioDto) {
         ValidatorResponse<Boolean> response = new ValidatorResponse<>();
         response.setData(new Boolean(true));
+        
+        if ( Util.isEmpty(usuarioDto.getEmail()) ) {
+            response.setData(new Boolean(false));
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_USUARIO_EMAIL_REQUIRED));
+        }
         
         if ( Util.isEmpty(usuarioDto.getUsername()) ) {
             response.setData(new Boolean(false));
@@ -138,28 +142,13 @@ public class Validator {
         return response;
     }
     
-    /**
-     * 
-     * @param sucursalContactoDto
-     * @return 
-     */
-    public ValidatorResponse<Boolean> validateAddSucursalContacto(SucursalContactoDto sucursalContactoDto) {
+    public ValidatorResponse<Boolean> validateAddCategoria(CategoriaDto categoriaDto) {
         ValidatorResponse<Boolean> response = new ValidatorResponse<>();
         response.setData(new Boolean(true));
         
-        if ( Util.isEmpty(sucursalContactoDto.getTipoContactoDto()) ) {
+        if ( Util.isEmpty(categoriaDto.getDescripcion()) ) {
             response.setData(new Boolean(false));
-            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_CONTACTO_TIPO_REQUIRED));
-        }
-        
-        if ( Util.isEmpty(sucursalContactoDto.getContacto()) ) {
-            response.setData(new Boolean(false));
-            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_CONTACTO_CONTACTO_REQUIRED));
-        }
-        
-        if ( Util.isEmpty(sucursalContactoDto.getClienteSucursalDto()) ) {
-            response.setData(new Boolean(false));
-            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_CONTACTO_SUCURSAL_REQUIRED));
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_CATEGORIA_DESCRIPCION));
         }
         
         return response;

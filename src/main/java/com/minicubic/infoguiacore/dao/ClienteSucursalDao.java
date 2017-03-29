@@ -19,7 +19,7 @@ import javax.persistence.PersistenceContext;
 public class ClienteSucursalDao implements Serializable{
 
     private final ClienteSucursalConverter converter = new ClienteSucursalConverter();
-    private static final Logger LOG = Logger.getLogger("ClienteSucursalService");
+    private static final Logger LOG = Logger.getLogger("ClienteSucursalDao");
     
     @PersistenceContext(unitName="infoGuiaPU")
     private EntityManager em;
@@ -88,10 +88,8 @@ public class ClienteSucursalDao implements Serializable{
         try {
             ClienteSucursal cliente = converter.getClienteSucursal(clienteSucursalDto);
 
-            em.getTransaction().begin();
             cliente = em.merge(cliente);
             em.flush();
-            em.getTransaction().commit();
 
             return converter.getClienteSucursalDto(cliente);
         } catch (IllegalAccessException | InvocationTargetException ex) {

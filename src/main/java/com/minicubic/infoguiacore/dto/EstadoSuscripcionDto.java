@@ -3,26 +3,27 @@ package com.minicubic.infoguiacore.dto;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
- * @author hectorvillalba
+ * @author xergio
+ * @version 1
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Response<T> {
-    @Getter
-    @Setter
-    private Integer codigo;
+@ToString
+@EqualsAndHashCode
+public class EstadoSuscripcionDto {
 
     @Getter
     @Setter
-    private String mensaje;
+    private Integer id;
 
     @Getter
     @Setter
-    private T data;
-
+    private String descripcion;
 }

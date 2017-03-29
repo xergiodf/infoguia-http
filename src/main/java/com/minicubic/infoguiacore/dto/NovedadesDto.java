@@ -2,17 +2,20 @@ package com.minicubic.infoguiacore.dto;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
- * @author hectorvillalba
+ * @author xergio
+ * @version 1
  */
-@Data
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
+@ToString
+@EqualsAndHashCode
 public class NovedadesDto {
    
     @Getter

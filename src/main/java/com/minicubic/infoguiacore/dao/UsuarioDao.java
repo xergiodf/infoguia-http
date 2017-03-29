@@ -22,7 +22,7 @@ import javax.persistence.PersistenceContext;
 public class UsuarioDao {
 
     private final UsuarioConverter converter = new UsuarioConverter();
-    private static final Logger LOG = Logger.getLogger("UsuarioService");
+    private static final Logger LOG = Logger.getLogger("UsuarioDao");
     
     @PersistenceContext(unitName="infoGuiaPU")
     private EntityManager em;
@@ -50,6 +50,22 @@ public class UsuarioDao {
         return null;
     }
     
+    /**
+     * 
+     * @return 
+     */
+    public List<UsuarioDto> getUsuarios() {
+        try {
+            List<Usuario> usuarios = em.createNamedQuery("Usuario.findAll")
+                    .getResultList();
+
+            return converter.getUsuariosDto(usuarios);
+        } catch (NoResultException nre) {
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     /**
      *
@@ -67,6 +83,19 @@ public class UsuarioDao {
         } catch (IllegalAccessException | InvocationTargetException ex) {
             LOG.log(Level.SEVERE, null, ex);
             return null;
+        }
+    }
+    
+        public void deleteUsuario(Long id) {
+        try {
+            Usuario usuario = (Usuario) em.createNamedQuery("Usuario.findById")
+                    .setParameter("id", id)
+                    .getSingleResult();
+
+            em.remove(usuario);
+            em.flush();
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
     

@@ -10,8 +10,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -27,37 +25,36 @@ import lombok.ToString;
 
 /**
  *
- * @author hectorvillalba
+ * @author xergio
+ * @version 1
  */
 @Entity
-@Table(name = "sucursal_horarios_cab")
+@Table(name = "tipos_ofertas")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SucursalHorarioCab.findAll", query = "SELECT s FROM SucursalHorarioCab s"),
-    @NamedQuery(name = "SucursalHorarioCab.findById", query = "SELECT s FROM SucursalHorarioCab s WHERE s.id = :id")})
+    @NamedQuery(name = "TipoOferta.findAll", query = "SELECT t FROM TipoOferta t"), 
+    @NamedQuery(name = "TipoOferta.findById", query = "SELECT t FROM TipoOferta t WHERE t.id = :id"), 
+    @NamedQuery(name = "TipoOferta.findByDescripcion", query = "SELECT t FROM TipoOferta t WHERE t.descripcion = :descripcion"), 
+    @NamedQuery(name = "TipoOferta.findByAuditUsuario", query = "SELECT t FROM TipoOferta t WHERE t.auditUsuario = :auditUsuario"), 
+    @NamedQuery(name = "TipoOferta.findByAuditFechaInsert", query = "SELECT t FROM TipoOferta t WHERE t.auditFechaInsert = :auditFechaInsert"), 
+    @NamedQuery(name = "TipoOferta.findByAuditFechaUpdate", query = "SELECT t FROM TipoOferta t WHERE t.auditFechaUpdate = :auditFechaUpdate")})
 @ToString
 @EqualsAndHashCode
-public class SucursalHorarioCab implements Serializable {
-    
+public class TipoOferta implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @Getter
+    @Setter
     private Integer id;
-    
-    @JoinColumn(name = "id_tipo_horario", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+
+    @Column(name = "descripcion")
     @Getter
     @Setter
-    private TipoHorario tipoHorario;
-    
-    @JoinColumn(name = "id_cliente_sucursal", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @Getter
-    @Setter
-    private ClienteSucursal clienteSucursal;
-    
+    private String descripcion;
+
     @Column(name = "audit_usuario")
     @Getter
     @Setter
@@ -75,14 +72,14 @@ public class SucursalHorarioCab implements Serializable {
     @Setter
     private Date auditFechaUpdate;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sucursalHorarioCab", fetch = FetchType.LAZY)
-    private Collection<SucursalHorarioDet> sucursalHorariosDets;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoOferta", fetch = FetchType.LAZY)
+    private Collection<ClienteOferta> clienteOfertas;
 
     @XmlTransient
-    public Collection<SucursalHorarioDet> getSucursalHorariosDets() {
-        return sucursalHorariosDets;
+    public Collection<ClienteOferta> getClienteOfertas() {
+        return clienteOfertas;
     }
-    public void setSucursalHorariosDetList(Collection<SucursalHorarioDet> sucursalHorariosDets) {
-        this.sucursalHorariosDets = sucursalHorariosDets;
+    public void setClienteOfertas(Collection<ClienteOferta> clienteOfertas) {
+        this.clienteOfertas = clienteOfertas;
     }
 }

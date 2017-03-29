@@ -78,7 +78,7 @@ public class ClienteRest {
     @POST
     @Secured
     @Path("/add")
-    @ApiOperation(value = "Obtiene un registro de Clientes en base a un ID")
+    @ApiOperation(value = "Agrega un registro de Publicacion de Cliente")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 406, message = "Error de Validacion"),

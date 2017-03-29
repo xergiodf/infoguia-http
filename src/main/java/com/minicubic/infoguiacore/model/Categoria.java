@@ -2,18 +2,27 @@ package com.minicubic.infoguiacore.model;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.persistence.Basic;
+import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -24,83 +33,62 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "categorias")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Categoria.findAll", query = "SELECT c FROM Categoria c")
-    , @NamedQuery(name = "Categoria.findById", query = "SELECT c FROM Categoria c WHERE c.id = :id")
-    , @NamedQuery(name = "Categoria.findByDescripcion", query = "SELECT c FROM Categoria c WHERE c.descripcion = :descripcion")})
+    @NamedQuery(name = "Categoria.findAll", query = "SELECT c FROM Categoria c"), 
+    @NamedQuery(name = "Categoria.findById", query = "SELECT c FROM Categoria c WHERE c.id = :id"), 
+    @NamedQuery(name = "Categoria.findByDescripcion", query = "SELECT c FROM Categoria c WHERE c.descripcion = :descripcion")})
+@ToString
+@EqualsAndHashCode
 public class Categoria implements Serializable {
-
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
+    @Getter
+    @Setter
     private Integer id;
-    @Basic(optional = false)
+
     @Column(name = "descripcion")
+    @Getter
+    @Setter
     private String descripcion;
-    @ManyToMany(mappedBy = "categoriaCollection")
-    private Collection<Cliente> clienteCollection;
 
-    public Categoria() {
+    @Column(name = "audit_usuario")
+    @Getter
+    @Setter
+    private String auditUsuario;
+
+    @Column(name = "audit_fecha_insert", insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Getter
+    @Setter
+    private Date auditFechaInsert;
+    
+    @Column(name = "audit_fecha_update", insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Getter
+    @Setter
+    private Date auditFechaUpdate;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria", fetch = FetchType.LAZY)
+    private Collection<ClienteCategoria> clienteCategorias;
+    
+    @ManyToMany(mappedBy = "categorias")
+    private Collection<Cliente> clientes;
+
+    @XmlTransient
+    public Collection<Cliente> getClientes() {
+        return clientes;
     }
-
-    public Categoria(Integer id) {
-        this.id = id;
-    }
-
-    public Categoria(Integer id, String descripcion) {
-        this.id = id;
-        this.descripcion = descripcion;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setClientes(Collection<Cliente> clientes) {
+        this.clientes = clientes;
     }
 
     @XmlTransient
-    public Collection<Cliente> getClienteCollection() {
-        return clienteCollection;
+    public Collection<ClienteCategoria> getClienteCategorias() {
+        return clienteCategorias;
     }
-
-    public void setClienteCollection(Collection<Cliente> clienteCollection) {
-        this.clienteCollection = clienteCollection;
+    public void setClienteCategorias(Collection<ClienteCategoria> clienteCategorias) {
+        this.clienteCategorias = clienteCategorias;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Categoria)) {
-            return false;
-        }
-        Categoria other = (Categoria) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.minicubic.infoguiacore.model.Categoria[ id=" + id + " ]";
-    }
-
 }

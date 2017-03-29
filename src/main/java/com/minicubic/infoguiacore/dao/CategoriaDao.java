@@ -1,9 +1,8 @@
 package com.minicubic.infoguiacore.dao;
 
-import java.io.Serializable;
-import com.minicubic.infoguiacore.dto.SucursalContactoDto;
-import com.minicubic.infoguiacore.model.SucursalContacto;
-import com.minicubic.infoguiacore.util.converter.SucursalContactoConverter;
+import com.minicubic.infoguiacore.dto.CategoriaDto;
+import com.minicubic.infoguiacore.model.Categoria;
+import com.minicubic.infoguiacore.util.converter.CategoriaConverter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.logging.Level;
@@ -15,27 +14,28 @@ import javax.persistence.PersistenceContext;
 /**
  *
  * @author xergio
+ * @version 1
  */
-public class SucursalContactoDao implements Serializable{
+public class CategoriaDao {
 
-    private final SucursalContactoConverter converter = new SucursalContactoConverter();
-    private static final Logger LOG = Logger.getLogger("SucursalContactoService");
+    private final CategoriaConverter converter = new CategoriaConverter();
+    private static final Logger LOG = Logger.getLogger("CategoriaDao");
     
     @PersistenceContext(unitName="infoGuiaPU")
     private EntityManager em;
-    
+
     /**
      *
      * @param id
      * @return
      */
-    public SucursalContactoDto getSucursalContacto(Integer id) {
+    public CategoriaDto getCategoria(Integer id) {
         try {
-            SucursalContacto cliente = (SucursalContacto) em.createNamedQuery("SucursalContacto.findById")
+            Categoria categoria = (Categoria) em.createNamedQuery("Categoria.findById")
                     .setParameter("id", id)
                     .getSingleResult();
 
-            return converter.getSucursalContactoDto(cliente);
+            return converter.getCategoriaDto(categoria);
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -47,12 +47,12 @@ public class SucursalContactoDao implements Serializable{
      * 
      * @return 
      */
-    public List<SucursalContactoDto> getSucursalContactoes() {
+    public List<CategoriaDto> getCategorias() {
         try {
-            List<SucursalContacto> clientes = em.createNamedQuery("SucursalContacto.findAll")
+            List<Categoria> categorias = em.createNamedQuery("Categoria.findAll")
                     .getResultList();
 
-            return converter.getSucursalContactosDto(clientes);
+            return converter.getCategoriasDto(categorias);
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -62,30 +62,30 @@ public class SucursalContactoDao implements Serializable{
 
     /**
      *
-     * @param sucursalContactoDto
+     * @param categoriaDto
      * @return
      */
-    public SucursalContactoDto saveSucursalContacto(SucursalContactoDto sucursalContactoDto) {
+    public CategoriaDto saveCategoria(CategoriaDto categoriaDto) {
         try {
-            SucursalContacto cliente = converter.getSucursalContacto(sucursalContactoDto);
+            Categoria categoria = converter.getCategoria(categoriaDto);
 
-            cliente = em.merge(cliente);
+            categoria = em.merge(categoria);
             em.flush();
 
-            return converter.getSucursalContactoDto(cliente);
+            return converter.getCategoriaDto(categoria);
         } catch (IllegalAccessException | InvocationTargetException ex) {
             LOG.log(Level.SEVERE, null, ex);
             return null;
         }
     }
 
-    public void deleteSucursalContacto(Integer id) {
+    public void deleteCategoria(Long id) {
         try {
-            SucursalContacto cliente = (SucursalContacto) em.createNamedQuery("SucursalContacto.findById")
+            Categoria categoria = (Categoria) em.createNamedQuery("Categoria.findById")
                     .setParameter("id", id)
                     .getSingleResult();
 
-            em.remove(cliente);
+            em.remove(categoria);
             em.flush();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);

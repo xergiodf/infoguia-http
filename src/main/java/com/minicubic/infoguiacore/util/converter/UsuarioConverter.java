@@ -4,6 +4,8 @@ import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.model.Usuario;
 import com.minicubic.infoguiacore.util.Util;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 
 /**
@@ -14,6 +16,42 @@ import org.apache.commons.beanutils.PropertyUtilsBean;
 public class UsuarioConverter {
 
     private final PropertyUtilsBean beanUtil = new PropertyUtilsBean();
+    
+    /**
+     * 
+     * @param usuarios
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException 
+     */
+    public List<UsuarioDto> getUsuariosDto(List<Usuario> usuarios) 
+            throws IllegalAccessException, InvocationTargetException {
+        List<UsuarioDto> usuariosDto = new ArrayList<>();
+        
+        for (Usuario usuario : usuarios) {
+            usuariosDto.add(getUsuarioDto(usuario));
+        }
+        
+        return usuariosDto;
+    }
+    
+    /**
+     * 
+     * @param usuariosDto
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException 
+     */
+    public List<Usuario> getUsuarios(List<UsuarioDto> usuariosDto) 
+            throws IllegalAccessException, InvocationTargetException {
+        List<Usuario> usuarios = new ArrayList<>();
+        
+        for (UsuarioDto usuarioDto : usuariosDto) {
+            usuarios.add(getUsuario(usuarioDto));
+        }
+        
+        return usuarios;
+    }
 
     public Usuario getUsuario(UsuarioDto usuarioDto) throws IllegalAccessException, InvocationTargetException {
         Usuario usuario = new Usuario();
@@ -33,7 +71,7 @@ public class UsuarioConverter {
             usuario.setTipoUsuario(new TipoUsuarioConverter().getTipoUsuario(usuarioDto.getTipoUsuarioDto()));
         
         if ( !Util.isEmpty(usuarioDto.getUsuarioEstadoDto()) ) {
-            usuario.setUsuarioEstado(new EstadoUsuarioConverter().getEstadoUsuario(usuarioDto.getUsuarioEstadoDto()));
+            usuario.setEstadoUsuario(new EstadoUsuarioConverter().getEstadoUsuario(usuarioDto.getUsuarioEstadoDto()));
         }
 
         return usuario;
@@ -56,8 +94,8 @@ public class UsuarioConverter {
         if ( !Util.isEmpty(usuario.getTipoUsuario()) )
             usuarioDto.setTipoUsuarioDto(new TipoUsuarioConverter().getTipoUsuarioDto(usuario.getTipoUsuario()));
         
-        if ( !Util.isEmpty(usuario.getUsuarioEstado()) ) {
-            usuarioDto.setUsuarioEstadoDto(new EstadoUsuarioConverter().getEstadoUsuarioDto(usuario.getUsuarioEstado()));
+        if ( !Util.isEmpty(usuario.getEstadoUsuario()) ) {
+            usuarioDto.setUsuarioEstadoDto(new EstadoUsuarioConverter().getEstadoUsuarioDto(usuario.getEstadoUsuario()));
         }
         
         // Por cuestion de seguridad, no enviamos el password

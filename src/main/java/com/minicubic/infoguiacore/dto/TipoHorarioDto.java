@@ -3,25 +3,27 @@ package com.minicubic.infoguiacore.dto;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
- * @author hectorvillalba
+ * @author xergio
+ * @version 1
  */
-
-@Data
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Request<T> {
+@ToString
+@EqualsAndHashCode
+public class TipoHorarioDto {
+
+    @Getter
+    @Setter
+    private Integer id;
     
     @Getter
     @Setter
-    private String type;
-    
-    @Getter
-    @Setter
-    private T data;
+    private String descripcion;
 }

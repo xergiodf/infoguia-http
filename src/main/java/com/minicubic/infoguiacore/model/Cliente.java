@@ -3,7 +3,6 @@ package com.minicubic.infoguiacore.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Collection;
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,10 +21,15 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
  * @author xergio
+ * @version 1
  */
 @Entity
 @Table(name = "clientes")
@@ -38,181 +42,153 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Cliente.findByDescripcionCorta", query = "SELECT c FROM Cliente c WHERE c.descripcionCorta = :descripcionCorta"),
     @NamedQuery(name = "Cliente.findByFechaAlta", query = "SELECT c FROM Cliente c WHERE c.fechaAlta = :fechaAlta"),
     @NamedQuery(name = "Cliente.findByFechaInicio", query = "SELECT c FROM Cliente c WHERE c.fechaInicio = :fechaInicio")})
+@ToString
+@EqualsAndHashCode
 public class Cliente implements Serializable {
-
     private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
+    @Getter
+    @Setter
     private Long id;
+
+    @Column(name = "codigo_cliente")
+    @Getter
+    @Setter
+    private Integer codigoCliente;
     
-    @Basic(optional = false)
     @Column(name = "nombre_completo")
+    @Getter
+    @Setter
     private String nombreCompleto;
     
     @Column(name = "nombre_corto")
+    @Getter
+    @Setter
     private String nombreCorto;
     
     @Column(name = "descripcion_completa", columnDefinition = "text")
+    @Getter
+    @Setter
     private String descripcionCompleta;
     
     @Column(name = "descripcion_corta")
+    @Getter
+    @Setter
     private String descripcionCorta;
-     
-    @Basic(optional = false)
-    @Column(name = "fecha_alta", updatable= false)
-    @Temporal(TemporalType.TIMESTAMP)
+    
+    @Column(name = "fecha_alta")
+    @Temporal(TemporalType.DATE)
+    @Getter
+    @Setter
     private Date fechaAlta;
     
     @Column(name = "fecha_inicio")
     @Temporal(TemporalType.DATE)
+    @Getter
+    @Setter
     private Date fechaInicio;
     
+    @Column(name = "audit_usuario")
+    @Getter
+    @Setter
+    private String auditUsuario;
+    
+    @Column(name = "audit_fecha_insert", insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Getter
+    @Setter
+    private Date auditFechaInsert;
+    
+    @Column(name = "audit_fecha_update", insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Getter
+    @Setter
+    private Date auditFechaUpdate;
+    
     @JoinTable(name = "clientes_categorias", joinColumns = {
-        @JoinColumn(name = "clientes_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "categorias_id", referencedColumnName = "id")})
+        @JoinColumn(name = "id_cliente", referencedColumnName = "id")
+    }, 
+    inverseJoinColumns = {
+        @JoinColumn(name = "id_categoria", referencedColumnName = "id")
+    })
     @ManyToMany
-    private Collection<Categoria> categoriaCollection;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
-    private Collection<Usuario> usuarioCollection;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
-    private Collection<ClientePublicacion> clientePublicacionesCollection;
+    private Collection<Categoria> categorias;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
-    private Collection<ClienteSucursal> clienteSucursalesCollection;
+    private Collection<Usuario> usuarios;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+    private Collection<ClientePublicacion> clientePublicaciones;
 
-    public Cliente() {
-    }
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+    private Collection<ClienteSucursal> clienteSucursales;
 
-    public Cliente(Long id) {
-        this.id = id;
-    }
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+    private Collection<ClienteCategoria> clienteCategorias;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+    private Collection<ClienteSuscripcion> clienteSuscripciones;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+    private Collection<ClienteOferta> clienteOfertas;
 
-    public Cliente(Long id, String nombreCompleto, Date fechaAlta) {
-        this.id = id;
-        this.nombreCompleto = nombreCompleto;
-        this.fechaAlta = fechaAlta;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombreCompleto() {
-        return nombreCompleto;
-    }
-
-    public void setNombreCompleto(String nombreCompleto) {
-        this.nombreCompleto = nombreCompleto;
-    }
-
-    public String getNombreCorto() {
-        return nombreCorto;
-    }
-
-    public void setNombreCorto(String nombreCorto) {
-        this.nombreCorto = nombreCorto;
-    }
-
-    public String getDescripcionCompleta() {
-        return descripcionCompleta;
-    }
-
-    public void setDescripcionCompleta(String descriptionCompleta) {
-        this.descripcionCompleta = descriptionCompleta;
-    }
-
-    public String getDescripcionCorta() {
-        return descripcionCorta;
-    }
-
-    public void setDescripcionCorta(String descripcionCorta) {
-        this.descripcionCorta = descripcionCorta;
-    }
-
-    public Date getFechaAlta() {
-        return fechaAlta;
-    }
-
-    public void setFechaAlta(Date fechaAlta) {
-        this.fechaAlta = fechaAlta;
-    }
-
-    public Date getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public void setFechaInicio(Date fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
 
     @XmlTransient
-    public Collection<Usuario> getUsuarioCollection() {
-        return usuarioCollection;
+    public Collection<Usuario> getUsuarios() {
+        return usuarios;
     }
-
-    public void setUsuarioCollection(Collection<Usuario> usuarioCollection) {
-        this.usuarioCollection = usuarioCollection;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Cliente)) {
-            return false;
-        }
-        Cliente other = (Cliente) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.minicubic.infoguiaserver.model.Cliente[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public Collection<ClienteSucursal> getClienteSucursalesCollection() {
-        return clienteSucursalesCollection;
-    }
-
-    public void setClienteSucursalesCollection(Collection<ClienteSucursal> clienteSucursalesCollection) {
-        this.clienteSucursalesCollection = clienteSucursalesCollection;
-    }
-
-    @XmlTransient
-    public Collection<ClientePublicacion> getClientePublicacionesCollection() {
-        return clientePublicacionesCollection;
-    }
-
-    public void setClientePublicacionesCollection(Collection<ClientePublicacion> clientePublicacionesCollection) {
-        this.clientePublicacionesCollection = clientePublicacionesCollection;
-    }
-
-    @XmlTransient
-    public Collection<Categoria> getCategoriaCollection() {
-        return categoriaCollection;
-    }
-
-    public void setCategoriaCollection(Collection<Categoria> categoriaCollection) {
-        this.categoriaCollection = categoriaCollection;
+    public void setUsuarios(Collection<Usuario> usuarios) {
+        this.usuarios = usuarios;
     }
     
+    @XmlTransient
+    public Collection<ClienteSucursal> getClienteSucursales() {
+        return clienteSucursales;
+    }
+    public void setClienteSucursales(Collection<ClienteSucursal> clienteSucursales) {
+        this.clienteSucursales = clienteSucursales;
+    }
+
+    @XmlTransient
+    public Collection<ClientePublicacion> getClientePublicaciones() {
+        return clientePublicaciones;
+    }
+    public void setClientePublicaciones(Collection<ClientePublicacion> clientePublicaciones) {
+        this.clientePublicaciones = clientePublicaciones;
+    }
+
+    @XmlTransient
+    public Collection<Categoria> getCategorias() {
+        return categorias;
+    }
+    public void setCategorias(Collection<Categoria> categorias) {
+        this.categorias = categorias;
+    }
+    
+    @XmlTransient
+    public Collection<ClienteCategoria> getClienteCategorias() {
+        return clienteCategorias;
+    }
+    public void setClienteCategorias(Collection<ClienteCategoria> clienteCategorias) {
+        this.clienteCategorias = clienteCategorias;
+    }
+
+    @XmlTransient
+    public Collection<ClienteSuscripcion> getClienteSuscripciones() {
+        return clienteSuscripciones;
+    }
+    public void setClienteSuscripciones(Collection<ClienteSuscripcion> clienteSuscripciones) {
+        this.clienteSuscripciones = clienteSuscripciones;
+    }
+
+    @XmlTransient
+    public Collection<ClienteOferta> getClienteOfertas() {
+        return clienteOfertas;
+    }
+    public void setClienteOfertas(Collection<ClienteOferta> clienteOfertas) {
+        this.clienteOfertas = clienteOfertas;
+    }
 }

@@ -25,18 +25,22 @@ import lombok.ToString;
 
 /**
  *
- * @author hectorvillalba
+ * @author xergio
+ * @version 1
  */
 @Entity
-@Table(name = "tipos_publicaciones")
+@Table(name = "estado_suscripciones")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TipoPublicacion.findAll", query = "SELECT t FROM TipoPublicacion t"),
-    @NamedQuery(name = "TipoPublicacion.findById", query = "SELECT t FROM TipoPublicacion t WHERE t.id = :id"),
-    @NamedQuery(name = "TipoPublicacion.findByDescripcion", query = "SELECT t FROM TipoPublicacion t WHERE t.descripcion = :descripcion")})
+    @NamedQuery(name = "EstadoSuscripcion.findAll", query = "SELECT e FROM EstadoSuscripcion e"), 
+    @NamedQuery(name = "EstadoSuscripcion.findById", query = "SELECT e FROM EstadoSuscripcion e WHERE e.id = :id"), 
+    @NamedQuery(name = "EstadoSuscripcion.findByDescripcion", query = "SELECT e FROM EstadoSuscripcion e WHERE e.descripcion = :descripcion"), 
+    @NamedQuery(name = "EstadoSuscripcion.findByAuditUsuario", query = "SELECT e FROM EstadoSuscripcion e WHERE e.auditUsuario = :auditUsuario"), 
+    @NamedQuery(name = "EstadoSuscripcion.findByAuditFechaInsert", query = "SELECT e FROM EstadoSuscripcion e WHERE e.auditFechaInsert = :auditFechaInsert"), 
+    @NamedQuery(name = "EstadoSuscripcion.findByAuditFechaUpdate", query = "SELECT e FROM EstadoSuscripcion e WHERE e.auditFechaUpdate = :auditFechaUpdate")})
 @ToString
 @EqualsAndHashCode
-public class TipoPublicacion implements Serializable {
+public class EstadoSuscripcion implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -45,7 +49,7 @@ public class TipoPublicacion implements Serializable {
     @Getter
     @Setter
     private Integer id;
-    
+
     @Column(name = "descripcion")
     @Getter
     @Setter
@@ -56,26 +60,27 @@ public class TipoPublicacion implements Serializable {
     @Setter
     private String auditUsuario;
 
-    @Column(name = "audit_fecha_insert", insertable = false, updatable = false)
+    @Column(name = "audit_fecha_insert")
     @Temporal(TemporalType.TIMESTAMP)
     @Getter
     @Setter
     private Date auditFechaInsert;
     
-    @Column(name = "audit_fecha_update", insertable = false, updatable = false)
+    @Column(name = "audit_fecha_update")
     @Temporal(TemporalType.TIMESTAMP)
     @Getter
     @Setter
     private Date auditFechaUpdate;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoPublicacion", fetch = FetchType.LAZY)
-    private Collection<ClientePublicacion> clientePublicaciones;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estadoSuscripcion", fetch = FetchType.LAZY)
+    private Collection<ClienteSuscripcion> clienteSuscripciones;
 
     @XmlTransient
-    public Collection<ClientePublicacion> getClientePublicaciones() {
-        return clientePublicaciones;
+    public Collection<ClienteSuscripcion> getClienteSuscripciones() {
+        return clienteSuscripciones;
     }
-    public void setClientePublicaciones(Collection<ClientePublicacion> clientePublicaciones) {
-        this.clientePublicaciones = clientePublicaciones;
+
+    public void setClienteSuscripciones(Collection<ClienteSuscripcion> clienteSuscripciones) {
+        this.clienteSuscripciones = clienteSuscripciones;
     }
 }

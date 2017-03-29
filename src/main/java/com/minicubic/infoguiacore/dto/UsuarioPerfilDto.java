@@ -1,5 +1,6 @@
 package com.minicubic.infoguiacore.dto;
 
+import java.util.Date;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -17,13 +18,33 @@ import lombok.ToString;
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 @EqualsAndHashCode
-public class EstadoUsuarioDto {
+public class UsuarioPerfilDto {
 
     @Getter
     @Setter
     private Integer id;
-    
+
     @Getter
     @Setter
-    private String descripcion;
+    private String nombres;
+
+    @Getter
+    @Setter
+    private String apellidos;
+
+    @Getter
+    @Setter
+    private Date fechaNacimiento;
+
+    @Getter
+    @Setter
+    private String ocupacion;
+
+    @Getter
+    @Setter
+    private Integer ciudad;
+
+    @Getter
+    @Setter
+    private UsuarioDto usuarioDto;
 }

@@ -1,5 +1,6 @@
 package com.minicubic.infoguiacore.dto;
 
+import javax.persistence.Column;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -17,13 +18,16 @@ import lombok.ToString;
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 @EqualsAndHashCode
-public class EstadoUsuarioDto {
+public class SucursalHorarioCabDto {
+
+    @Column(name = "id")
+    private Integer id;
 
     @Getter
     @Setter
-    private Integer id;
-    
+    private TipoHorarioDto tipoHorarioDto;
+
     @Getter
     @Setter
-    private String descripcion;
+    private ClienteSucursalDto clienteSucursalDto;
 }

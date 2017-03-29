@@ -1,7 +1,7 @@
 package com.minicubic.infoguiahttp.services;
 
-import com.minicubic.infoguiacore.dao.SucursalContactoDao;
-import com.minicubic.infoguiacore.dto.SucursalContactoDto;
+import com.minicubic.infoguiacore.dao.CategoriaDao;
+import com.minicubic.infoguiacore.dto.CategoriaDto;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -18,42 +18,42 @@ import javax.inject.Inject;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-public class SucursalContactoService {
+public class CategoriaService {
 
     @Inject
-    private SucursalContactoDao dao;
+    private CategoriaDao dao;
     
     /**
      * 
      * @param id
      * @return 
      */
-    public SucursalContactoDto getSucursalContacto(Integer id) {
-        return dao.getSucursalContacto(id);
+    public CategoriaDto getCategoria(Integer id) {
+        return dao.getCategoria(id);
     }
     
     /**
      * 
      * @return 
      */
-    public List<SucursalContactoDto> getSucursalContactoes() {
-        return dao.getSucursalContactoes();
+    public List<CategoriaDto> getCategorias() {
+        return dao.getCategorias();
     }
     
     /**
      * 
-     * @param sucursalContactoDto
+     * @param categoriaDto
      * @return 
      */
-    public SucursalContactoDto saveSucursalContacto(SucursalContactoDto sucursalContactoDto) {
-        return dao.saveSucursalContacto(sucursalContactoDto);
+    public CategoriaDto saveCategoria(CategoriaDto categoriaDto) {
+        return dao.saveCategoria(categoriaDto);
     }
     
     /**
      * 
      * @param id 
      */
-    public void deleteSucursalContacto(Integer id) {
-        dao.deleteSucursalContacto(id);
+    public void deleteCategoria(Long id) {
+        dao.deleteCategoria(id);
     }
 }

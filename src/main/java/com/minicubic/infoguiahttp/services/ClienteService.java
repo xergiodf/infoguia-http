@@ -39,15 +39,6 @@ public class ClienteService {
     public List<ClienteDto> getClientes() {
         return dao.getClientes();
     }
-
-    /**
-     * 
-     * @param clienteDto
-     * @return 
-     */
-    public List<ClienteDto> getClientes(ClienteDto clienteDto) {
-        return dao.getClientes(clienteDto);
-    }
     
     /**
      * 

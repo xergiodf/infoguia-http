@@ -30,10 +30,10 @@ public class AppBase extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(com.minicubic.infoguiahttp.rest.AuthenticationRest.class);
+        resources.add(com.minicubic.infoguiahttp.rest.CategoriaRest.class);
         resources.add(com.minicubic.infoguiahttp.rest.ClienteRest.class);
-        resources.add(com.minicubic.infoguiahttp.rest.ContactoRest.class);
         resources.add(com.minicubic.infoguiahttp.rest.PublicacionRest.class);
-        resources.add(com.minicubic.infoguiahttp.rest.PublicacionesRest.class);
         resources.add(com.minicubic.infoguiahttp.rest.SucursalRest.class);
         resources.add(com.minicubic.infoguiahttp.rest.UsuarioRest.class);
         resources.add(com.minicubic.infoguiahttp.util.SecurityFilter.class);

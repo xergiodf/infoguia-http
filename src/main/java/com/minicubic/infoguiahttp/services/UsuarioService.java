@@ -34,12 +34,29 @@ public class UsuarioService {
     
     /**
      * 
+     * @return 
+     */
+    public List<UsuarioDto> getUsuarios() {
+        return dao.getUsuarios();
+    }
+    
+    /**
+     * 
      * @param usuarioDto
      * @return 
      */
     public UsuarioDto saveUsuario(UsuarioDto usuarioDto) {
         return dao.saveUsuario(usuarioDto);
     }
+    
+    /**
+     * 
+     * @param id 
+     */
+    public void deleteUsuario(Long id) {
+        dao.deleteUsuario(id);
+    }
+    
     
     /**
      * Obtiene una Lista de Tipos de Usuario

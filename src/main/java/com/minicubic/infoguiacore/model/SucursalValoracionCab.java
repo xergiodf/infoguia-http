@@ -1,13 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.minicubic.infoguiacore.model;
 
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.Basic;
+import java.util.Collection;
+import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,100 +16,78 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
- * @author hectorvillalba
+ * @author xergio
+ * @version 1
  */
 @Entity
-@Table(name = "sucursal_valoracion_cab")
+@Table(name = "sucursal_valoraciones_cab")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SucursalValoracionCab.findAll", query = "SELECT s FROM SucursalValoracionCab s"),
-    @NamedQuery(name = "SucursalValoracionCab.findById", query = "SELECT s FROM SucursalValoracionCab s WHERE s.id = :id"),
-    @NamedQuery(name = "SucursalValoracionCab.findByPuntajeTotal", query = "SELECT s FROM SucursalValoracionCab s WHERE s.puntajeTotal = :puntajeTotal")})
+    @NamedQuery(name = "SucursalValoracionCab.findAll", query = "SELECT s FROM SucursalValoracionCab s"), 
+    @NamedQuery(name = "SucursalValoracionCab.findById", query = "SELECT s FROM SucursalValoracionCab s WHERE s.id = :id"), 
+    @NamedQuery(name = "SucursalValoracionCab.findByPuntajeTotal", query = "SELECT s FROM SucursalValoracionCab s WHERE s.puntajeTotal = :puntajeTotal"), 
+    @NamedQuery(name = "SucursalValoracionCab.findByAuditUsuario", query = "SELECT s FROM SucursalValoracionCab s WHERE s.auditUsuario = :auditUsuario"), 
+    @NamedQuery(name = "SucursalValoracionCab.findByAuditFechaInsert", query = "SELECT s FROM SucursalValoracionCab s WHERE s.auditFechaInsert = :auditFechaInsert"), 
+    @NamedQuery(name = "SucursalValoracionCab.findByAuditFechaUpdate", query = "SELECT s FROM SucursalValoracionCab s WHERE s.auditFechaUpdate = :auditFechaUpdate")})
+@ToString
+@EqualsAndHashCode
 public class SucursalValoracionCab implements Serializable {
-
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
+    @Getter
+    @Setter
     private Integer id;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "puntaje_total")
-    private Float puntajeTotal;
+    
     @JoinColumn(name = "id_cliente_sucursal", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private ClienteSucursal idClienteSucursal;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCabecera", fetch = FetchType.LAZY)
-    private List<SucursalValoracionDet> sucursalValoracionDetList;
+    @ManyToOne(optional = false)
+    @Getter
+    @Setter
+    private ClienteSucursal clienteSucursal;
 
-    public SucursalValoracionCab() {
-    }
+    @Column(name = "puntaje_total")
+    @Getter
+    @Setter
+    private Float puntajeTotal;
+    
+    @Column(name = "audit_usuario")
+    @Getter
+    @Setter
+    private String auditUsuario;
 
-    public SucursalValoracionCab(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Float getPuntajeTotal() {
-        return puntajeTotal;
-    }
-
-    public void setPuntajeTotal(Float puntajeTotal) {
-        this.puntajeTotal = puntajeTotal;
-    }
-
-    public ClienteSucursal getIdClienteSucursal() {
-        return idClienteSucursal;
-    }
-
-    public void setIdClienteSucursal(ClienteSucursal idClienteSucursal) {
-        this.idClienteSucursal = idClienteSucursal;
-    }
+    @Column(name = "audit_fecha_insert", insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Getter
+    @Setter
+    private Date auditFechaInsert;
+    
+    @Column(name = "audit_fecha_update", insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Getter
+    @Setter
+    private Date auditFechaUpdate;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sucursalValoracionCab", fetch = FetchType.LAZY)
+    private Collection<SucursalValoracionDet> sucursalValoracionDets;
 
     @XmlTransient
-    public List<SucursalValoracionDet> getSucursalValoracionDetList() {
-        return sucursalValoracionDetList;
+    public Collection<SucursalValoracionDet> getSucursalValoracionDets() {
+        return sucursalValoracionDets;
     }
-
-    public void setSucursalValoracionDetList(List<SucursalValoracionDet> sucursalValoracionDetList) {
-        this.sucursalValoracionDetList = sucursalValoracionDetList;
+    public void setSucursalValoracionDets(Collection<SucursalValoracionDet> sucursalValoracionDets) {
+        this.sucursalValoracionDets = sucursalValoracionDets;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SucursalValoracionCab)) {
-            return false;
-        }
-        SucursalValoracionCab other = (SucursalValoracionCab) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.minicubic.infoguiaserver.model.SucursalValoracionCab[ id=" + id + " ]";
-    }
-    
 }

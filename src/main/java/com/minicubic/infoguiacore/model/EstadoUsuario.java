@@ -2,10 +2,11 @@ package com.minicubic.infoguiacore.model;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.persistence.Basic;
+import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,8 +14,14 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -27,58 +34,49 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "EstadoUsuario.findAll", query = "SELECT e FROM EstadoUsuario e"),
     @NamedQuery(name = "EstadoUsuario.findById", query = "SELECT e FROM EstadoUsuario e WHERE e.id = :id"),
     @NamedQuery(name = "EstadoUsuario.findByDescripcion", query = "SELECT e FROM EstadoUsuario e WHERE e.descripcion = :descripcion")})
+@ToString
+@EqualsAndHashCode
 public class EstadoUsuario implements Serializable {
-
     private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
+    @Getter
+    @Setter
     private Integer id;
-    
-    @Basic(optional = false)
+
     @Column(name = "descripcion")
+    @Getter
+    @Setter
     private String descripcion;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioEstado")
-    private Collection<Usuario> usuarioCollection;
+    @Column(name = "audit_usuario")
+    @Getter
+    @Setter
+    private String auditUsuario;
 
-    public EstadoUsuario() {
-    }
-
-    public EstadoUsuario(Integer id) {
-        this.id = id;
-    }
-
-    public EstadoUsuario(Integer id, String descripcion) {
-        this.id = id;
-        this.descripcion = descripcion;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    @Column(name = "audit_fecha_insert", insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Getter
+    @Setter
+    private Date auditFechaInsert;
+    
+    @Column(name = "audit_fecha_update", insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Getter
+    @Setter
+    private Date auditFechaUpdate;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estadoUsuario", fetch = FetchType.LAZY)
+    private Collection<Usuario> usuarios;
 
     @XmlTransient
-    public Collection<Usuario> getUsuarioCollection() {
-        return usuarioCollection;
+    public Collection<Usuario> getUsuarios() {
+        return usuarios;
     }
-
-    public void setUsuarioCollection(Collection<Usuario> usuarioCollection) {
-        this.usuarioCollection = usuarioCollection;
+    public void setUsuarios(Collection<Usuario> usuarios) {
+        this.usuarios = usuarios;
     }
 
     @Override
@@ -105,5 +103,4 @@ public class EstadoUsuario implements Serializable {
     public String toString() {
         return "com.minicubic.infoguiaserver.model.EstadoUsuario[ id=" + id + " ]";
     }
-    
 }

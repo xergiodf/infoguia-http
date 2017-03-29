@@ -1,6 +1,6 @@
 package com.minicubic.infoguiahttp.rest;
 
-import com.minicubic.infoguiacore.dto.SucursalContactoDto;
+import com.minicubic.infoguiacore.dto.CategoriaDto;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.dto.ValidatorResponse;
 import com.minicubic.infoguiacore.util.Constants;
@@ -8,7 +8,7 @@ import com.minicubic.infoguiacore.util.Util;
 import com.minicubic.infoguiacore.util.Validator;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import com.minicubic.infoguiahttp.annotations.Secured;
-import com.minicubic.infoguiahttp.services.SucursalContactoService;
+import com.minicubic.infoguiahttp.services.CategoriaService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
@@ -17,14 +17,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
-import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -34,77 +34,77 @@ import javax.ws.rs.core.Response;
  * @version 1
  */
 @Singleton
-@Path("contactos")
+@Path("categorias")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Api(value = "/contactos", description = "REST Service de Contactos")
-public class ContactoRest {
+@Api(value = "/categorias", description = "REST Service de Categorias")
+public class CategoriaRest {
 
     @LoggedIn
     @Inject
     private UsuarioDto usuarioLogueado;
 
     @Inject
-    private SucursalContactoService service;
+    private CategoriaService service;
 
-    private static final Logger LOG = Logger.getLogger("SucursalContactoesRest");
+    private static final Logger LOG = Logger.getLogger("CategoriasRest");
 
     @GET
     @Secured
     @Path("/find/all")
-    @ApiOperation(value = "Obtiene una lista de Contactos de Clientes")
+    @ApiOperation(value = "Obtiene una lista de Categorias")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
     public Response findAll() {
-        LOG.log(Level.INFO, "Obteniendo listado de Contactos de Clientes");
+        LOG.log(Level.INFO, "Obteniendo listado de categorias");
 
-        return Response.ok().entity(service.getSucursalContactoes()).build();
+        return Response.ok().entity(service.getCategorias()).build();
     }
 
     @GET
     @Secured
     @Path("/find/{id}")
-    @ApiOperation(value = "Obtiene un registro de Contacto de Cliente en base a un ID")
+    @ApiOperation(value = "Obtiene un registro de Categorias en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
     public Response findById(@PathParam("id") Integer id) {
-        LOG.log(Level.INFO, "Obteniendo Contacto de Cliente por id: {0}", new Object[]{id});
+        LOG.log(Level.INFO, "Obteniendo categoria por id: {0}", new Object[]{id});
 
-        return Response.ok().entity(service.getSucursalContacto(id)).build();
+        return Response.ok().entity(service.getCategoria(id)).build();
     }
 
     @POST
     @Secured
     @Path("/add")
-    @ApiOperation(value = "Agrega un registro de Contacto de Cliente en base a un ID. En el parametro debe venir especificado el tipo de publicacion (Novedad o Promocion.")
+    @ApiOperation(value = "Agrega un registro de Publicacion de Categoria")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 406, message = "Error de Validacion"),
         @ApiResponse(code = 400, message = "Error generico"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response addSucursalContacto(SucursalContactoDto sucursalContactoParam) {
-        LOG.log(Level.INFO, "Creando nueva Contacto de Ciente");
+    public Response addCategoria(CategoriaDto categoriaParam) {
+        LOG.log(Level.INFO, "Creando nuevo categoria");
 
         try {
 
             // Validacion global
-            ValidatorResponse<Boolean> validatorResponse = Validator.getInstance().validateAddSucursalContacto(sucursalContactoParam);
+            ValidatorResponse<Boolean> validatorResponse = Validator.getInstance().validateAddCategoria(categoriaParam);
             if (!validatorResponse.getData()) {
                 LOG.log(Level.WARNING, "Error de validacion");
                 return Response.status(Response.Status.NOT_ACCEPTABLE).entity(validatorResponse.getMensaje()).build();
             }
 
-            sucursalContactoParam = service.saveSucursalContacto(sucursalContactoParam);
+            categoriaParam = service.saveCategoria(categoriaParam);
 
-            if (Util.isEmpty(sucursalContactoParam)) {
+            if (Util.isEmpty(categoriaParam)) {
                 LOG.log(Level.WARNING, "Registro vacio");
                 return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
             }
 
-            LOG.log(Level.INFO, "Contacto de Cliente {0} creado correctamente.", sucursalContactoParam.getId());
-            return Response.ok().entity(sucursalContactoParam).build();
+            LOG.log(Level.INFO, "Categoria {0} creado correctamente.", categoriaParam.getId());
+            return Response.ok().entity(categoriaParam).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
@@ -114,20 +114,20 @@ public class ContactoRest {
     @PUT
     @Secured
     @Path("/update")
-    @ApiOperation(value = "Actualiza un registro de Contacto de Cliente en base a un ID")
+    @ApiOperation(value = "Actualiza un registro de Categorias en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Error Generico"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response updateSucursalContacto(SucursalContactoDto sucursalContactoParam) {
-        LOG.log(Level.INFO, "Actualizando Contacto de Cliente por id: {0}", new Object[]{sucursalContactoParam.getId()});
+    public Response updateCategoria(CategoriaDto categoriaParam) {
+        LOG.log(Level.INFO, "Actualizando categoria por id: {0}", new Object[]{categoriaParam.getId()});
 
         try {
 
-            sucursalContactoParam = service.saveSucursalContacto(sucursalContactoParam);
+            categoriaParam = service.saveCategoria(categoriaParam);
 
-            LOG.log(Level.INFO, "Contacto de Cliente {0} actualizado correctamente.", sucursalContactoParam.getId());
-            return Response.ok().entity(sucursalContactoParam).build();
+            LOG.log(Level.INFO, "Categoria {0} actualizado correctamente.", categoriaParam.getId());
+            return Response.ok().entity(categoriaParam).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
@@ -137,18 +137,18 @@ public class ContactoRest {
     @DELETE
     @Secured
     @Path("/delete/{id}")
-    @ApiOperation(value = "Borra un registro de Contacto de Cliente en base a un ID")
+    @ApiOperation(value = "Borra un registro de Categorias en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Error Generico"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response deleteSucursalContacto(@PathParam("id") Integer id) {
-        LOG.log(Level.INFO, "Eliminando Contacto de Cliente por id: {0}", new Object[]{id});
+    public Response deleteCategoria(@PathParam("id") Long id) {
+        LOG.log(Level.INFO, "Eliminando categoria por id: {0}", new Object[]{id});
 
         try {
-            service.deleteSucursalContacto(id);
+            service.deleteCategoria(id);
 
-            LOG.log(Level.INFO, "Contacto de Cliente {0} eliminado correctamente.", id);
+            LOG.log(Level.INFO, "Categoria {0} eliminado correctamente.", id);
             return Response.ok().build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);

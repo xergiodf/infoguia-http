@@ -118,7 +118,7 @@ public class PublicacionRest {
     @POST
     @Secured
     @Path("/add")
-    @ApiOperation(value = "Agrega un registro de Publicacion de Cliente en base a un ID. En el parametro debe venir especificado el tipo de publicacion (Novedad o Promocion.")
+    @ApiOperation(value = "Agrega un registro de Publicacion de Cliente. En el parametro debe venir especificado el tipo de publicacion (Novedad o Promocion.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 406, message = "Error de Validacion"),

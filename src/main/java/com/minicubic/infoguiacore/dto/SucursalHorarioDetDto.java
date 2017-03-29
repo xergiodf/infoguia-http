@@ -17,13 +17,25 @@ import lombok.ToString;
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 @EqualsAndHashCode
-public class EstadoUsuarioDto {
+public class SucursalHorarioDetDto {
 
     @Getter
     @Setter
     private Integer id;
-    
+
     @Getter
     @Setter
-    private String descripcion;
+    private SucursalHorarioCabDto sucursalHorarioCabDto;
+
+    @Getter
+    @Setter
+    private String dias;
+
+    @Getter
+    @Setter
+    private String horaDesde;
+
+    @Getter
+    @Setter
+    private String horaHasta;
 }
