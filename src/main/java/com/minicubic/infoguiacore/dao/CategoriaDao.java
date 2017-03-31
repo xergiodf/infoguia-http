@@ -79,7 +79,7 @@ public class CategoriaDao {
         }
     }
 
-    public void deleteCategoria(Long id) {
+    public void deleteCategoria(Integer id) {
         try {
             Categoria categoria = (Categoria) em.createNamedQuery("Categoria.findById")
                     .setParameter("id", id)

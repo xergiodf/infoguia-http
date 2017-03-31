@@ -30,9 +30,7 @@ import lombok.ToString;
     @NamedQuery(name = "ClienteCategoria.findAll", query = "SELECT c FROM ClienteCategoria c"), 
     @NamedQuery(name = "ClienteCategoria.findByIdCliente", query = "SELECT c FROM ClienteCategoria c WHERE c.clienteCategoriaPK.idCliente = :idCliente"), 
     @NamedQuery(name = "ClienteCategoria.findByIdCategoria", query = "SELECT c FROM ClienteCategoria c WHERE c.clienteCategoriaPK.idCategoria = :idCategoria"), 
-    @NamedQuery(name = "ClienteCategoria.findByAuditUsuario", query = "SELECT c FROM ClienteCategoria c WHERE c.auditUsuario = :auditUsuario"), 
-    @NamedQuery(name = "ClienteCategoria.findByAuditFechaInsert", query = "SELECT c FROM ClienteCategoria c WHERE c.auditFechaInsert = :auditFechaInsert"), 
-    @NamedQuery(name = "ClienteCategoria.findByAuditFechaUpdate", query = "SELECT c FROM ClienteCategoria c WHERE c.auditFechaUpdate = :auditFechaUpdate")})
+    @NamedQuery(name = "ClienteCategoria.findById", query = "SELECT c FROM ClienteCategoria c WHERE c.clienteCategoriaPK = :id")})
 @ToString
 @EqualsAndHashCode
 public class ClienteCategoria implements Serializable {

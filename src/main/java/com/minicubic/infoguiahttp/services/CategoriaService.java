@@ -53,7 +53,7 @@ public class CategoriaService {
      * 
      * @param id 
      */
-    public void deleteCategoria(Long id) {
+    public void deleteCategoria(Integer id) {
         dao.deleteCategoria(id);
     }
 }

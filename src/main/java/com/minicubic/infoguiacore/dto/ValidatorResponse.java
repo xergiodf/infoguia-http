@@ -14,6 +14,10 @@ import lombok.Setter;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ValidatorResponse<T> {
+    
+    public ValidatorResponse() {
+        this.mensaje = "";
+    }
 
     @Getter
     @Setter

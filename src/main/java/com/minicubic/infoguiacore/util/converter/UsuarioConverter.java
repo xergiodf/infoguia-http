@@ -70,8 +70,8 @@ public class UsuarioConverter {
         if ( !Util.isEmpty(usuarioDto.getTipoUsuarioDto()) )
             usuario.setTipoUsuario(new TipoUsuarioConverter().getTipoUsuario(usuarioDto.getTipoUsuarioDto()));
         
-        if ( !Util.isEmpty(usuarioDto.getUsuarioEstadoDto()) ) {
-            usuario.setEstadoUsuario(new EstadoUsuarioConverter().getEstadoUsuario(usuarioDto.getUsuarioEstadoDto()));
+        if ( !Util.isEmpty(usuarioDto.getEstadoUsuarioDto()) ) {
+            usuario.setEstadoUsuario(new EstadoUsuarioConverter().getEstadoUsuario(usuarioDto.getEstadoUsuarioDto()));
         }
 
         return usuario;
@@ -95,7 +95,7 @@ public class UsuarioConverter {
             usuarioDto.setTipoUsuarioDto(new TipoUsuarioConverter().getTipoUsuarioDto(usuario.getTipoUsuario()));
         
         if ( !Util.isEmpty(usuario.getEstadoUsuario()) ) {
-            usuarioDto.setUsuarioEstadoDto(new EstadoUsuarioConverter().getEstadoUsuarioDto(usuario.getEstadoUsuario()));
+            usuarioDto.setEstadoUsuarioDto(new EstadoUsuarioConverter().getEstadoUsuarioDto(usuario.getEstadoUsuario()));
         }
         
         // Por cuestion de seguridad, no enviamos el password

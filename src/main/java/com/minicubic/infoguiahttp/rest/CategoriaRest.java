@@ -142,7 +142,7 @@ public class CategoriaRest {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Error Generico"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response deleteCategoria(@PathParam("id") Long id) {
+    public Response deleteCategoria(@PathParam("id") Integer id) {
         LOG.log(Level.INFO, "Eliminando categoria por id: {0}", new Object[]{id});
 
         try {

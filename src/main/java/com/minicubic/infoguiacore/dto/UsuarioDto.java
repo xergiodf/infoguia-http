@@ -62,7 +62,7 @@ public class UsuarioDto {
     
     @Getter
     @Setter
-    private EstadoUsuarioDto usuarioEstadoDto;
+    private EstadoUsuarioDto estadoUsuarioDto;
     
     @Getter
     @Setter

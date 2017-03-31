@@ -155,5 +155,4 @@ public class ClienteRest {
             return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
         }
     }
-
 }

@@ -31,30 +31,30 @@ public class Validator {
      */
     public ValidatorResponse<Boolean> validateAddUsuario(UsuarioDto usuarioDto) {
         ValidatorResponse<Boolean> response = new ValidatorResponse<>();
-        response.setData(new Boolean(true));
+        response.setData(true);
         
         if ( Util.isEmpty(usuarioDto.getEmail()) ) {
-            response.setData(new Boolean(false));
+            response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_USUARIO_EMAIL_REQUIRED));
         }
         
         if ( Util.isEmpty(usuarioDto.getUsername()) ) {
-            response.setData(new Boolean(false));
+            response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_USUARIO_USERNAME_REQUIRED));
         }
         
         if ( Util.isEmpty(usuarioDto.getPassword()) ) {
-            response.setData(new Boolean(false));
+            response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_USUARIO_PASSWORD_REQUIRED));
         }
         
-        if ( Util.isEmpty(usuarioDto.getUsuarioEstadoDto())) {
-            response.setData(new Boolean(false));
+        if ( Util.isEmpty(usuarioDto.getEstadoUsuarioDto())) {
+            response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_USUARIO_ESTADOUSUARIO_REQUIRED));
         }
         
         if ( Util.isEmpty(usuarioDto.getTipoUsuarioDto()) ) {
-            response.setData(new Boolean(false));
+            response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_USUARIO_ESTADOUSUARIO_REQUIRED));
         }
         
@@ -68,10 +68,10 @@ public class Validator {
      */
     public ValidatorResponse<Boolean> validateAddCliente(ClienteDto clienteDto) {
         ValidatorResponse<Boolean> response = new ValidatorResponse<>();
-        response.setData(new Boolean(true));
+        response.setData(true);
         
         if ( Util.isEmpty(clienteDto.getNombreCompleto()) ) {
-            response.setData(new Boolean(false));
+            response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_CLIENTE_NOMBRECOMPLETO_REQUIRED));
         }
         
@@ -85,25 +85,25 @@ public class Validator {
      */
     public ValidatorResponse<Boolean> validateAddClientePublicacion(ClientePublicacionDto clientePublicacionDto) {
         ValidatorResponse<Boolean> response = new ValidatorResponse<>();
-        response.setData(new Boolean(true));
+        response.setData(true);
         
         if ( Util.isEmpty(clientePublicacionDto.getTipoPublicacionDto()) ) {
-            response.setData(new Boolean(false));
+            response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_PUBLICACION_TIPOPUBLICACION_REQUIRED));
         }
         
         if ( Util.isEmpty(clientePublicacionDto.getClienteDto()) ) {
-            response.setData(new Boolean(false));
+            response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_PUBLICACION_CLIENTE_REQUIRED));
         }
         
         if ( Util.isEmpty(clientePublicacionDto.getEstadoPublicacionDto()) ) {
-            response.setData(new Boolean(false));
+            response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_PUBLICACION_ESTADO_REQUIRED));
         }
         
         if ( Util.isEmpty(clientePublicacionDto.getFechaDesde()) ) {
-            response.setData(new Boolean(false));
+            response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_PUBLICACION_FECHADESDE_REQUIRED));
         }
         
@@ -117,25 +117,25 @@ public class Validator {
      */
     public ValidatorResponse<Boolean> validateAddClienteSucursal(ClienteSucursalDto clienteSucursalDto) {
         ValidatorResponse<Boolean> response = new ValidatorResponse<>();
-        response.setData(new Boolean(true));
+        response.setData(true);
         
         if ( Util.isEmpty(clienteSucursalDto.getNombreSucursal()) ) {
-            response.setData(new Boolean(false));
+            response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_SUCURSAL_NOMBRE_REQUIRED));
         }
         
         if ( Util.isEmpty(clienteSucursalDto.getDireccionFisica()) ) {
-            response.setData(new Boolean(false));
+            response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_SUCURSAL_DIRECCION_REQUIRED));
         }
         
         if ( Util.isEmpty(clienteSucursalDto.getCoordenadas()) ) {
-            response.setData(new Boolean(false));
+            response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_SUCURSAL_COORDENADAS_REQUIRED));
         }
         
         if ( Util.isEmpty(clienteSucursalDto.getClienteDto()) ) {
-            response.setData(new Boolean(false));
+            response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_SUCURSAL_CLIENTE_REQUIRED));
         }
         
@@ -144,10 +144,10 @@ public class Validator {
     
     public ValidatorResponse<Boolean> validateAddCategoria(CategoriaDto categoriaDto) {
         ValidatorResponse<Boolean> response = new ValidatorResponse<>();
-        response.setData(new Boolean(true));
+        response.setData(true);
         
         if ( Util.isEmpty(categoriaDto.getDescripcion()) ) {
-            response.setData(new Boolean(false));
+            response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_CATEGORIA_DESCRIPCION));
         }
         
