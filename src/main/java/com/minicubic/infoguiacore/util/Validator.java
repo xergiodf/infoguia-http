@@ -5,6 +5,7 @@ import com.minicubic.infoguiacore.dto.ClienteDto;
 import com.minicubic.infoguiacore.dto.ClientePublicacionDto;
 import com.minicubic.infoguiacore.dto.ClienteSucursalDto;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
+import com.minicubic.infoguiacore.dto.UsuarioPerfilDto;
 import com.minicubic.infoguiacore.dto.ValidatorResponse;
 
 /**
@@ -149,6 +150,28 @@ public class Validator {
         if ( Util.isEmpty(categoriaDto.getDescripcion()) ) {
             response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_CATEGORIA_DESCRIPCION));
+        }
+        
+        return response;
+    }
+    
+    public ValidatorResponse<Boolean> validateAddUsuarioPerfil(UsuarioPerfilDto usuarioPerfilDto) {
+        ValidatorResponse<Boolean> response = new ValidatorResponse<>();
+        response.setData(true);
+        
+        if ( Util.isEmpty(usuarioPerfilDto.getNombres()) ) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_USUARIO_PERFIL_NOMBRES));
+        }
+        
+        if ( Util.isEmpty(usuarioPerfilDto.getApellidos()) ) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_USUARIO_PERFIL_APELLIDOS));
+        }
+        
+        if ( Util.isEmpty(usuarioPerfilDto.getUsuarioDto()) ) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_USUARIO_PERFIL_USUARIO));
         }
         
         return response;

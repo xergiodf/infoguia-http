@@ -1,13 +1,14 @@
 package com.minicubic.infoguiahttp.rest;
 
 import com.minicubic.infoguiacore.dto.UsuarioDto;
+import com.minicubic.infoguiacore.dto.UsuarioPerfilDto;
 import com.minicubic.infoguiacore.dto.ValidatorResponse;
 import com.minicubic.infoguiacore.util.Constants;
 import com.minicubic.infoguiacore.util.Util;
 import com.minicubic.infoguiacore.util.Validator;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import com.minicubic.infoguiahttp.annotations.Secured;
-import com.minicubic.infoguiahttp.services.UsuarioService;
+import com.minicubic.infoguiahttp.services.UsuarioPerfilService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
@@ -33,76 +34,76 @@ import javax.ws.rs.core.Response;
  * @version 1
  */
 @Singleton
-@Path("usuarios")
+@Path("usuarioPerfiles")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Api(value = "/usuarios", description = "REST Service de Usuarios")
-public class UsuarioRest {
+@Api(value = "/usuarioPerfiles", description = "REST Service de Perfiles de Usuarios")
+public class UsuarioPerfilRest {
     
     @LoggedIn
     @Inject
     private UsuarioDto usuarioLogueado;
     
     @Inject
-    private UsuarioService service;
+    private UsuarioPerfilService service;
     
-    private static final Logger LOG = Logger.getLogger("UsuariosRest");
+    private static final Logger LOG = Logger.getLogger("UsuarioPerfilesRest");
     
     @GET
     @Secured
     @Path("/find/all")
-    @ApiOperation(value = "Obtiene una lista de Usuarios.")
+    @ApiOperation(value = "Obtiene una lista de Perfiles de Usuario.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
     public Response findAll() {
-        LOG.log(Level.INFO, "Obteniendo listado de usuarios");
+        LOG.log(Level.INFO, "Obteniendo listado de perfiles de usuarios");
         
-        return Response.ok().entity(service.getUsuarios()).build();
+        return Response.ok().entity(service.getUsuarioPerfiles()).build();
     }
  
     @GET
     @Secured
     @Path("/find/{id}")
-    @ApiOperation(value = "Obtiene un registro de Usuario.")
+    @ApiOperation(value = "Obtiene un registro de Perfil de Usuario.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response findById(@PathParam("id") Long id) {
-        LOG.log(Level.INFO, "Obteniendo usuario por id: {0}", new Object[]{id});
+    public Response findById(@PathParam("id") Integer id) {
+        LOG.log(Level.INFO, "Obteniendo perfil de usuario por id: {0}", new Object[]{id});
         
-        return Response.ok().entity(service.getUsuario(id)).build();
+        return Response.ok().entity(service.getUsuarioPerfil(id)).build();
     }
     
     @POST
     @Secured
     @Path("/add")
-    @ApiOperation(value = "Agrega un registro de Usuario")
+    @ApiOperation(value = "Agrega un registro de Perfil de Usuario")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 406, message = "Error de Validacion"),
         @ApiResponse(code = 400, message = "Error generico"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response addUsuario(UsuarioDto usuarioParam) {
-        LOG.log(Level.INFO, "Creando nuevo usuario");
+    public Response addUsuario(UsuarioPerfilDto usuarioParam) {
+        LOG.log(Level.INFO, "Creando nuevo perfil de usuario");
 
         try {
 
             // Validacion global
-            ValidatorResponse<Boolean> validatorResponse = Validator.getInstance().validateAddUsuario(usuarioParam);
+            ValidatorResponse<Boolean> validatorResponse = Validator.getInstance().validateAddUsuarioPerfil(usuarioParam);
             if (!validatorResponse.getData()) {
                 LOG.log(Level.WARNING, "Error de validacion");
                 return Response.status(Response.Status.NOT_ACCEPTABLE).entity(validatorResponse.getMensaje()).build();
             }
 
-            usuarioParam = service.saveUsuario(usuarioParam);
+            usuarioParam = service.saveUsuarioPerfil(usuarioParam);
 
             if (Util.isEmpty(usuarioParam)) {
                 LOG.log(Level.WARNING, "Registro vacio");
                 return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
             }
 
-            LOG.log(Level.INFO, "Usuario {0} creado correctamente.", usuarioParam.getId());
+            LOG.log(Level.INFO, "Perfil de Usuario {0} creado correctamente.", usuarioParam.getId());
             return Response.ok().entity(usuarioParam).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -113,18 +114,18 @@ public class UsuarioRest {
     @PUT
     @Secured
     @Path("/update")
-    @ApiOperation(value = "Actualiza un registro de Usuario.")
+    @ApiOperation(value = "Actualiza un registro de Usuario. Servicio no implementado aun.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response updateUsuario(UsuarioDto usuarioParam) {
-        LOG.log(Level.INFO, "Actualizando usuario por id: {0}", new Object[]{usuarioParam.getId()});
+    public Response updateUsuario(UsuarioPerfilDto usuarioParam) {
+        LOG.log(Level.INFO, "Actualizando perfil de usuario por id: {0}", new Object[]{usuarioParam.getId()});
         
         try {
 
-            usuarioParam = service.saveUsuario(usuarioParam);
+            usuarioParam = service.saveUsuarioPerfil(usuarioParam);
 
-            LOG.log(Level.INFO, "Usuario {0} actualizado correctamente.", usuarioParam.getId());
+            LOG.log(Level.INFO, "Perfil de Usuario {0} actualizado correctamente.", usuarioParam.getId());
             return Response.ok().entity(usuarioParam).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -135,17 +136,17 @@ public class UsuarioRest {
     @DELETE
     @Secured
     @Path("/delete/{id}")
-    @ApiOperation(value = "Elimina un registro de Usuario.")
+    @ApiOperation(value = "Elimina un registro de Perfil de Usuario.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response deleteUsuario(@PathParam("id") Long id) {
-        LOG.log(Level.INFO, "Eliminando usuario por id: {0}", new Object[]{id});
+    public Response deleteUsuario(@PathParam("id") Integer id) {
+        LOG.log(Level.INFO, "Eliminando perfil de usuario por id: {0}", new Object[]{id});
         
         try {
-            service.deleteUsuario(id);
+            service.deleteUsuarioPerfil(id);
 
-            LOG.log(Level.INFO, "Usuario {0} eliminado correctamente.", id);
+            LOG.log(Level.INFO, "Perfil de Usuario {0} eliminado correctamente.", id);
             return Response.ok().build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);

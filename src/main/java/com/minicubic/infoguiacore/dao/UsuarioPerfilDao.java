@@ -1,9 +1,9 @@
 package com.minicubic.infoguiacore.dao;
 
-import com.minicubic.infoguiacore.dto.ClienteDto;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
-import com.minicubic.infoguiacore.model.Cliente;
-import com.minicubic.infoguiacore.util.converter.ClienteConverter;
+import com.minicubic.infoguiacore.dto.UsuarioPerfilDto;
+import com.minicubic.infoguiacore.model.UsuarioPerfil;
+import com.minicubic.infoguiacore.util.converter.UsuarioPerfilConverter;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -19,30 +19,29 @@ import javax.persistence.PersistenceContext;
  * @author xergio
  * @version 1
  */
-public class ClienteDao {
-    
+public class UsuarioPerfilDao {
     @LoggedIn
     @Inject
     private UsuarioDto usuarioLogueado;
 
-    private final ClienteConverter converter = new ClienteConverter();
-    private static final Logger LOG = Logger.getLogger("ClienteDao");
+    private final UsuarioPerfilConverter converter = new UsuarioPerfilConverter();
+    private static final Logger LOG = Logger.getLogger("UsuarioDao");
     
     @PersistenceContext(unitName="infoGuiaPU")
     private EntityManager em;
-
+    
     /**
      *
      * @param id
      * @return
      */
-    public ClienteDto getCliente(Long id) {
+    public UsuarioPerfilDto getUsuarioPerfil(Integer id) {
         try {
-            Cliente cliente = (Cliente) em.createNamedQuery("Cliente.findById")
+            UsuarioPerfil usuarioPerfil = (UsuarioPerfil) em.createNamedQuery("UsuarioPerfil.findById")
                     .setParameter("id", id)
                     .getSingleResult();
 
-            return converter.getClienteDto(cliente);
+            return converter.getUsuarioPerfilDto(usuarioPerfil);
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -54,12 +53,12 @@ public class ClienteDao {
      * 
      * @return 
      */
-    public List<ClienteDto> getClientes() {
+    public List<UsuarioPerfilDto> getUsuarioPerfiles() {
         try {
-            List<Cliente> clientes = em.createNamedQuery("Cliente.findAll")
+            List<UsuarioPerfil> usuarioPerfiles = em.createNamedQuery("UsuarioPerfil.findAll")
                     .getResultList();
 
-            return converter.getClientesDto(clientes);
+            return converter.getUsuarioPerfilesDto(usuarioPerfiles);
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -69,31 +68,35 @@ public class ClienteDao {
 
     /**
      *
-     * @param clienteDto
+     * @param usuarioPerfilDto
      * @return
      */
-    public ClienteDto saveCliente(ClienteDto clienteDto) {
+    public UsuarioPerfilDto saveUsuarioPerfil(UsuarioPerfilDto usuarioPerfilDto) {
         try {
-            Cliente cliente = converter.getCliente(clienteDto);
+            UsuarioPerfil usuarioPerfil = converter.getUsuarioPerfil(usuarioPerfilDto);
 
-            cliente.setAuditUsuario(usuarioLogueado.getUsername());
-            cliente = em.merge(cliente);
+            usuarioPerfil.setAuditUsuario(usuarioLogueado.getUsername());
+            usuarioPerfil = em.merge(usuarioPerfil);
             em.flush();
 
-            return converter.getClienteDto(cliente);
+            return converter.getUsuarioPerfilDto(usuarioPerfil);
         } catch (IllegalAccessException | InvocationTargetException ex) {
             LOG.log(Level.SEVERE, null, ex);
             return null;
         }
     }
 
-    public void deleteCliente(Long id) {
+    /**
+     * 
+     * @param id 
+     */
+    public void deleteUsuarioPerfil(Integer id) {
         try {
-            Cliente cliente = (Cliente) em.createNamedQuery("Cliente.findById")
+            UsuarioPerfil usuarioPerfil = (UsuarioPerfil) em.createNamedQuery("UsuarioPerfil.findById")
                     .setParameter("id", id)
                     .getSingleResult();
 
-            em.remove(cliente);
+            em.remove(usuarioPerfil);
             em.flush();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);

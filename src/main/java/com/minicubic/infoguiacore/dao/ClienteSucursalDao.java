@@ -1,6 +1,5 @@
 package com.minicubic.infoguiacore.dao;
 
-import java.io.Serializable;
 import com.minicubic.infoguiacore.dto.ClienteSucursalDto;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.model.ClienteSucursal;
@@ -18,6 +17,7 @@ import javax.persistence.PersistenceContext;
 /**
  *
  * @author xergio
+ * @version 1
  */
 public class ClienteSucursalDao {
     

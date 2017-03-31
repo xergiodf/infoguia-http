@@ -37,6 +37,10 @@ public class Constants {
     
     public static final String VALIDATION_CATEGORIA_DESCRIPCION = "Descripcion es un campo requerido \n";
     
+    public static final String VALIDATION_USUARIO_PERFIL_NOMBRES = "Nombres es un campo requerido \n";
+    public static final String VALIDATION_USUARIO_PERFIL_APELLIDOS = "Apellidos es un campo requerido \n";
+    public static final String VALIDATION_USUARIO_PERFIL_USUARIO = "Usuario es un campo requerido \n";
+    
     public static final String MSG_ERROR_DEFAULT = "Ocurrio un error al procesar la peticion. Revise el log.";
     public static final String MSG_SUCCESS_USUARIO_REGISTRO = "Usuario creado correctamente";
 }
