@@ -1,13 +1,16 @@
 package com.minicubic.infoguiacore.dao;
 
 import com.minicubic.infoguiacore.dto.ClienteCategoriaDto;
+import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.model.ClienteCategoria;
 import com.minicubic.infoguiacore.model.ClienteCategoriaPK;
 import com.minicubic.infoguiacore.util.converter.ClienteCategoriaConverter;
+import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -18,6 +21,10 @@ import javax.persistence.PersistenceContext;
  * @version 1
  */
 public class ClienteCategoriaDao {
+    
+    @LoggedIn
+    @Inject
+    private UsuarioDto usuarioLogueado;
     
     private final ClienteCategoriaConverter converter = new ClienteCategoriaConverter();
     private static final Logger LOG = Logger.getLogger("ClienteCategoriaDao");
@@ -72,6 +79,7 @@ public class ClienteCategoriaDao {
         try {
             ClienteCategoria clienteCategoria = converter.getClienteCategoria(clienteCategoriaDto);
 
+            clienteCategoria.setAuditUsuario(usuarioLogueado.getUsername());
             clienteCategoria = em.merge(clienteCategoria);
             em.flush();
 

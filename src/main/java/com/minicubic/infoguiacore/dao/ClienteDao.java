@@ -2,12 +2,15 @@ package com.minicubic.infoguiacore.dao;
 
 import java.io.Serializable;
 import com.minicubic.infoguiacore.dto.ClienteDto;
+import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.model.Cliente;
 import com.minicubic.infoguiacore.util.converter.ClienteConverter;
+import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -16,7 +19,11 @@ import javax.persistence.PersistenceContext;
  *
  * @author xergio
  */
-public class ClienteDao implements Serializable{
+public class ClienteDao {
+    
+    @LoggedIn
+    @Inject
+    private UsuarioDto usuarioLogueado;
 
     private final ClienteConverter converter = new ClienteConverter();
     private static final Logger LOG = Logger.getLogger("ClienteDao");
@@ -69,6 +76,7 @@ public class ClienteDao implements Serializable{
         try {
             Cliente cliente = converter.getCliente(clienteDto);
 
+            cliente.setAuditUsuario(usuarioLogueado.getUsername());
             cliente = em.merge(cliente);
             em.flush();
 

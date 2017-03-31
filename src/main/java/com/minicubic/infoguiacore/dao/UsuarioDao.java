@@ -6,10 +6,12 @@ import com.minicubic.infoguiacore.model.TipoUsuario;
 import com.minicubic.infoguiacore.model.Usuario;
 import com.minicubic.infoguiacore.util.Constants;
 import com.minicubic.infoguiacore.util.Util;
+import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -20,6 +22,10 @@ import javax.persistence.PersistenceContext;
  * @version 1
  */
 public class UsuarioDao {
+    
+    @LoggedIn
+    @Inject
+    private UsuarioDto usuarioLogueado;
 
     private final UsuarioConverter converter = new UsuarioConverter();
     private static final Logger LOG = Logger.getLogger("UsuarioDao");
@@ -76,6 +82,7 @@ public class UsuarioDao {
         try {
             Usuario usuario = converter.getUsuario(usuarioDto);
 
+            usuario.setAuditUsuario(usuarioLogueado.getUsername());
             usuario = em.merge(usuario);
             em.flush();
 

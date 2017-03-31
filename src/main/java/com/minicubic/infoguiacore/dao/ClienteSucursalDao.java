@@ -2,12 +2,15 @@ package com.minicubic.infoguiacore.dao;
 
 import java.io.Serializable;
 import com.minicubic.infoguiacore.dto.ClienteSucursalDto;
+import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.model.ClienteSucursal;
 import com.minicubic.infoguiacore.util.converter.ClienteSucursalConverter;
+import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -16,7 +19,11 @@ import javax.persistence.PersistenceContext;
  *
  * @author xergio
  */
-public class ClienteSucursalDao implements Serializable{
+public class ClienteSucursalDao {
+    
+    @LoggedIn
+    @Inject
+    private UsuarioDto usuarioLogueado;
 
     private final ClienteSucursalConverter converter = new ClienteSucursalConverter();
     private static final Logger LOG = Logger.getLogger("ClienteSucursalDao");
@@ -31,11 +38,11 @@ public class ClienteSucursalDao implements Serializable{
      */
     public ClienteSucursalDto getClienteSucursal(Integer id) {
         try {
-            ClienteSucursal cliente = (ClienteSucursal) em.createNamedQuery("ClienteSucursal.findById")
+            ClienteSucursal clienteSucursal = (ClienteSucursal) em.createNamedQuery("ClienteSucursal.findById")
                     .setParameter("id", id)
                     .getSingleResult();
 
-            return converter.getClienteSucursalDto(cliente);
+            return converter.getClienteSucursalDto(clienteSucursal);
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -49,10 +56,10 @@ public class ClienteSucursalDao implements Serializable{
      */
     public List<ClienteSucursalDto> getClienteSucursales() {
         try {
-            List<ClienteSucursal> clientes = em.createNamedQuery("ClienteSucursal.findAll")
+            List<ClienteSucursal> clienteSucursals = em.createNamedQuery("ClienteSucursal.findAll")
                     .getResultList();
 
-            return converter.getClienteSucursalesDto(clientes);
+            return converter.getClienteSucursalesDto(clienteSucursals);
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -62,16 +69,16 @@ public class ClienteSucursalDao implements Serializable{
     
     /**
      * 
-     * @param clienteId
+     * @param clienteSucursalId
      * @return 
      */
-    public List<ClienteSucursalDto> getClienteSucursalesByCliente(Long clienteId) {
+    public List<ClienteSucursalDto> getClienteSucursalesByCliente(Long clienteSucursalId) {
         try {
-            List<ClienteSucursal> clientes = em.createNamedQuery("ClienteSucursal.findByCliente")
-                    .setParameter("clienteId", clienteId)
+            List<ClienteSucursal> clienteSucursals = em.createNamedQuery("ClienteSucursal.findByCliente")
+                    .setParameter("clienteId", clienteSucursalId)
                     .getResultList();
 
-            return converter.getClienteSucursalesDto(clientes);
+            return converter.getClienteSucursalesDto(clienteSucursals);
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -81,17 +88,18 @@ public class ClienteSucursalDao implements Serializable{
 
     /**
      *
-     * @param clienteSucursalDto
+     * @param clienteSucursalSucursalDto
      * @return
      */
-    public ClienteSucursalDto saveClienteSucursal(ClienteSucursalDto clienteSucursalDto) {
+    public ClienteSucursalDto saveClienteSucursal(ClienteSucursalDto clienteSucursalSucursalDto) {
         try {
-            ClienteSucursal cliente = converter.getClienteSucursal(clienteSucursalDto);
+            ClienteSucursal clienteSucursal = converter.getClienteSucursal(clienteSucursalSucursalDto);
 
-            cliente = em.merge(cliente);
+            clienteSucursal.setAuditUsuario(usuarioLogueado.getUsername());
+            clienteSucursal = em.merge(clienteSucursal);
             em.flush();
 
-            return converter.getClienteSucursalDto(cliente);
+            return converter.getClienteSucursalDto(clienteSucursal);
         } catch (IllegalAccessException | InvocationTargetException ex) {
             LOG.log(Level.SEVERE, null, ex);
             return null;
@@ -100,11 +108,11 @@ public class ClienteSucursalDao implements Serializable{
 
     public void deleteClienteSucursal(Integer id) {
         try {
-            ClienteSucursal cliente = (ClienteSucursal) em.createNamedQuery("ClienteSucursal.findById")
+            ClienteSucursal clienteSucursal = (ClienteSucursal) em.createNamedQuery("ClienteSucursal.findById")
                     .setParameter("id", id)
                     .getSingleResult();
 
-            em.remove(cliente);
+            em.remove(clienteSucursal);
             em.flush();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
