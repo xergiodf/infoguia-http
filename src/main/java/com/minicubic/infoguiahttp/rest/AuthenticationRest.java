@@ -8,7 +8,7 @@ import com.minicubic.infoguiacore.util.Util;
 import com.minicubic.infoguiacore.util.Validator;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import com.minicubic.infoguiahttp.annotations.Secured;
-import com.minicubic.infoguiahttp.services.UsuarioService;
+import com.minicubic.infoguiahttp.services.AuthService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
@@ -43,7 +43,7 @@ public class AuthenticationRest {
     private UsuarioDto usuarioLogueado;
     
     @Inject
-    private UsuarioService service;
+    private AuthService service;
     
     private static final Logger LOG = Logger.getLogger("AuthenticationRest");
     

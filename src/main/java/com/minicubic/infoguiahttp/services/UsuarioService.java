@@ -14,6 +14,7 @@ import javax.inject.Inject;
 /**
  *
  * @author xergio
+ * @version 2
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
@@ -64,15 +65,5 @@ public class UsuarioService {
      */
     public List<TipoUsuario> getTiposUsuarios() {
         return dao.getTiposUsuarios();
-    }
-    
-    /**
-     * Obtiene un registro de usuario en base a sus credenciales
-     * @param user
-     * @param pass
-     * @return 
-     */
-    public UsuarioDto getUsuarioByCredentials(String user, String pass) {
-        return dao.getUsuarioByCredentials(user, pass);
     }
 }

@@ -19,7 +19,7 @@ import javax.persistence.PersistenceContext;
 /**
  *
  * @author xergio
- * @version 1
+ * @version 2
  */
 public class UsuarioDao {
     
@@ -104,29 +104,6 @@ public class UsuarioDao {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
-    }
-    
-    /**
-     *
-     * @param user
-     * @param pass
-     * @return
-     */
-    public UsuarioDto getUsuarioByCredentials(String user, String pass) {
-        try {
-
-            Usuario usuario = (Usuario) em.createNamedQuery("Usuario.findByUsernameAndPassword")
-                    .setParameter("username", user)
-                    .setParameter("password", pass)
-                    .getSingleResult();
-
-            return converter.getUsuarioDto(usuario);
-
-        } catch (NoResultException nre) {
-        } catch (Exception ex) {
-            LOG.log(Level.SEVERE, null, ex);
-        }
-        return null;
     }
     
     /**
