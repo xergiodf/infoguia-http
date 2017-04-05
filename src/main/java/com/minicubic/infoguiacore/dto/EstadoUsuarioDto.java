@@ -18,6 +18,12 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class EstadoUsuarioDto {
+    
+    public EstadoUsuarioDto() {}
+    
+    public EstadoUsuarioDto(Integer id) {
+        this.id = id;
+    }
 
     @Getter
     @Setter
