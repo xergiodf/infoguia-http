@@ -18,6 +18,12 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class TipoUsuarioDto {
+    
+    public TipoUsuarioDto() {}
+    
+    public TipoUsuarioDto(Integer id) {
+        this.id = id;
+    }
 
     @Getter
     @Setter

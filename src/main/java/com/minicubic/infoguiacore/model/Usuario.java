@@ -35,11 +35,13 @@ import lombok.ToString;
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
     @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id"),
-    @NamedQuery(name = "Usuario.findByUsernameAndPassword", query = "SELECT u FROM Usuario u WHERE u.username = :username AND u.password = :password"),
-    @NamedQuery(name = "Usuario.findByFechaRegistro", query = "SELECT u FROM Usuario u WHERE u.fechaRegistro = :fechaRegistro"),
-    @NamedQuery(name = "Usuario.findByFechaExpiracion", query = "SELECT u FROM Usuario u WHERE u.fechaExpiracion = :fechaExpiracion"),
-    @NamedQuery(name = "Usuario.findByTokenCambioPass", query = "SELECT u FROM Usuario u WHERE u.tokenCambioPass = :tokenCambioPass"),
-    @NamedQuery(name = "Usuario.findByTokenConfirmacion", query = "SELECT u FROM Usuario u WHERE u.tokenConfirmacion = :tokenConfirmacion")})
+    @NamedQuery(name = "Usuario.findByUsernameAndPassword", 
+            query = "SELECT u FROM Usuario u WHERE u.username = :username AND u.password = :password AND u.estadoUsuario.id = :estadoUsuarioId"),
+    @NamedQuery(name = "Usuario.findByUsername", query = "SELECT u FROM Usuario u WHERE u.username = :username"),
+    @NamedQuery(name = "Usuario.findByEmail", query = "SELECT u FROM Usuario u WHERE u.email = :email"),
+    @NamedQuery(name = "Usuario.finfByUsernameAndTokenConfirmacion", 
+            query = "SELECT u FROM Usuario u WHERE u.username = :username AND u.tokenConfirmacion = :tokenConfirmacion AND u.estadoUsuario.id = :estadoUsuarioId")
+})
 @ToString
 @EqualsAndHashCode
 public class Usuario implements Serializable {

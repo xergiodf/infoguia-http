@@ -104,7 +104,7 @@ public class ClienteCategoriaRest {
     
     @DELETE
     @Secured
-    @Path("/delete")
+    @Path("/delete/{idCliente}/{idCategoria}")
     @ApiOperation(value = "Borra un registro de Clientes en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),

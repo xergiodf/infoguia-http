@@ -21,6 +21,15 @@ public class AuthService {
     
     @Inject
     private AuthDao dao;
+    
+    /**
+     * 
+     * @param usuarioParam
+     * @return 
+     */
+    public UsuarioDto getUsuarioByParam(UsuarioDto usuarioParam) {
+        return dao.getUsuarioByParam(usuarioParam);
+    }
 
     /**
      * Obtiene un registro de usuario en base a sus credenciales
