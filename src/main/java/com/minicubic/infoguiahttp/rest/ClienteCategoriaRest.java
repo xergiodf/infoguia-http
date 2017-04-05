@@ -110,14 +110,14 @@ public class ClienteCategoriaRest {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Error Generico"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response deleteClienteCategoria(ClienteCategoriaDto clienteCategoriaParam) {
+    public Response deleteClienteCategoria(@PathParam(value = "idCliente") Long idCliente, 
+            @PathParam(value = "idCategoria") Integer idCategoria) {
         LOG.log(Level.INFO, "Eliminando ClienteCategoria por id: {0}-{1}", 
-                new Object[]{clienteCategoriaParam.getClienteDto().getId(), clienteCategoriaParam.getCategoriaDto().getId()});
+                new Object[]{idCliente, idCategoria});
 
         try {
             
-            ClienteCategoriaPK id = new ClienteCategoriaPK(
-                    clienteCategoriaParam.getClienteDto().getId(), clienteCategoriaParam.getCategoriaDto().getId());
+            ClienteCategoriaPK id = new ClienteCategoriaPK(idCliente, idCategoria);
             
             service.deleteClienteCategoria(id);
 

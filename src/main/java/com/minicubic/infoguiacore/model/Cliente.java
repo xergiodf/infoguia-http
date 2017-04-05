@@ -108,7 +108,7 @@ public class Cliente implements Serializable {
     @Setter
     private Date auditFechaUpdate;
     
-    @JoinTable(name = "clientes_categorias", joinColumns = {
+    @JoinTable(name = "cliente_categorias", joinColumns = {
         @JoinColumn(name = "id_cliente", referencedColumnName = "id")
     }, 
     inverseJoinColumns = {
