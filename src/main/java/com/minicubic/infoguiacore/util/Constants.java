@@ -49,6 +49,7 @@ public class Constants {
     public static final String VALIDATION_SUCURSAL_CLIENTE_REQUIRED = "Cliente es un campo requerido \n";
     
     public static final String VALIDATION_CATEGORIA_DESCRIPCION = "Descripcion es un campo requerido \n";
+    public static final String VALIDATION_CATEGORIA_GRUPO = "Grupo es un campo requerido \n";
     
     public static final String VALIDATION_USUARIO_PERFIL_NOMBRES = "Nombres es un campo requerido \n";
     public static final String VALIDATION_USUARIO_PERFIL_APELLIDOS = "Apellidos es un campo requerido \n";

@@ -11,7 +11,7 @@ import com.minicubic.infoguiacore.dto.ValidatorResponse;
 /**
  *
  * @author xergio
- * @version 1
+ * @version 2 - 07/04/2017
  */
 public class Validator {
     private static Validator INSTANCE = null;
@@ -150,6 +150,11 @@ public class Validator {
         if ( Util.isEmpty(categoriaDto.getDescripcion()) ) {
             response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_CATEGORIA_DESCRIPCION));
+        }
+        
+        if ( Util.isEmpty(categoriaDto.getGrupoCategoriaDto()) ) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_CATEGORIA_GRUPO));
         }
         
         return response;

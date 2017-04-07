@@ -2,6 +2,7 @@ package com.minicubic.infoguiacore.util.converter;
 
 import com.minicubic.infoguiacore.dto.CategoriaDto;
 import com.minicubic.infoguiacore.model.Categoria;
+import com.minicubic.infoguiacore.util.Util;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import org.apache.commons.beanutils.PropertyUtilsBean;
 /**
  *
  * @author xergio
- * @version 1
+ * @version 2 - 07/04/2017
  */
 public class CategoriaConverter {
 
@@ -69,6 +70,11 @@ public class CategoriaConverter {
         } catch (NoSuchMethodException ex) {
             // No importa
         }
+        
+        // Copiamos las propiedades compuestas
+        if ( !Util.isEmpty(categoriaDto.getGrupoCategoriaDto()) ) 
+            categoria.setGrupoCategoria(new GrupoCategoriaConverter().getGrupoCategoria(categoriaDto.getGrupoCategoriaDto()));
+        
 
         return categoria;
     }
@@ -90,6 +96,10 @@ public class CategoriaConverter {
         } catch (NoSuchMethodException ex) {
             // No importa
         }
+        
+        // Copiamos las propiedades compuestas
+        if ( !Util.isEmpty(categoria.getGrupoCategoria()) )
+            categoriaDto.setGrupoCategoriaDto(new GrupoCategoriaConverter().getGrupoCategoriaDto(categoria.getGrupoCategoria()));
         
         return categoriaDto;
     }

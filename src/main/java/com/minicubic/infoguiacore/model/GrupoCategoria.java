@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.minicubic.infoguiacore.model;
 
 import java.io.Serializable;
@@ -6,13 +11,9 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -29,18 +30,21 @@ import lombok.ToString;
 /**
  *
  * @author xergio
- * @version 2 - 07/04/2017
+ * @version 1 - 07/04/2017
  */
 @Entity
-@Table(name = "categorias")
+@Table(name = "grupo_categorias")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Categoria.findAll", query = "SELECT c FROM Categoria c"), 
-    @NamedQuery(name = "Categoria.findById", query = "SELECT c FROM Categoria c WHERE c.id = :id"), 
-    @NamedQuery(name = "Categoria.findByDescripcion", query = "SELECT c FROM Categoria c WHERE c.descripcion = :descripcion")})
+    @NamedQuery(name = "GrupoCategoria.findAll", query = "SELECT g FROM GrupoCategoria g"), 
+    @NamedQuery(name = "GrupoCategoria.findById", query = "SELECT g FROM GrupoCategoria g WHERE g.id = :id"), 
+    @NamedQuery(name = "GrupoCategoria.findByDescripcion", query = "SELECT g FROM GrupoCategoria g WHERE g.descripcion = :descripcion"), 
+    @NamedQuery(name = "GrupoCategoria.findByAuditUsuario", query = "SELECT g FROM GrupoCategoria g WHERE g.auditUsuario = :auditUsuario"), 
+    @NamedQuery(name = "GrupoCategoria.findByAuditFechaInsert", query = "SELECT g FROM GrupoCategoria g WHERE g.auditFechaInsert = :auditFechaInsert"), 
+    @NamedQuery(name = "GrupoCategoria.findByAuditFechaUpdate", query = "SELECT g FROM GrupoCategoria g WHERE g.auditFechaUpdate = :auditFechaUpdate")})
 @ToString
 @EqualsAndHashCode
-public class Categoria implements Serializable {
+public class GrupoCategoria implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -49,17 +53,11 @@ public class Categoria implements Serializable {
     @Getter
     @Setter
     private Integer id;
-
+    
     @Column(name = "descripcion")
     @Getter
     @Setter
     private String descripcion;
-    
-    @JoinColumn(name = "id_grupo_categoria", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    @Getter
-    @Setter
-    private GrupoCategoria grupoCategoria;
     
     @Column(name = "audit_usuario")
     @Getter
@@ -78,25 +76,15 @@ public class Categoria implements Serializable {
     @Setter
     private Date auditFechaUpdate;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria", fetch = FetchType.LAZY)
-    private Collection<ClienteCategoria> clienteCategorias;
-    
-    @ManyToMany(mappedBy = "categorias")
-    private Collection<Cliente> clientes;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grupoCategoria")
+    private Collection<Categoria> categoriaCollection;
 
     @XmlTransient
-    public Collection<Cliente> getClientes() {
-        return clientes;
-    }
-    public void setClientes(Collection<Cliente> clientes) {
-        this.clientes = clientes;
+    public Collection<Categoria> getCategoriaCollection() {
+        return categoriaCollection;
     }
 
-    @XmlTransient
-    public Collection<ClienteCategoria> getClienteCategorias() {
-        return clienteCategorias;
-    }
-    public void setClienteCategorias(Collection<ClienteCategoria> clienteCategorias) {
-        this.clienteCategorias = clienteCategorias;
-    }
+    public void setCategoriaCollection(Collection<Categoria> categoriaCollection) {
+        this.categoriaCollection = categoriaCollection;
+    }    
 }

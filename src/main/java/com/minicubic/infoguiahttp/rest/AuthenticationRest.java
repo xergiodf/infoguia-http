@@ -33,7 +33,7 @@ import javax.ws.rs.core.Response;
 /**
  *
  * @author xergio
- * @version 2 - 05/04/2017
+ * @version 3 - 07/04/2017
  */
 
 @Singleton
@@ -53,7 +53,7 @@ public class AuthenticationRest {
     private static final Logger LOG = Logger.getLogger("AuthenticationRest");
     
     @POST
-    @Path("login")
+    @Path("admin/login")
     @ApiOperation(value = "Valida las credenciales del usuario y devuelve un token de autorizacion. El usuario debe estar con estado ACTIVO.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -86,7 +86,7 @@ public class AuthenticationRest {
     }
     
     @POST
-    @Path("signup")
+    @Path("public/signup")
     @ApiOperation(value = "Registra un nuevo usuario.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -155,7 +155,7 @@ public class AuthenticationRest {
     }
     
     @GET
-    @Path("confirm/{username}/{tokenConfirmacion}")
+    @Path("public/confirm/{username}/{tokenConfirmacion}")
     @ApiOperation(value = "Registra un nuevo usuario.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),

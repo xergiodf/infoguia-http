@@ -11,13 +11,13 @@ import lombok.ToString;
 /**
  *
  * @author xergio
- * @version 2 - 07/04/2017
+ * @version 1 - 07/04/2017
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 @EqualsAndHashCode
-public class CategoriaDto {
+public class GrupoCategoriaDto {
     @Getter
     @Setter
     private Integer id;
@@ -25,8 +25,4 @@ public class CategoriaDto {
     @Getter
     @Setter
     private String descripcion;
-    
-    @Getter
-    @Setter
-    private GrupoCategoriaDto grupoCategoriaDto;
 }
