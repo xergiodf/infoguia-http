@@ -26,6 +26,10 @@ public class UsuarioDto {
     
     @Getter
     @Setter
+    private String nombreSocial;
+    
+    @Getter
+    @Setter
     private String email;
     
     @Getter
@@ -70,9 +74,17 @@ public class UsuarioDto {
     
     @Getter
     @Setter
+    private String tokenSocial;
+    
+    @Getter
+    @Setter
     private String newPassword;
     
     @Getter
     @Setter
     private Boolean admin;
+    
+    @Getter
+    @Setter
+    private String imagenURL;
 }

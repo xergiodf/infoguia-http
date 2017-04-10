@@ -36,6 +36,7 @@ public class Constants {
     public static final String VALIDATION_USUARIO_TIPOUSUARIO_REQUIRED = "Tipo de Usuario es un campo requerido \n";
     public static final String VALIDATION_USUARIO_EMAIL_UNIQUE = "Ya existe un usuario con el mismo email \n";
     public static final String VALIDATION_USUARIO_USERNAME_UNIQUE = "Ya existe un usuario con el mismo nombre de usuario \n";
+    public static final String VALIDATION_USUARIO_SOCIAL_TOKEN = "El token de la red social es requerido. \n";
     public static final String VALIDATION_USUARIO_NOT_FOUND = "Usuario no encontrado \n";
     
     public static final String VALIDATION_CLIENTE_NOMBRECOMPLETO_REQUIRED = "Nombre Completo es un campo requerido\n";

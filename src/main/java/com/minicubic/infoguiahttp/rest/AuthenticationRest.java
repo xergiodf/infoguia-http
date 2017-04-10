@@ -154,6 +154,75 @@ public class AuthenticationRest {
         }
     }
     
+    @POST
+    @Path("social/signup")
+    @ApiOperation(value = "Registra un nuevo usuario.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 406, message = "Error de validacion"),
+        @ApiResponse(code = 400, message = "Error generico"),
+        @ApiResponse(code = 500, message = "Something wrong in Server")})
+    public Response registrarUsuarioRedSocial(UsuarioDto usuarioParam) {
+        LOG.log(Level.INFO, "Registando nuevo usuario");
+        
+        UsuarioDto usuarioAux;
+
+        try {
+            
+            // Asumimos que todos los usuarios registrados mediante este metodo
+            // son usuarios nuevos de tipo usuario (no admin)
+            usuarioParam.setTipoUsuarioDto(new TipoUsuarioDto(Constants.DB_USR_TIPO_USUARIO_ID));
+            usuarioParam.setEstadoUsuarioDto(new EstadoUsuarioDto(Constants.DB_USR_ESTADO_ACTIVO_ID));
+            
+            // Validacion global
+            ValidatorResponse<Boolean> validatorResponse = Validator.getInstance().validateAddUsuarioSocial(usuarioParam);
+            if ( !validatorResponse.getData() ) {
+                LOG.log(Level.WARNING, "Error de validacion");
+                return Response.status(Response.Status.NOT_ACCEPTABLE).entity(validatorResponse.getMensaje()).build();
+            }
+            
+            // Generamos una contrasenha en base al username (MEJORAR)
+            // Creamos el usuario
+            PasswordService ps = new PasswordService();
+            usuarioParam.setPassword(ps.encrypt(usuarioParam.getUsername() + ".123*"));
+            
+            // Validacion de email unico
+            usuarioAux = new UsuarioDto();
+            usuarioAux.setEmail(usuarioParam.getEmail());
+            
+            if ( !Util.isEmpty(service.getUsuarioByParam(usuarioAux)) ) {
+                LOG.log(Level.WARNING, "Error de validacion: Email ya existe.");
+                return Response.status(Response.Status.NOT_ACCEPTABLE).entity(Constants.VALIDATION_USUARIO_EMAIL_UNIQUE).build();
+            }
+            
+            // Validacion de username unico
+            usuarioAux = new UsuarioDto();
+            usuarioAux.setUsername(usuarioParam.getUsername());
+            
+            if ( !Util.isEmpty(service.getUsuarioByParam(usuarioAux)) ) {
+                LOG.log(Level.WARNING, "Error de validacion: Username ya existe.");
+                return Response.status(Response.Status.NOT_ACCEPTABLE).entity(Constants.VALIDATION_USUARIO_USERNAME_UNIQUE).build();
+            }
+            
+            usuarioParam = service.saveUsuario(usuarioParam);
+            
+            if ( Util.isEmpty(usuarioParam) ) {
+                LOG.log(Level.WARNING, "Registro vacio");
+                return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
+            }
+
+            LOG.log(Level.INFO, "Usuario Social {0} creado correctamente.", usuarioParam.getId());
+            
+            // Enviamos el mail
+            MailService.enviarMailActivacion(usuarioParam);            
+            
+            return Response.ok().entity(usuarioParam).build();
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
+        }
+    }
+    
     @GET
     @Path("public/confirm/{username}/{tokenConfirmacion}")
     @ApiOperation(value = "Registra un nuevo usuario.")
