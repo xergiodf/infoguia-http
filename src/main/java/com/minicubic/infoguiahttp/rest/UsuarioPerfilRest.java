@@ -1,5 +1,6 @@
 package com.minicubic.infoguiahttp.rest;
 
+import com.minicubic.infoguiacore.dto.FileUploadDto;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.dto.UsuarioPerfilDto;
 import com.minicubic.infoguiacore.dto.ValidatorResponse;
@@ -13,6 +14,9 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Singleton;
@@ -27,6 +31,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 /**
  *
@@ -152,5 +157,42 @@ public class UsuarioPerfilRest {
             LOG.log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
         }
+    }
+    
+    @POST
+    @Path("/upload")
+    @Consumes("multipart/form-data")
+    @ApiOperation(value = "Carga un archivo en el servidor.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Something wrong in Server")})
+    public Response uploadFile(@MultipartForm FileUploadDto form) {
+
+        String fileName = form.getFileName() == null ? "Unknown" : form.getFileName() ;
+         
+        String completeFilePath = Constants.UPLOAD_DIR + fileName;
+        try
+        {
+            //Save the file
+            File file = new File(completeFilePath);
+              
+            if (!file.exists()) 
+            {
+                file.createNewFile();
+            }
+      
+            FileOutputStream fos = new FileOutputStream(file);
+      
+            fos.write(form.getFileData());
+            fos.flush();
+            fos.close();
+        } 
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        //Build a response to return
+        return Response.status(200)
+            .entity("uploadFile is called, Uploaded file name : " + fileName).build();
     }
 }

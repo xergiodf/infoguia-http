@@ -17,7 +17,7 @@ public class Constants {
     public static final String USER_NAME_SMTP = "noreply@enemedu.com";
     public static final String PASS_SMTP = ".NoReply.*";
     
-    public static final String UPLOAD_DIR = "/usr/share/nginx/html";
+    public static final String UPLOAD_DIR = "/home/xergio/Documents/Projects/InfoGuia/Dev/Backend/uploads/"; //"/usr/share/nginx/html/";
     
     public static final Integer DB_USR_TIPO_ADMIN_ID = 1;
     public static final Integer DB_USR_TIPO_USUARIO_ID = 2;
