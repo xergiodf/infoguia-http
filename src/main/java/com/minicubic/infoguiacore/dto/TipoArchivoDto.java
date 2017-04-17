@@ -11,13 +11,13 @@ import lombok.ToString;
 /**
  *
  * @author xergio
- * @version 1
+ * @version 1 - 18/04/2017
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 @EqualsAndHashCode
-public class TipoOfertaDto {
+public class TipoArchivoDto {
 
     @Getter
     @Setter

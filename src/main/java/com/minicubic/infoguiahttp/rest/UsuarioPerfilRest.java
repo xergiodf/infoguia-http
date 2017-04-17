@@ -1,5 +1,6 @@
 package com.minicubic.infoguiahttp.rest;
 
+import com.minicubic.infoguiacore.dto.FileUploadDto;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.dto.UsuarioPerfilDto;
 import com.minicubic.infoguiacore.dto.ValidatorResponse;
@@ -8,11 +9,15 @@ import com.minicubic.infoguiacore.util.Util;
 import com.minicubic.infoguiacore.util.Validator;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import com.minicubic.infoguiahttp.annotations.Secured;
+import com.minicubic.infoguiahttp.services.ArchivoService;
 import com.minicubic.infoguiahttp.services.UsuarioPerfilService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Singleton;
@@ -26,7 +31,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 /**
  *
@@ -46,6 +55,9 @@ public class UsuarioPerfilRest {
     
     @Inject
     private UsuarioPerfilService service;
+    
+    @Inject
+    private ArchivoService archivoService;
     
     private static final Logger LOG = Logger.getLogger("UsuarioPerfilesRest");
     
@@ -152,5 +164,44 @@ public class UsuarioPerfilRest {
             LOG.log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
         }
+    }
+    
+    @POST
+    @Secured
+    @Path("/upload/{id}")
+    @Consumes("multipart/form-data")
+    @ApiOperation(value = "Carga un archivo en el servidor.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 404, message = "Registros de Perfil de Usuario No Encontrado"),
+        @ApiResponse(code = 500, message = "Something wrong in Server")})
+    public Response uploadFotoPerfil(@PathParam("id") Integer id, MultipartFormDataInput input) {
+        LOG.log(Level.INFO, "Guardando una Foto de Perfil");
+        
+        try {
+            // Verificamos que exista el ID de Perfil de Usuario
+            UsuarioPerfilDto usuarioPerfilDto = service.getUsuarioPerfil(id);
+            
+            if ( Util.isEmpty(usuarioPerfilDto) ) {
+                LOG.log(Level.WARNING, "Registro vacio");
+                return Response.status(Response.Status.NOT_FOUND).entity(Constants.MSG_ERROR_DEFAULT).build();
+            }
+
+            // Guardamos la imagen en disco
+            String fileName = UUID.randomUUID().toString();
+            
+            Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
+            InputPart inputPart = uploadForm.get(Constants.FILE_FORM_NAME).get(0);
+            
+            MultivaluedMap<String, String> header = inputPart.getHeaders();
+
+            // Guardamos la informacion en DB
+
+            LOG.log(Level.INFO, "Foto de Perfil {0} agregada correctamente.", id);
+            return Response.ok().build();
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
+        }        
     }
 }

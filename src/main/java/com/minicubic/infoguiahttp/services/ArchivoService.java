@@ -1,7 +1,7 @@
 package com.minicubic.infoguiahttp.services;
 
-import com.minicubic.infoguiacore.dao.CategoriaDao;
-import com.minicubic.infoguiacore.dto.CategoriaDto;
+import com.minicubic.infoguiacore.dao.ArchivoDao;
+import com.minicubic.infoguiacore.dto.ArchivoCabDto;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -13,47 +13,47 @@ import javax.inject.Inject;
 /**
  *
  * @author xergio
- * @version 1 
+ * @version 1 - 18/04/2017
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-public class CategoriaService {
+public class ArchivoService {
 
     @Inject
-    private CategoriaDao dao;
+    private ArchivoDao dao;
     
     /**
      * 
      * @param id
      * @return 
      */
-    public CategoriaDto getCategoria(Integer id) {
-        return dao.getCategoria(id);
+    public ArchivoCabDto getArchivoCab(Integer id) {
+        return dao.getArchivoCab(id);
     }
     
     /**
      * 
      * @return 
      */
-    public List<CategoriaDto> getCategorias() {
-        return dao.getCategorias();
+    public List<ArchivoCabDto> getArchivoCabs() {
+        return dao.getArchivoCabs();
     }
     
     /**
      * 
-     * @param categoriaDto
+     * @param archivoCabDto
      * @return 
      */
-    public CategoriaDto saveCategoria(CategoriaDto categoriaDto) {
-        return dao.saveCategoria(categoriaDto);
+    public ArchivoCabDto saveArchivoCab(ArchivoCabDto archivoCabDto) {
+        return dao.saveArchivoCab(archivoCabDto);
     }
     
     /**
      * 
      * @param id 
      */
-    public void deleteCategoria(Integer id) {
-        dao.deleteCategoria(id);
+    public void deleteArchivoCab(Integer id) {
+        dao.deleteArchivoCab(id);
     }
 }

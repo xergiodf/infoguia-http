@@ -134,7 +134,7 @@ public class Usuario implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.LAZY)
     private Collection<SucursalValoracionDet> sucursalValoracionDets;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
     private Collection<UsuarioPerfil> usuarioPerfiles;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioEmisor", fetch = FetchType.LAZY)
