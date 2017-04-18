@@ -11,15 +11,15 @@ import org.jboss.resteasy.annotations.providers.multipart.PartType;
 public class FileUploadDto {
     
     private byte[] fileData;
-    private String referenceId;
+    private String fileName;
  
-    public String getReferenceId() {
-        return referenceId;
+    public String getFileName() {
+        return fileName;
     }
  
-    @FormParam("referenceId")
-    public void setReferenceId(String fileName) {
-        this.referenceId = fileName;
+    @FormParam("fileName")
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
  
     public byte[] getFileData() {
