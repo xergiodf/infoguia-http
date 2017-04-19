@@ -1,9 +1,10 @@
 package com.minicubic.infoguiahttp.rest;
 
-import com.minicubic.infoguiacore.dto.FileUploadDto;
+import com.minicubic.infoguiacore.dto.ArchivoCabDto;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.dto.UsuarioPerfilDto;
 import com.minicubic.infoguiacore.dto.ValidatorResponse;
+import com.minicubic.infoguiacore.util.Builder;
 import com.minicubic.infoguiacore.util.Constants;
 import com.minicubic.infoguiacore.util.Util;
 import com.minicubic.infoguiacore.util.Validator;
@@ -15,6 +16,7 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -31,9 +33,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
@@ -187,18 +187,20 @@ public class UsuarioPerfilRest {
                 return Response.status(Response.Status.NOT_FOUND).entity(Constants.MSG_ERROR_DEFAULT).build();
             }
 
-            // Guardamos la imagen en disco
-            String fileName = UUID.randomUUID().toString();
-            
+            // Guardamos la imagen en disco            
             Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
             InputPart inputPart = uploadForm.get(Constants.FILE_FORM_NAME).get(0);
             
-            MultivaluedMap<String, String> header = inputPart.getHeaders();
+            String mimeType = inputPart.getHeaders().getFirst("Content-Type");
+            String fileName = UUID.randomUUID().toString() + "_" + usuarioPerfilDto.getId() + "." + mimeType.split("/")[1];
+            
+            Util.saveFileToDisk(inputPart.getBody(InputStream.class, null), fileName);
 
             // Guardamos la informacion en DB
+            ArchivoCabDto archivoCabDto = archivoService.saveArchivo(Builder.buildArchivoFotoPerfil(usuarioPerfilDto.getId().toString(), fileName, mimeType));
 
             LOG.log(Level.INFO, "Foto de Perfil {0} agregada correctamente.", id);
-            return Response.ok().build();
+            return Response.ok().entity(archivoCabDto).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();

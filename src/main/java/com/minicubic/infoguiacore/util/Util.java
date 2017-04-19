@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.util.Date;
 import java.util.Map;
 import javax.xml.bind.DatatypeConverter;
+import org.apache.commons.io.IOUtils;
 
 /**
  *
@@ -87,16 +88,22 @@ public final class Util {
     public static void saveFileToDisk(InputStream uploadedInputStream, String fileName) {
 
         try {
-            OutputStream outpuStream = new FileOutputStream(new File(Constants.UPLOAD_DIR + fileName));
-            int read = 0;
-            byte[] bytes = new byte[1024];
+            
+            byte [] bytes = IOUtils.toByteArray(uploadedInputStream);
 
-            outpuStream = new FileOutputStream(new File(fileName));
-            while ((read = uploadedInputStream.read(bytes)) != -1) {
-                outpuStream.write(bytes, 0, read);
+            //Save the file
+            File file = new File(Constants.UPLOAD_DIR + fileName);
+              
+            if (!file.exists()) 
+            {
+                file.createNewFile();
             }
-            outpuStream.flush();
-            outpuStream.close();
+      
+            FileOutputStream fos = new FileOutputStream(file);
+      
+            fos.write(bytes);
+            fos.flush();
+            fos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

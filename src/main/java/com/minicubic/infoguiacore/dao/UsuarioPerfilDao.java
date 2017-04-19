@@ -2,6 +2,7 @@ package com.minicubic.infoguiacore.dao;
 
 import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.dto.UsuarioPerfilDto;
+import com.minicubic.infoguiacore.model.Usuario;
 import com.minicubic.infoguiacore.model.UsuarioPerfil;
 import com.minicubic.infoguiacore.util.converter.UsuarioPerfilConverter;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;

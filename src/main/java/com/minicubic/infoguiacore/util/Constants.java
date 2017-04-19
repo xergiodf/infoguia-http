@@ -8,7 +8,8 @@ public class Constants {
     
     public static final String SECRET_KEY = "INFOGUIA-VILO-SA";
     
-    public static final String PUBLIC_API_URL = "http://45.79.159.123:8080/infoguia-rest/api/";
+    public static final String PUBLIC_SERVER_URL = "http://45.79.159.123";
+    public static final String PUBLIC_API_URL = PUBLIC_SERVER_URL + ":8080/infoguia-rest/api/";
     public static final String PUBLIC_DOMAIN_URL = "http://www.infoguia.com.py";
     public static final String PUBLIC_API_CONFIRM_URL = PUBLIC_API_URL + "auth/confirm/";
     
@@ -18,7 +19,8 @@ public class Constants {
     public static final String PASS_SMTP = ".NoReply.*";
     
     public static final String FILE_FORM_NAME = "fileData";
-    public static final String UPLOAD_DIR = "/home/xergio/Documents/Projects/InfoGuia/Dev/Backend/uploads/"; //"/usr/share/nginx/html/";
+//    public static final String UPLOAD_DIR = "/home/xergio/Documents/Projects/InfoGuia/Dev/Backend/uploads/"; 
+    public static final String UPLOAD_DIR = "/usr/share/nginx/html/";
     
     public static final Integer DB_USR_TIPO_ADMIN_ID = 1;
     public static final Integer DB_USR_TIPO_USUARIO_ID = 2;

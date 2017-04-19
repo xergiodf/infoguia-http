@@ -3,6 +3,7 @@ package com.minicubic.infoguiacore.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Collection;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import lombok.EqualsAndHashCode;
@@ -45,6 +47,11 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class Cliente implements Serializable {
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "codigo_cliente")
+    private int codigoCliente;
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -54,10 +61,6 @@ public class Cliente implements Serializable {
     @Setter
     private Long id;
 
-    @Column(name = "codigo_cliente")
-    @Getter
-    @Setter
-    private Integer codigoCliente;
     
     @Column(name = "nombre_completo")
     @Getter
@@ -190,5 +193,16 @@ public class Cliente implements Serializable {
     }
     public void setClienteOfertas(Collection<ClienteOferta> clienteOfertas) {
         this.clienteOfertas = clienteOfertas;
+    }
+
+    public Cliente() {
+    }
+
+    public int getCodigoCliente() {
+        return codigoCliente;
+    }
+
+    public void setCodigoCliente(int codigoCliente) {
+        this.codigoCliente = codigoCliente;
     }
 }

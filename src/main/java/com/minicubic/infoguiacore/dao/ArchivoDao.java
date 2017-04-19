@@ -1,13 +1,14 @@
 package com.minicubic.infoguiacore.dao;
 
 import com.minicubic.infoguiacore.dto.ArchivoCabDto;
-import com.minicubic.infoguiacore.dto.ArchivoDetDto;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.model.ArchivoCab;
 import com.minicubic.infoguiacore.model.ArchivoDet;
+import com.minicubic.infoguiacore.util.Util;
 import com.minicubic.infoguiacore.util.converter.ArchivoConverter;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +39,7 @@ public class ArchivoDao {
      * @param id
      * @return
      */
-    public ArchivoCabDto getArchivoCab(Integer id) {
+    public ArchivoCabDto getArchivo(Integer id) {
         try {
             ArchivoCab archivoCab = (ArchivoCab) em.createNamedQuery("ArchivoCab.findById")
                     .setParameter("id", id)
@@ -56,7 +57,7 @@ public class ArchivoDao {
      * 
      * @return 
      */
-    public List<ArchivoCabDto> getArchivoCabs() {
+    public List<ArchivoCabDto> getArchivos() {
         try {
             List<ArchivoCab> archivoCabs = em.createNamedQuery("ArchivoCab.findAll")
                     .getResultList();
@@ -74,20 +75,34 @@ public class ArchivoDao {
      * @param archivoCabDto
      * @return
      */
-    public ArchivoCabDto saveArchivoCab(ArchivoCabDto archivoCabDto) {
+    public ArchivoCabDto saveArchivo(ArchivoCabDto archivoCabDto) {
         try {
+            ArchivoCab archivoCabAux = converter.getArchivoCab(archivoCabDto);
+            ArchivoCab archivoCab;
+            
+            // Verificamos si no existe una cabecera para este tipo de archivo
+            try {
+                archivoCab = (ArchivoCab) em.createNamedQuery("ArchivoCab.findByRef")
+                    .setParameter("tablaRef", archivoCabDto.getTablaRef())
+                    .setParameter("columnaRef", archivoCabDto.getColumnaRef())
+                    .setParameter("idRef", archivoCabDto.getIdRef())
+                    .getSingleResult();
+            } catch (NoResultException nre) {
+                archivoCab = null;
+            }
             
             // Guardamos la cabecera
-            ArchivoCab archivoCab = converter.getArchivoCab(archivoCabDto);
-
+            if ( !Util.isEmpty(archivoCab) ) {
+                // TODO: Mejorar despues
+                archivoCabAux.getArchivosDet().iterator().next().setArchivoCab(archivoCab);
+                archivoCab.setArchivosDet(new ArrayList<ArchivoDet>());
+                archivoCab.getArchivosDet().addAll(archivoCabAux.getArchivosDet());
+            } else {
+                archivoCab = archivoCabAux;
+            }
+            
             archivoCab.setAuditUsuario(usuarioLogueado.getUsername());
             archivoCab = em.merge(archivoCab);
-            
-            // Guardamos el detalle
-            for ( ArchivoDet archivoDet : archivoCab.getArchivosDet() ) {
-                archivoDet.setAuditUsuario(usuarioLogueado.getUsername());
-                archivoDet = em.merge(archivoDet);
-            }
             
             em.flush();
             
@@ -102,7 +117,7 @@ public class ArchivoDao {
      * 
      * @param id 
      */
-    public void deleteArchivoCab(Integer id) {
+    public void deleteArchivo(Integer id) {
         try {
             ArchivoCab archivoCab = (ArchivoCab) em.createNamedQuery("ArchivoCab.findById")
                     .setParameter("id", id)

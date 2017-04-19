@@ -28,16 +28,16 @@ public class ArchivoService {
      * @param id
      * @return 
      */
-    public ArchivoCabDto getArchivoCab(Integer id) {
-        return dao.getArchivoCab(id);
+    public ArchivoCabDto getArchivo(Integer id) {
+        return dao.getArchivo(id);
     }
     
     /**
      * 
      * @return 
      */
-    public List<ArchivoCabDto> getArchivoCabs() {
-        return dao.getArchivoCabs();
+    public List<ArchivoCabDto> getArchivos() {
+        return dao.getArchivos();
     }
     
     /**
@@ -45,15 +45,15 @@ public class ArchivoService {
      * @param archivoCabDto
      * @return 
      */
-    public ArchivoCabDto saveArchivoCab(ArchivoCabDto archivoCabDto) {
-        return dao.saveArchivoCab(archivoCabDto);
+    public ArchivoCabDto saveArchivo(ArchivoCabDto archivoCabDto) {
+        return dao.saveArchivo(archivoCabDto);
     }
     
     /**
      * 
      * @param id 
      */
-    public void deleteArchivoCab(Integer id) {
-        dao.deleteArchivoCab(id);
+    public void deleteArchivo(Integer id) {
+        dao.deleteArchivo(id);
     }
 }

@@ -36,12 +36,7 @@ import lombok.ToString;
 @NamedQueries({
     @NamedQuery(name = "ArchivoCab.findAll", query = "SELECT a FROM ArchivoCab a"), 
     @NamedQuery(name = "ArchivoCab.findById", query = "SELECT a FROM ArchivoCab a WHERE a.id = :id"), 
-    @NamedQuery(name = "ArchivoCab.findByTablaRef", query = "SELECT a FROM ArchivoCab a WHERE a.tablaRef = :tablaRef"), 
-    @NamedQuery(name = "ArchivoCab.findByColumnaRef", query = "SELECT a FROM ArchivoCab a WHERE a.columnaRef = :columnaRef"), 
-    @NamedQuery(name = "ArchivoCab.findByIdRef", query = "SELECT a FROM ArchivoCab a WHERE a.idRef = :idRef"), 
-    @NamedQuery(name = "ArchivoCab.findByAuditUsuario", query = "SELECT a FROM ArchivoCab a WHERE a.auditUsuario = :auditUsuario"), 
-    @NamedQuery(name = "ArchivoCab.findByAuditFechaInsert", query = "SELECT a FROM ArchivoCab a WHERE a.auditFechaInsert = :auditFechaInsert"), 
-    @NamedQuery(name = "ArchivoCab.findByAuditFechaUpdate", query = "SELECT a FROM ArchivoCab a WHERE a.auditFechaUpdate = :auditFechaUpdate")})
+    @NamedQuery(name = "ArchivoCab.findByRef", query = "SELECT a FROM ArchivoCab a WHERE a.tablaRef = :tablaRef AND a.columnaRef = :columnaRef AND a.idRef = :idRef")})
 @ToString
 @EqualsAndHashCode
 public class ArchivoCab implements Serializable {

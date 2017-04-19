@@ -29,7 +29,7 @@ import lombok.ToString;
  * @version 1
  */
 @Entity
-@Table(name = "estado_suscripciones")
+@Table(name = "estados_suscripciones")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "EstadoSuscripcion.findAll", query = "SELECT e FROM EstadoSuscripcion e"), 

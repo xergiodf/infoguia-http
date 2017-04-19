@@ -103,4 +103,7 @@ public class EstadoUsuario implements Serializable {
     public String toString() {
         return "com.minicubic.infoguiaserver.model.EstadoUsuario[ id=" + id + " ]";
     }
+
+    public EstadoUsuario() {
+    }
 }

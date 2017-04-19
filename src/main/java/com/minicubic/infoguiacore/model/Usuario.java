@@ -103,7 +103,7 @@ public class Usuario implements Serializable {
     private String ultimaConexion;
     
     @JoinColumn(name = "id_cliente", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     @Getter
     @Setter
     private Cliente cliente;
@@ -131,47 +131,47 @@ public class Usuario implements Serializable {
     @Setter
     private Date auditFechaUpdate;    
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.LAZY)
-    private Collection<SucursalValoracionDet> sucursalValoracionDets;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private Collection<UsuarioPerfil> usuarioPerfiles;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioEmisor", fetch = FetchType.LAZY)
-    private Collection<UsuarioMensajeCab> usuarioMensajeCabsEmisor;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioReceptor", fetch = FetchType.LAZY)
-    private Collection<UsuarioMensajeCab> usuarioMensajesCabsReceptor;
-
-    @XmlTransient
-    public Collection<SucursalValoracionDet> getSucursalValoracionDets() {
-        return sucursalValoracionDets;
-    }
-    public void setSucursalValoracionDets(Collection<SucursalValoracionDet> sucursalValoracionDets) {
-        this.sucursalValoracionDets = sucursalValoracionDets;
-    }
-
-    @XmlTransient
-    public Collection<UsuarioMensajeCab> getUsuarioMensajesCabsEmisor() {
-        return usuarioMensajeCabsEmisor;
-    }
-    public void setUsuarioMensajesCabsEmisor(Collection<UsuarioMensajeCab> usuarioMensajesCabsEmisor) {
-        this.usuarioMensajeCabsEmisor = usuarioMensajesCabsEmisor;
-    }
-
-    @XmlTransient
-    public Collection<UsuarioMensajeCab> getUsuarioMensajesCabsReceptor() {
-        return usuarioMensajesCabsReceptor;
-    }
-    public void setUsuarioMensajesCabsReceptor(Collection<UsuarioMensajeCab> usuarioMensajesCabsReceptor) {
-        this.usuarioMensajesCabsReceptor = usuarioMensajesCabsReceptor;
-    }
-    
-    @XmlTransient
-    public Collection<UsuarioPerfil> getUsuarioPerfiles() {
-        return usuarioPerfiles;
-    }
-    public void setUsuarioPerfiles(Collection<UsuarioPerfil> usuarioPerfiles) {
-        this.usuarioPerfiles = usuarioPerfiles;
-    }
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.LAZY)
+//    private Collection<SucursalValoracionDet> sucursalValoracionDets;
+//    
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.LAZY)
+//    private Collection<UsuarioPerfil> usuarioPerfiles;
+//
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioEmisor", fetch = FetchType.LAZY)
+//    private Collection<UsuarioMensajeCab> usuarioMensajeCabsEmisor;
+//    
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioReceptor", fetch = FetchType.LAZY)
+//    private Collection<UsuarioMensajeCab> usuarioMensajesCabsReceptor;
+//
+//    @XmlTransient
+//    public Collection<SucursalValoracionDet> getSucursalValoracionDets() {
+//        return sucursalValoracionDets;
+//    }
+//    public void setSucursalValoracionDets(Collection<SucursalValoracionDet> sucursalValoracionDets) {
+//        this.sucursalValoracionDets = sucursalValoracionDets;
+//    }
+//
+//    @XmlTransient
+//    public Collection<UsuarioMensajeCab> getUsuarioMensajesCabsEmisor() {
+//        return usuarioMensajeCabsEmisor;
+//    }
+//    public void setUsuarioMensajesCabsEmisor(Collection<UsuarioMensajeCab> usuarioMensajesCabsEmisor) {
+//        this.usuarioMensajeCabsEmisor = usuarioMensajesCabsEmisor;
+//    }
+//
+//    @XmlTransient
+//    public Collection<UsuarioMensajeCab> getUsuarioMensajesCabsReceptor() {
+//        return usuarioMensajesCabsReceptor;
+//    }
+//    public void setUsuarioMensajesCabsReceptor(Collection<UsuarioMensajeCab> usuarioMensajesCabsReceptor) {
+//        this.usuarioMensajesCabsReceptor = usuarioMensajesCabsReceptor;
+//    }
+//    
+//    @XmlTransient
+//    public Collection<UsuarioPerfil> getUsuarioPerfiles() {
+//        return usuarioPerfiles;
+//    }
+//    public void setUsuarioPerfiles(Collection<UsuarioPerfil> usuarioPerfiles) {
+//        this.usuarioPerfiles = usuarioPerfiles;
+//    }
 }

@@ -79,7 +79,7 @@ public class ArchivoConverter {
         
         if ( !Util.isEmpty(archivoCabDto.getArchivosDetDto()) ) {
             if ( !archivoCabDto.getArchivosDetDto().isEmpty() )
-                archivoCab.setArchivosDet(getArchivosDet(archivoCabDto.getArchivosDetDto()));
+                archivoCab.setArchivosDet(getArchivosDet(archivoCabDto.getArchivosDetDto(), archivoCab));
         }
 
         return archivoCab;
@@ -140,12 +140,12 @@ public class ArchivoConverter {
      * @throws IllegalAccessException
      * @throws InvocationTargetException 
      */
-    private List<ArchivoDet> getArchivosDet(List<ArchivoDetDto> archivosDetDto) 
+    private List<ArchivoDet> getArchivosDet(List<ArchivoDetDto> archivosDetDto, ArchivoCab archivoCab) 
             throws IllegalAccessException, InvocationTargetException {
         List<ArchivoDet> archivosDet = new ArrayList<>();
         
         for (ArchivoDetDto archivoDetDto : archivosDetDto) {
-            archivosDet.add(getArchivoDet(archivoDetDto));
+            archivosDet.add(getArchivoDet(archivoDetDto, archivoCab));
         }
         
         return archivosDet;
@@ -158,7 +158,7 @@ public class ArchivoConverter {
      * @throws IllegalAccessException
      * @throws InvocationTargetException 
      */
-    private ArchivoDet getArchivoDet(ArchivoDetDto archivoDetDto) 
+    private ArchivoDet getArchivoDet(ArchivoDetDto archivoDetDto, ArchivoCab archivoCab) 
             throws IllegalAccessException, InvocationTargetException {
         ArchivoDet archivoDet = new ArchivoDet();
         
@@ -168,6 +168,8 @@ public class ArchivoConverter {
         } catch (NoSuchMethodException ex) {
             // No importa
         }
+        
+        archivoDet.setArchivoCab(archivoCab);
         
         return archivoDet;
     }

@@ -102,4 +102,7 @@ public class TipoUsuario implements Serializable {
     public String toString() {
         return "com.minicubic.infoguiaserver.model.TipoUsuario[ id=" + id + " ]";
     }
+
+    public TipoUsuario() {
+    }
 }
