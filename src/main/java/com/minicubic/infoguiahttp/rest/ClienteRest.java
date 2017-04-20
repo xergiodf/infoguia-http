@@ -86,6 +86,8 @@ public class ClienteRest {
         @ApiResponse(code = 500, message = "Something wrong in Server")})
     public Response addCliente(ClienteDto clienteParam) {
         LOG.log(Level.INFO, "Creando nuevo cliente");
+        
+        ClienteDto clienteAux;
 
         try {
 
@@ -94,6 +96,15 @@ public class ClienteRest {
             if (!validatorResponse.getData()) {
                 LOG.log(Level.WARNING, "Error de validacion");
                 return Response.status(Response.Status.NOT_ACCEPTABLE).entity(validatorResponse.getMensaje()).build();
+            }
+            
+            // Validacion de codigo cliente unico
+            clienteAux = new ClienteDto();
+            clienteAux.setCodigoCliente(clienteParam.getCodigoCliente());
+            
+            if ( !Util.isEmpty(service.getClienteByParam(clienteAux)) ) {
+                LOG.log(Level.WARNING, "Error de validacion: Codigo Cliente ya existe.");
+                return Response.status(Response.Status.NOT_ACCEPTABLE).entity(Constants.VALIDATION_CLIENTE_CODIGO_CLIENTE_UNIQUE).build();
             }
 
             clienteParam = service.saveCliente(clienteParam);

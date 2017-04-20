@@ -3,6 +3,7 @@ package com.minicubic.infoguiacore.dao;
 import com.minicubic.infoguiacore.dto.ClienteDto;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.model.Cliente;
+import com.minicubic.infoguiacore.util.Util;
 import com.minicubic.infoguiacore.util.converter.ClienteConverter;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import java.lang.reflect.InvocationTargetException;
@@ -47,6 +48,31 @@ public class ClienteDao {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
+        return null;
+    }
+    
+    /**
+     * 
+     * @param clienteDto
+     * @return 
+     */
+    public ClienteDto getClienteByParam(ClienteDto clienteDto) {
+        try {
+            
+            Cliente cliente = null;
+                    
+            if ( !Util.isEmpty(clienteDto.getCodigoCliente()) ) {
+                cliente = (Cliente) em.createNamedQuery("Cliente.findByCodigoCliente")
+                    .setParameter("codigoCliente", clienteDto.getCodigoCliente().toUpperCase())
+                    .getSingleResult();
+            }
+
+            return converter.getClienteDto(cliente);
+        } catch (NoResultException nre) {
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        
         return null;
     }
     

@@ -26,7 +26,7 @@ public class ClienteDto {
 
     @Getter
     @Setter
-    private Integer codigoCliente;
+    private String codigoCliente;
 
     @Getter
     @Setter

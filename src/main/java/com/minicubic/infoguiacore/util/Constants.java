@@ -19,8 +19,15 @@ public class Constants {
     public static final String PASS_SMTP = ".NoReply.*";
     
     public static final String FILE_FORM_NAME = "fileData";
-//    public static final String UPLOAD_DIR = "/home/xergio/Documents/Projects/InfoGuia/Dev/Backend/uploads/"; 
     public static final String UPLOAD_DIR = "/usr/share/nginx/html/";
+//    public static final String UPLOAD_DIR = "/home/xergio/Documents/Projects/InfoGuia/Dev/Backend/uploads/";
+    
+    public static final String IMG_PERFIL_USUARIO_SERVER_URL = PUBLIC_SERVER_URL + "/usuarioPerfiles/";
+    public static final String IMG_PERFIL_USUARIO_UPLOAD_DIR = UPLOAD_DIR + "usuarioPerfiles/"; 
+    public static final String IMG_PERFIL_USUARIO_DEFAULT = "default_avatar.png";
+    
+    public static final String IMG_PORTADA_SUCURSAL_SERVER_URL = PUBLIC_SERVER_URL + "/clienteSucursales/";
+    public static final String IMG_PORTADA_SUCURSAL_UPLOAD_DIR = UPLOAD_DIR + "clienteSucursales/"; 
     
     public static final Integer DB_USR_TIPO_ADMIN_ID = 1;
     public static final Integer DB_USR_TIPO_USUARIO_ID = 2;
@@ -43,6 +50,8 @@ public class Constants {
     public static final String VALIDATION_USUARIO_NOT_FOUND = "Usuario no encontrado \n";
     
     public static final String VALIDATION_CLIENTE_NOMBRECOMPLETO_REQUIRED = "Nombre Completo es un campo requerido\n";
+    public static final String VALIDATION_CLIENTE_CODIGO_CLIENTE_REQUIRED = "Codigo de Cliente es un campo requerido\n";
+    public static final String VALIDATION_CLIENTE_CODIGO_CLIENTE_UNIQUE = "Codigo de Cliente ya existe\n";
     
     public static final String VALIDATION_PUBLICACION_TIPOPUBLICACION_REQUIRED = "Tipo de Publicacion es un campo requerido\n";
     public static final String VALIDATION_PUBLICACION_CLIENTE_REQUIRED = "Cliente es un campo requerido\n";

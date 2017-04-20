@@ -4,7 +4,6 @@ import com.minicubic.infoguiacore.dto.ArchivoCabDto;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.dto.UsuarioPerfilDto;
 import com.minicubic.infoguiacore.dto.ValidatorResponse;
-import com.minicubic.infoguiacore.util.Builder;
 import com.minicubic.infoguiacore.util.Constants;
 import com.minicubic.infoguiacore.util.Util;
 import com.minicubic.infoguiacore.util.Validator;
@@ -16,10 +15,6 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Singleton;
@@ -34,13 +29,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 /**
  *
  * @author xergio
- * @version 1
+ * @version 2 - 20/04/2017
  */
 @Singleton
 @Path("usuarioPerfiles")
@@ -80,11 +74,21 @@ public class UsuarioPerfilRest {
     @ApiOperation(value = "Obtiene un registro de Perfil de Usuario.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 404, message = "Registro de Perfil de Usuario No Encontrado"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
     public Response findById(@PathParam("id") Integer id) {
         LOG.log(Level.INFO, "Obteniendo perfil de usuario por id: {0}", new Object[]{id});
         
-        return Response.ok().entity(service.getUsuarioPerfil(id)).build();
+        UsuarioPerfilDto usuarioPerfilDto = service.getUsuarioPerfil(id);
+        
+        if ( Util.isEmpty(usuarioPerfilDto) ) {
+            LOG.log(Level.WARNING, "Registro vacio");
+            return Response.status(Response.Status.NOT_FOUND).entity(Constants.MSG_ERROR_DEFAULT).build();
+        }
+        
+        usuarioPerfilDto.setImagenPerfil(archivoService.getUrlImagenPerfilUsuario(id.toString()));
+        
+        return Response.ok().entity(usuarioPerfilDto).build();
     }
     
     @POST
@@ -173,10 +177,10 @@ public class UsuarioPerfilRest {
     @ApiOperation(value = "Carga un archivo en el servidor.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
-        @ApiResponse(code = 404, message = "Registros de Perfil de Usuario No Encontrado"),
+        @ApiResponse(code = 404, message = "Registro de Perfil de Usuario No Encontrado"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response uploadFotoPerfil(@PathParam("id") Integer id, MultipartFormDataInput input) {
-        LOG.log(Level.INFO, "Guardando una Foto de Perfil");
+    public Response uploadImagenPerfil(@PathParam("id") Integer id, MultipartFormDataInput input) {
+        LOG.log(Level.INFO, "Guardando una Imagen de Perfil");
         
         try {
             // Verificamos que exista el ID de Perfil de Usuario
@@ -186,20 +190,11 @@ public class UsuarioPerfilRest {
                 LOG.log(Level.WARNING, "Registro vacio");
                 return Response.status(Response.Status.NOT_FOUND).entity(Constants.MSG_ERROR_DEFAULT).build();
             }
-
-            // Guardamos la imagen en disco            
-            Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
-            InputPart inputPart = uploadForm.get(Constants.FILE_FORM_NAME).get(0);
             
-            String mimeType = inputPart.getHeaders().getFirst("Content-Type");
-            String fileName = UUID.randomUUID().toString() + "_" + usuarioPerfilDto.getId() + "." + mimeType.split("/")[1];
-            
-            Util.saveFileToDisk(inputPart.getBody(InputStream.class, null), fileName);
-
             // Guardamos la informacion en DB
-            ArchivoCabDto archivoCabDto = archivoService.saveArchivo(Builder.buildArchivoFotoPerfil(usuarioPerfilDto.getId().toString(), fileName, mimeType));
+            ArchivoCabDto archivoCabDto = archivoService.saveArchivoImagenPerfilUsuario(input, usuarioPerfilDto.getId().toString());
 
-            LOG.log(Level.INFO, "Foto de Perfil {0} agregada correctamente.", id);
+            LOG.log(Level.INFO, "Imagen de Perfil {0} agregada correctamente.", id);
             return Response.ok().entity(archivoCabDto).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);

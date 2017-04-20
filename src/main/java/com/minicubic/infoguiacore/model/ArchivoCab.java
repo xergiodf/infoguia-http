@@ -64,7 +64,7 @@ public class ArchivoCab implements Serializable {
     @Setter
     private String idRef;
     
-    @JoinColumn(name = "id_tipo_usuario", referencedColumnName = "id")
+    @JoinColumn(name = "id_tipo_archivo", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @Getter
     @Setter

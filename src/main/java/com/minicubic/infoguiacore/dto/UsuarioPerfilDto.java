@@ -47,4 +47,8 @@ public class UsuarioPerfilDto {
     @Getter
     @Setter
     private UsuarioDto usuarioDto;
+    
+    @Getter
+    @Setter
+    private String imagenPerfil;
 }

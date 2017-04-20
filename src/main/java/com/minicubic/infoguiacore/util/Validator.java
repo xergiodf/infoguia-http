@@ -45,8 +45,8 @@ public class Validator {
             response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_USUARIO_USERNAME_REQUIRED));
         }
-        
-         if (Util.isEmpty(usuarioDto.getPassword())) {
+
+        if (Util.isEmpty(usuarioDto.getPassword())) {
             response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_USUARIO_PASSWORD_REQUIRED));
         }
@@ -81,7 +81,7 @@ public class Validator {
                 response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_USUARIO_EMAIL_REQUIRED));
             }
         }
-        
+
         return response;
     }
 
@@ -97,6 +97,11 @@ public class Validator {
         if (Util.isEmpty(clienteDto.getNombreCompleto())) {
             response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_CLIENTE_NOMBRECOMPLETO_REQUIRED));
+        }
+
+        if (Util.isEmpty(clienteDto.getCodigoCliente())) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_CLIENTE_CODIGO_CLIENTE_REQUIRED));
         }
 
         return response;

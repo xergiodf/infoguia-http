@@ -32,17 +32,19 @@ public class ArchivoDao {
     private static final Logger LOG = Logger.getLogger("ArchivoDao");
     
     @PersistenceContext(unitName="infoGuiaPU")
-    private EntityManager em;
-    
+    private EntityManager em; 
+
     /**
-     *
-     * @param id
-     * @return
+     * 
+     * @param archivoCabDto
+     * @return 
      */
-    public ArchivoCabDto getArchivo(Integer id) {
+    public ArchivoCabDto getArchivo(ArchivoCabDto archivoCabDto) {
         try {
-            ArchivoCab archivoCab = (ArchivoCab) em.createNamedQuery("ArchivoCab.findById")
-                    .setParameter("id", id)
+            ArchivoCab archivoCab = (ArchivoCab) em.createNamedQuery("ArchivoCab.findByRef")
+                    .setParameter("tablaRef", archivoCabDto.getTablaRef())
+                    .setParameter("columnaRef", archivoCabDto.getColumnaRef())
+                    .setParameter("idRef", archivoCabDto.getIdRef())
                     .getSingleResult();
 
             return converter.getArchivoCabDto(archivoCab);
@@ -52,30 +54,14 @@ public class ArchivoDao {
         }
         return null;
     }
-    
-    /**
-     * 
-     * @return 
-     */
-    public List<ArchivoCabDto> getArchivos() {
-        try {
-            List<ArchivoCab> archivoCabs = em.createNamedQuery("ArchivoCab.findAll")
-                    .getResultList();
-
-            return converter.getArchivosCabDto(archivoCabs);
-        } catch (NoResultException nre) {
-        } catch (Exception ex) {
-            LOG.log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
 
     /**
-     *
+     * Guardar archivos con multiple detalles. Por cada archivo nuevo
+     * crea nuevos detalles.
      * @param archivoCabDto
      * @return
      */
-    public ArchivoCabDto saveArchivo(ArchivoCabDto archivoCabDto) {
+    public ArchivoCabDto saveArchivoMultipleDetalle(ArchivoCabDto archivoCabDto) {
         try {
             ArchivoCab archivoCabAux = converter.getArchivoCab(archivoCabDto);
             ArchivoCab archivoCab;
@@ -112,32 +98,51 @@ public class ArchivoDao {
             return null;
         }
     }
-
+    
     /**
-     * 
-     * @param id 
+     * Guarda un archivo creando un solo detalle. Por cada archivo nuevo
+     * Se actuliza el registro de detalle.
+     * @param archivoCabDto
+     * @return 
      */
-    public void deleteArchivo(Integer id) {
+    public ArchivoCabDto saveArchivoUnDetalle(ArchivoCabDto archivoCabDto) {
         try {
-            ArchivoCab archivoCab = (ArchivoCab) em.createNamedQuery("ArchivoCab.findById")
-                    .setParameter("id", id)
+            ArchivoCab archivoCabAux = converter.getArchivoCab(archivoCabDto);
+            ArchivoCab archivoCab;
+            
+            // Verificamos si no existe una cabecera para este tipo de archivo
+            try {
+                archivoCab = (ArchivoCab) em.createNamedQuery("ArchivoCab.findByRef")
+                    .setParameter("tablaRef", archivoCabDto.getTablaRef())
+                    .setParameter("columnaRef", archivoCabDto.getColumnaRef())
+                    .setParameter("idRef", archivoCabDto.getIdRef())
                     .getSingleResult();
-
-            // Borramos los detalles
-            ArchivoDet archivoDetAux;
-            for ( ArchivoDet archivoDet : archivoCab.getArchivosDet() ) {
-                archivoDetAux = (ArchivoDet) em.createNamedQuery("ArchivoCab.findById")
-                    .setParameter("id", archivoDet.getId())
-                    .getSingleResult();
-                
-                em.remove(archivoDet);
+            } catch (NoResultException nre) {
+                archivoCab = null;
             }
             
-            //Borramos la cabecera
-            em.remove(archivoCab);
+            // Guardamos la cabecera
+            if ( !Util.isEmpty(archivoCab) ) {
+                ArchivoDet archivoDetDB = archivoCab.getArchivosDet().iterator().next();
+                ArchivoDet archivoDetAux = archivoCabAux.getArchivosDet().iterator().next();
+                
+                archivoDetDB.setMimeType(archivoDetAux.getMimeType());
+                archivoDetDB.setNombre(archivoDetAux.getNombre());
+                archivoDetDB.setUbicacion(archivoDetAux.getUbicacion());
+                archivoDetDB.setUrl(archivoDetAux.getUrl());
+            } else {
+                archivoCab = archivoCabAux;
+            }
+            
+            archivoCab.setAuditUsuario(usuarioLogueado.getUsername());
+            archivoCab = em.merge(archivoCab);
+            
             em.flush();
-        } catch (Exception ex) {
+            
+            return converter.getArchivoCabDto(archivoCab);
+        } catch (IllegalAccessException | InvocationTargetException ex) {
             LOG.log(Level.SEVERE, null, ex);
+            return null;
         }
     }
 }

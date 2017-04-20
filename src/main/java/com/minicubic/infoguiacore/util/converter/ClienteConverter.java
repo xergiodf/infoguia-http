@@ -2,6 +2,7 @@ package com.minicubic.infoguiacore.util.converter;
 
 import com.minicubic.infoguiacore.dto.ClienteDto;
 import com.minicubic.infoguiacore.model.Cliente;
+import com.minicubic.infoguiacore.util.Util;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,10 @@ public class ClienteConverter {
         } catch (NoSuchMethodException ex) {
             // No importa
         }
+        
+        // Pasamos a MAYUS codigo cliente
+        if ( !Util.isEmpty(cliente.getCodigoCliente()) )
+            cliente.setCodigoCliente(cliente.getCodigoCliente().toUpperCase());
 
         return cliente;
     }

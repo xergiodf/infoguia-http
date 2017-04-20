@@ -34,6 +34,15 @@ public class ClienteService {
     
     /**
      * 
+     * @param clienteDto
+     * @return 
+     */
+    public ClienteDto getClienteByParam(ClienteDto clienteDto) {
+        return dao.getClienteByParam(clienteDto);
+    }
+    
+    /**
+     * 
      * @return 
      */
     public List<ClienteDto> getClientes() {
