@@ -7,7 +7,9 @@ package com.minicubic.infoguiacore.enums;
  */
 public enum TipoArchivo {
     
-    PERFIL_USUARIO(1), PORTADA_SUCURSAL_CLIENTE(2), GALERIA_PERFIL_CLIENTE(3);
+    PERFIL_USUARIO(1), PORTADA_SUCURSAL_CLIENTE(2), GALERIA_PERFIL_CLIENTE(3),
+    IMAGEN_PUBLICACION(4);
+    
     private final Integer id;
     
     private TipoArchivo(Integer id) {

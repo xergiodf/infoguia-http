@@ -6,7 +6,6 @@ import com.minicubic.infoguiacore.util.Builder;
 import com.minicubic.infoguiacore.util.Constants;
 import com.minicubic.infoguiacore.util.Util;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -19,7 +18,7 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 /**
  *
  * @author xergio
- * @version 1 - 18/04/2017
+ * @version 2 - 26/04/2017
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
@@ -81,6 +80,24 @@ public class ArchivoService {
     }
     
     /**
+     * Obtiene la URL de la imagen de perfil de usuario.
+     * Sino existe, retorna la imagen por defecto.
+     * @param idRef
+     * @return 
+     */
+    public String getUrlImagenPortadaSucursal(String idRef) {
+        // Construimos el archivo para buscar
+        ArchivoCabDto archivoPortadaSucursal = Builder.buildArchivoImagenPortadaSucursal(idRef);
+        
+        // Verificamos si existe
+        ArchivoCabDto archivoAux = getArchivo(archivoPortadaSucursal);
+        if ( !Util.isEmpty(archivoAux) ) 
+            return archivoAux.getArchivosDetDto().iterator().next().getUrl();
+        else
+            return "";
+    }
+    
+    /**
      * 
      * @param input
      * @param idRef
@@ -102,5 +119,46 @@ public class ArchivoService {
 
         // Guardamos en la BD
         return dao.saveArchivoUnDetalle(archivoImagenPortadaSucursal);
+    }
+    
+    /**
+     * Obtiene la URL de la imagen de una publicacion.
+     * @param idRef
+     * @return 
+     */
+    public String getUrlImagenPublicacion(String idRef) {
+        // Construimos el archivo para buscar
+        ArchivoCabDto archivoImagenPublicacion = Builder.buildArchivoImagenPublicacion(idRef);
+        
+        // Verificamos si existe
+        ArchivoCabDto archivoAux = getArchivo(archivoImagenPublicacion);
+        if ( !Util.isEmpty(archivoAux) ) 
+            return archivoAux.getArchivosDetDto().iterator().next().getUrl();
+        else
+            return "";
+    }
+
+    /**
+     * 
+     * @param input
+     * @param idRef
+     * @return 
+     * @throws java.io.IOException 
+     */
+    public ArchivoCabDto saveArchivoImagenPublicacion(MultipartFormDataInput input, String idRef) throws IOException {
+        // Guardamos el archivo en disco
+        Map<String, String> map = Util.saveFileToDisk(input, Constants.IMG_PUBLICACION_UPLOAD_DIR, idRef);
+        
+        // Construimos el archivo para guardar
+        ArchivoCabDto archivoImagenPublicacion = Builder.buildArchivoImagenPublicacion(idRef, map.get("fileName"), map.get("mimeType"));
+        
+        // Verificamos si ya existe un archivo, en ese caso lo borramos
+        ArchivoCabDto archivoAux = getArchivo(archivoImagenPublicacion);
+        if ( !Util.isEmpty(archivoAux) ) 
+            Util.deleteFileFromDisk(archivoAux.getArchivosDetDto().iterator().next().getUbicacion(), 
+                    archivoAux.getArchivosDetDto().iterator().next().getNombre());
+
+        // Guardamos en la BD
+        return dao.saveArchivoUnDetalle(archivoImagenPublicacion);
     }
 }

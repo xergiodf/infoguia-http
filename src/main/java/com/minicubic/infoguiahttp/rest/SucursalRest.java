@@ -74,11 +74,21 @@ public class SucursalRest {
     @ApiOperation(value = "Obtiene un registro de Sucursal de Cliente en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 404, message = "Sucursal de Cliente No Encontrada"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
     public Response findById(@PathParam("id") Integer id) {
         LOG.log(Level.INFO, "Obteniendo Sucursal de Cliente por id: {0}", new Object[]{id});
 
-        return Response.ok().entity(service.getClienteSucursal(id)).build();
+        ClienteSucursalDto clienteSucursalDto = service.getClienteSucursal(id);
+        
+        if ( Util.isEmpty(clienteSucursalDto) ) {
+            LOG.log(Level.WARNING, "Registro vacio");
+            return Response.status(Response.Status.NOT_FOUND).entity(Constants.MSG_ERROR_DEFAULT).build();
+        }
+        
+        clienteSucursalDto.setImagenURL(archivoService.getUrlImagenPortadaSucursal(id.toString()));
+        
+        return Response.ok().entity(clienteSucursalDto).build();
     }
     
     @GET

@@ -46,4 +46,8 @@ public class ClienteSucursalDto {
     @Getter
     @Setter
     private String emails;
+    
+    @Getter
+    @Setter
+    private String imagenURL;
 }

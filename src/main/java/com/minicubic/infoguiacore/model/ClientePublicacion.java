@@ -107,6 +107,11 @@ public class ClientePublicacion implements Serializable {
     @Setter
     private Date fechaHasta;
     
+    @Column(name = "tiempo_muestra")
+    @Getter
+    @Setter
+    private Integer tiempoMuestra;
+    
     @Column(name = "audit_usuario")
     @Getter
     @Setter

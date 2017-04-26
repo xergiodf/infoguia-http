@@ -104,4 +104,49 @@ public class Builder {
         
         return archivoCabDto;
     }
+    
+    /**
+     * Devuelve un ArchivoCabDto sin Detalle, para busquedas
+     * @param idRef
+     * @return 
+     */
+    public static ArchivoCabDto buildArchivoImagenPublicacion(String idRef) {
+        ArchivoCabDto archivoCabDto = new ArchivoCabDto();
+        
+        TipoArchivoDto tipoArchivoDto = new TipoArchivoDto();
+        tipoArchivoDto.setId(TipoArchivo.IMAGEN_PUBLICACION.getId());
+        
+        // Seteamos la cabecera
+        archivoCabDto.setColumnaRef(TableReference.PUBLICACION_CLIENTE.getIdColumnName());
+        archivoCabDto.setTablaRef(TableReference.PUBLICACION_CLIENTE.getTableName());
+        archivoCabDto.setIdRef(idRef);
+        archivoCabDto.setTipoArchivoDto(tipoArchivoDto);
+        
+        return archivoCabDto;
+    }
+
+    /**
+     * Devuelve un ArchivoCabDto con Detalles, para guardar
+     * @param idRef
+     * @param fileName
+     * @param mimeType
+     * @return 
+     */
+    public static ArchivoCabDto buildArchivoImagenPublicacion(String idRef, String fileName, String mimeType) {
+        List<ArchivoDetDto> archivosDetDto = new ArrayList<>();
+        ArchivoDetDto archivoDetDto = new ArchivoDetDto();
+        ArchivoCabDto archivoCabDto = Builder.buildArchivoImagenPerfilUsuario(idRef);
+        
+        // Seteamos el detalle
+        archivoDetDto.setMimeType(mimeType);
+        archivoDetDto.setNombre(fileName);
+        archivoDetDto.setUbicacion(Constants.IMG_PUBLICACION_UPLOAD_DIR);
+        archivoDetDto.setUrl(Constants.IMG_PUBLICACION_SERVER_URL + fileName);
+        
+        archivosDetDto.add(archivoDetDto);
+        
+        archivoCabDto.setArchivosDetDto(archivosDetDto);
+        
+        return archivoCabDto;
+    }
 }

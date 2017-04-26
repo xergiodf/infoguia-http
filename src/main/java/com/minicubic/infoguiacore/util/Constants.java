@@ -29,6 +29,9 @@ public class Constants {
     public static final String IMG_PORTADA_SUCURSAL_SERVER_URL = PUBLIC_SERVER_URL + "/clienteSucursales/";
     public static final String IMG_PORTADA_SUCURSAL_UPLOAD_DIR = UPLOAD_DIR + "clienteSucursales/"; 
     
+    public static final String IMG_PUBLICACION_SERVER_URL = PUBLIC_SERVER_URL + "/clientePublicaciones/";
+    public static final String IMG_PUBLICACION_UPLOAD_DIR = UPLOAD_DIR + "clientePublicaciones/";
+    
     public static final Integer DB_USR_TIPO_ADMIN_ID = 1;
     public static final Integer DB_USR_TIPO_USUARIO_ID = 2;
     

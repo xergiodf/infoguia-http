@@ -63,4 +63,8 @@ public class ClientePublicacionDto {
     @Getter
     @Setter
     private Date fechaHasta;
+    
+    @Getter
+    @Setter
+    private Integer tiempoMuestra;
 }
