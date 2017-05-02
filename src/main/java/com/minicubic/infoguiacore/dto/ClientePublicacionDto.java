@@ -1,6 +1,7 @@
 package com.minicubic.infoguiacore.dto;
 
 import java.util.Date;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -18,7 +19,7 @@ import lombok.ToString;
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 @EqualsAndHashCode
-public class ClientePublicacionDto {
+public class ClientePublicacionDto implements Archivable {
     
     @Getter
     @Setter
@@ -67,4 +68,8 @@ public class ClientePublicacionDto {
     @Getter
     @Setter
     private Integer tiempoMuestra;
+    
+    @Getter
+    @Setter
+    private List<ArchivoDto> archivos;
 }

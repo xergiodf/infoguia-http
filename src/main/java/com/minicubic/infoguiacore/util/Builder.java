@@ -15,11 +15,31 @@ import java.util.List;
  */
 public class Builder {
     
+    private TipoArchivo tipoArchivo;
+    private TableReference tableReference;
+    
+    public static ArchivoCabDto buildArchivo(TipoArchivo tipoArchivo, TableReference tableReference, String idRef) {
+        ArchivoCabDto archivoCabDto = new ArchivoCabDto();
+        
+        TipoArchivoDto tipoArchivoDto = new TipoArchivoDto();
+        tipoArchivoDto.setId(tipoArchivo.getId());
+        
+        //Seteamos la cabecera
+        archivoCabDto.setColumnaRef(tableReference.getIdColumnName());
+        archivoCabDto.setTablaRef(tableReference.getTableName());
+        archivoCabDto.setIdRef(idRef);
+        archivoCabDto.setTipoArchivoDto(tipoArchivoDto);
+        
+        return archivoCabDto;
+    }
+    
+    
     /**
      * Devuelve un ArchivoCabDto sin Detalle, para busquedas
      * @param idRef
      * @return 
      */
+    @Deprecated
     public static ArchivoCabDto buildArchivoImagenPerfilUsuario(String idRef) {
         ArchivoCabDto archivoCabDto = new ArchivoCabDto();
         
@@ -65,6 +85,7 @@ public class Builder {
      * @param idRef
      * @return 
      */
+    @Deprecated
     public static ArchivoCabDto buildArchivoImagenPortadaSucursal(String idRef) {
         ArchivoCabDto archivoCabDto = new ArchivoCabDto();
         
@@ -110,6 +131,7 @@ public class Builder {
      * @param idRef
      * @return 
      */
+    @Deprecated
     public static ArchivoCabDto buildArchivoImagenPublicacion(String idRef) {
         ArchivoCabDto archivoCabDto = new ArchivoCabDto();
         
@@ -135,7 +157,7 @@ public class Builder {
     public static ArchivoCabDto buildArchivoImagenPublicacion(String idRef, String fileName, String mimeType) {
         List<ArchivoDetDto> archivosDetDto = new ArrayList<>();
         ArchivoDetDto archivoDetDto = new ArchivoDetDto();
-        ArchivoCabDto archivoCabDto = Builder.buildArchivoImagenPerfilUsuario(idRef);
+        ArchivoCabDto archivoCabDto = Builder.buildArchivoImagenPublicacion(idRef);
         
         // Seteamos el detalle
         archivoDetDto.setMimeType(mimeType);

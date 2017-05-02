@@ -42,6 +42,8 @@ public class Constants {
     public static final Integer DB_PUB_TIPO_NOVED_ID = 2;
     public static final Integer DB_PUB_TIPO_PROMO_ID = 1;
     
+    public static final String VALIDATION_GENERIC_DESCRIPCION = "Descripcion es un campo requerido \n";
+    
     public static final String VALIDATION_USUARIO_EMAIL_REQUIRED = "Email es un campo requerido \n";
     public static final String VALIDATION_USUARIO_USERNAME_REQUIRED = "Nombre de Usuario es un campo requerido \n";
     public static final String VALIDATION_USUARIO_PASSWORD_REQUIRED = "Contrase\u00f1a es un campo requerido \n";

@@ -34,8 +34,13 @@ public class AppBase extends Application {
         resources.add(com.minicubic.infoguiahttp.rest.CategoriaRest.class);
         resources.add(com.minicubic.infoguiahttp.rest.ClienteCategoriaRest.class);
         resources.add(com.minicubic.infoguiahttp.rest.ClienteRest.class);
+        resources.add(com.minicubic.infoguiahttp.rest.EstadoPublicacionRest.class);
+        resources.add(com.minicubic.infoguiahttp.rest.EstadoUsuarioRest.class);
         resources.add(com.minicubic.infoguiahttp.rest.PublicacionRest.class);
         resources.add(com.minicubic.infoguiahttp.rest.SucursalRest.class);
+        resources.add(com.minicubic.infoguiahttp.rest.TipoPublicacionRest.class);
+        resources.add(com.minicubic.infoguiahttp.rest.TipoUsuarioRest.class);
+        resources.add(com.minicubic.infoguiahttp.rest.UploadRest.class);
         resources.add(com.minicubic.infoguiahttp.rest.UsuarioPerfilRest.class);
         resources.add(com.minicubic.infoguiahttp.rest.UsuarioRest.class);
         resources.add(com.minicubic.infoguiahttp.util.SecurityFilter.class);

@@ -3,6 +3,8 @@ package com.minicubic.infoguiacore.util.converter;
 import com.minicubic.infoguiacore.dto.TipoUsuarioDto;
 import com.minicubic.infoguiacore.model.TipoUsuario;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 
 /**
@@ -13,6 +15,42 @@ import org.apache.commons.beanutils.PropertyUtilsBean;
 public class TipoUsuarioConverter {
 
     private final PropertyUtilsBean beanUtil = new PropertyUtilsBean();
+    
+    /**
+     * 
+     * @param tipoUsuarios
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException 
+     */
+    public List<TipoUsuarioDto> getTipoUsuariosDto(List<TipoUsuario> tipoUsuarios) 
+            throws IllegalAccessException, InvocationTargetException {
+        List<TipoUsuarioDto> tipoUsuariosDto = new ArrayList<>();
+        
+        for (TipoUsuario tipoUsuario : tipoUsuarios) {
+            tipoUsuariosDto.add(getTipoUsuarioDto(tipoUsuario));
+        }
+        
+        return tipoUsuariosDto;
+    }
+    
+    /**
+     * 
+     * @param tipoUsuariosDto
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException 
+     */
+    public List<TipoUsuario> getTipoUsuarios(List<TipoUsuarioDto> tipoUsuariosDto) 
+            throws IllegalAccessException, InvocationTargetException {
+        List<TipoUsuario> tipoUsuarios = new ArrayList<>();
+        
+        for (TipoUsuarioDto tipoUsuarioDto : tipoUsuariosDto) {
+            tipoUsuarios.add(getTipoUsuario(tipoUsuarioDto));
+        }
+        
+        return tipoUsuarios;
+    }
     
     public TipoUsuario getTipoUsuario(TipoUsuarioDto tipoUsuarioDto) throws IllegalAccessException, InvocationTargetException {
         TipoUsuario tipoUsuario = new TipoUsuario();

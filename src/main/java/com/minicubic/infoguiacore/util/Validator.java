@@ -4,6 +4,10 @@ import com.minicubic.infoguiacore.dto.CategoriaDto;
 import com.minicubic.infoguiacore.dto.ClienteDto;
 import com.minicubic.infoguiacore.dto.ClientePublicacionDto;
 import com.minicubic.infoguiacore.dto.ClienteSucursalDto;
+import com.minicubic.infoguiacore.dto.EstadoPublicacionDto;
+import com.minicubic.infoguiacore.dto.EstadoUsuarioDto;
+import com.minicubic.infoguiacore.dto.TipoPublicacionDto;
+import com.minicubic.infoguiacore.dto.TipoUsuarioDto;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.dto.UsuarioPerfilDto;
 import com.minicubic.infoguiacore.dto.ValidatorResponse;
@@ -171,6 +175,11 @@ public class Validator {
         return response;
     }
 
+    /**
+     * 
+     * @param categoriaDto
+     * @return 
+     */
     public ValidatorResponse<Boolean> validateAddCategoria(CategoriaDto categoriaDto) {
         ValidatorResponse<Boolean> response = new ValidatorResponse<>();
         response.setData(true);
@@ -188,6 +197,11 @@ public class Validator {
         return response;
     }
 
+    /**
+     * 
+     * @param usuarioPerfilDto
+     * @return 
+     */
     public ValidatorResponse<Boolean> validateAddUsuarioPerfil(UsuarioPerfilDto usuarioPerfilDto) {
         ValidatorResponse<Boolean> response = new ValidatorResponse<>();
         response.setData(true);
@@ -207,6 +221,69 @@ public class Validator {
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_USUARIO_PERFIL_USUARIO));
         }
 
+        return response;
+    }
+    
+    /**
+     * 
+     * @param tipoPublicacionDto
+     * @return 
+     */
+    public ValidatorResponse<Boolean> validateAddTipoPublicacion(TipoPublicacionDto tipoPublicacionDto) {
+        ValidatorResponse<Boolean> response = new ValidatorResponse<>();
+        response.setData(true);
+        
+        if (Util.isEmpty(tipoPublicacionDto.getDescripcion())) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_GENERIC_DESCRIPCION));
+        }
+        
+        return response;
+    }
+    
+    /**
+     * 
+     * @param estadoPublicacionDto
+     * @return 
+     */
+    public ValidatorResponse<Boolean> validateAddEstadoPublicacion(EstadoPublicacionDto estadoPublicacionDto) {
+        ValidatorResponse<Boolean> response = new ValidatorResponse<>();
+        response.setData(true);
+        
+        if (Util.isEmpty(estadoPublicacionDto.getDescripcion())) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_GENERIC_DESCRIPCION));
+        }
+        
+        return response;
+    }
+    
+    /**
+     * 
+     * @param tipoUsuarioDto
+     * @return 
+     */
+    public ValidatorResponse<Boolean> validateAddTipoUsuario(TipoUsuarioDto tipoUsuarioDto) {
+        ValidatorResponse<Boolean> response = new ValidatorResponse<>();
+        response.setData(true);
+        
+        if (Util.isEmpty(tipoUsuarioDto.getDescripcion())) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_GENERIC_DESCRIPCION));
+        }
+        
+        return response;
+    }
+    
+    public ValidatorResponse<Boolean> validateAddEstadoUsuario(EstadoUsuarioDto estadoUsuarioDto) {
+        ValidatorResponse<Boolean> response = new ValidatorResponse<>();
+        response.setData(true);
+        
+        if (Util.isEmpty(estadoUsuarioDto.getDescripcion())) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_GENERIC_DESCRIPCION));
+        }
+        
         return response;
     }
 }

@@ -120,6 +120,16 @@ public class PublicacionRest {
         return Response.ok().entity(service.getPromociones()).build();
     }
 
+    @GET
+    @Secured
+    @Path("/publicidades/{tipoPublicidad}")
+    @ApiOperation(value = "Obtiene una lista de Publicidades. No implementado aun.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Something wrong in Server")})
+    public Response findPublicidad(@PathParam("tipoPublicidad") String tipoPublicidad) {
+        return null;
+    }
 
     @POST
     @Secured
