@@ -2,8 +2,9 @@ package com.minicubic.infoguiacore.dao;
 
 import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.dto.UsuarioPerfilDto;
-import com.minicubic.infoguiacore.model.Usuario;
+import com.minicubic.infoguiacore.enums.TableReference;
 import com.minicubic.infoguiacore.model.UsuarioPerfil;
+import com.minicubic.infoguiacore.util.converter.ArchivoConverter;
 import com.minicubic.infoguiacore.util.converter.UsuarioPerfilConverter;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import java.lang.reflect.InvocationTargetException;
@@ -24,8 +25,12 @@ public class UsuarioPerfilDao {
     @LoggedIn
     @Inject
     private UsuarioDto usuarioLogueado;
+    
+    @Inject
+    private ArchivoDao archivoDao;
 
     private final UsuarioPerfilConverter converter = new UsuarioPerfilConverter();
+    private final ArchivoConverter archivoConverter = new ArchivoConverter();
     private static final Logger LOG = Logger.getLogger("UsuarioDao");
     
     @PersistenceContext(unitName="infoGuiaPU")
@@ -37,12 +42,59 @@ public class UsuarioPerfilDao {
      * @return
      */
     public UsuarioPerfilDto getUsuarioPerfil(Integer id) {
-        try {
-            UsuarioPerfil usuarioPerfil = (UsuarioPerfil) em.createNamedQuery("UsuarioPerfil.findById")
-                    .setParameter("id", id)
-                    .getSingleResult();
+        try {            
+            UsuarioPerfilDto usuarioPerfilDto = converter.getUsuarioPerfilDto(
+                    (UsuarioPerfil) em.createNamedQuery("UsuarioPerfil.findById")
+                        .setParameter("id", id)
+                        .getSingleResult()
+            );
+            
+            // TODO: Buscar algun patron de disenho que mejore esto
+            // Cargamos las imagenes (si tiene)
+            usuarioPerfilDto.setArchivos(
+                    archivoConverter.getArchivoDto(
+                            archivoDao.getArchivo(
+                                    TableReference.USUARIO_PERFIL.getTableName(),
+                                    TableReference.USUARIO_PERFIL.getIdColumnName(),
+                                    id.toString()
+                            )
+                    )
+            );
 
-            return converter.getUsuarioPerfilDto(usuarioPerfil);
+            return usuarioPerfilDto;
+        } catch (NoResultException nre) {
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    /**
+     *
+     * @param idUsuario
+     * @return
+     */
+    public UsuarioPerfilDto getUsuarioPerfilByUsuario(Long idUsuario) {
+        try {            
+            UsuarioPerfilDto usuarioPerfilDto = converter.getUsuarioPerfilDto(
+                    (UsuarioPerfil) em.createNamedQuery("UsuarioPerfil.findByUsuario")
+                        .setParameter("idUsuario", idUsuario)
+                        .getSingleResult()
+            );
+            
+            // TODO: Buscar algun patron de disenho que mejore esto
+            // Cargamos las imagenes (si tiene)
+            usuarioPerfilDto.setArchivos(
+                    archivoConverter.getArchivoDto(
+                            archivoDao.getArchivo(
+                                    TableReference.USUARIO_PERFIL.getTableName(),
+                                    TableReference.USUARIO_PERFIL.getIdColumnName(),
+                                    idUsuario.toString()
+                            )
+                    )
+            );
+
+            return usuarioPerfilDto;
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -56,10 +108,25 @@ public class UsuarioPerfilDao {
      */
     public List<UsuarioPerfilDto> getUsuarioPerfiles() {
         try {
-            List<UsuarioPerfil> usuarioPerfiles = em.createNamedQuery("UsuarioPerfil.findAll")
-                    .getResultList();
+            List<UsuarioPerfilDto> usuarioPerfilesDto = converter.getUsuarioPerfilesDto(
+                    em.createNamedQuery("UsuarioPerfil.findAll").getResultList()
+            );
 
-            return converter.getUsuarioPerfilesDto(usuarioPerfiles);
+            // TODO: Buscar algun patron de disenho que mejore esto
+            // Cargamos las imagenes (si tiene)
+            for ( UsuarioPerfilDto usuarioPerfilDto : usuarioPerfilesDto ) {        
+                usuarioPerfilDto.setArchivos(
+                        archivoConverter.getArchivoDto(
+                                archivoDao.getArchivo(
+                                        TableReference.USUARIO_PERFIL.getTableName(),
+                                        TableReference.USUARIO_PERFIL.getIdColumnName(),
+                                        usuarioPerfilDto.getId().toString()
+                                )
+                        )
+                );
+            }
+            
+            return usuarioPerfilesDto;
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);

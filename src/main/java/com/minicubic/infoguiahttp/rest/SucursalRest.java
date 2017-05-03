@@ -79,16 +79,7 @@ public class SucursalRest {
     public Response findById(@PathParam("id") Integer id) {
         LOG.log(Level.INFO, "Obteniendo Sucursal de Cliente por id: {0}", new Object[]{id});
 
-        ClienteSucursalDto clienteSucursalDto = service.getClienteSucursal(id);
-        
-        if ( Util.isEmpty(clienteSucursalDto) ) {
-            LOG.log(Level.WARNING, "Registro vacio");
-            return Response.status(Response.Status.NOT_FOUND).entity(Constants.MSG_ERROR_DEFAULT).build();
-        }
-        
-        clienteSucursalDto.setImagenURL(archivoService.getUrlImagenPortadaSucursal(id.toString()));
-        
-        return Response.ok().entity(clienteSucursalDto).build();
+        return Response.ok().entity(service.getClienteSucursal(id)).build();
     }
     
     @GET
@@ -207,7 +198,7 @@ public class SucursalRest {
             }
             
             // Guardamos la informacion en DB
-            ArchivoCabDto archivoCabDto = archivoService.saveArchivoImagenPortadaSucursal(input, clienteSucursalDto.getId().toString());
+            ArchivoCabDto archivoCabDto = archivoService.saveArchivoMultiple(input, clienteSucursalDto);
 
             LOG.log(Level.INFO, "Imagen de Portada de Sucursal {0} agregada correctamente.", id);
             return Response.ok().entity(archivoCabDto).build();

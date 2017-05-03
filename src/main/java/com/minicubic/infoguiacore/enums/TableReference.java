@@ -10,9 +10,9 @@ package com.minicubic.infoguiacore.enums;
  */
 public enum TableReference {
 
-    PERFIL_USUARIO("usuario_perfiles", "id"),
-    SUCURSAL_CLIENTE("cliente_sucursales", "id"),
-    PUBLICACION_CLIENTE("cliente_publicaciones", "id");
+    USUARIO_PERFIL("usuario_perfiles", "id"),
+    CLIENTE_SUCURSAL("cliente_sucursales", "id"),
+    CLIENTE_PUBLICACION("cliente_publicaciones", "id");
 
     private final String tableName;
     private final String idColumnName;

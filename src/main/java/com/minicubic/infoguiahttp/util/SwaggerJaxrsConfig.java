@@ -24,8 +24,8 @@ public class SwaggerJaxrsConfig extends HttpServlet {
             super.init(servletConfig);
             SwaggerConfig swaggerConfig = new SwaggerConfig();
             ConfigFactory.setConfig(swaggerConfig);
-//            swaggerConfig.setBasePath("http://45.79.159.123:8080/infoguia-rest/api");
-            swaggerConfig.setBasePath("http://localhost:8080/infoguia-rest/api");
+            swaggerConfig.setBasePath("http://45.79.159.123:8080/infoguia-rest/api");
+//            swaggerConfig.setBasePath("http://localhost:8080/infoguia-rest/api");
             swaggerConfig.setApiVersion("1.0.0");
             ScannerFactory.setScanner(new DefaultJaxrsScanner());
             ClassReaders.setReader(new DefaultJaxrsApiReader());

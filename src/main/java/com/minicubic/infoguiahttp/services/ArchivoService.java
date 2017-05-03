@@ -1,11 +1,12 @@
 package com.minicubic.infoguiahttp.services;
 
 import com.minicubic.infoguiacore.dao.ArchivoDao;
+import com.minicubic.infoguiacore.dto.Archivable;
 import com.minicubic.infoguiacore.dto.ArchivoCabDto;
+import com.minicubic.infoguiacore.dto.ArchivoDetDto;
 import com.minicubic.infoguiacore.util.Builder;
 import com.minicubic.infoguiacore.util.Constants;
 import com.minicubic.infoguiacore.util.Util;
-import java.io.IOException;
 import java.util.Map;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -36,129 +37,79 @@ public class ArchivoService {
     private ArchivoCabDto getArchivo(ArchivoCabDto archivoCabDto) {
         return dao.getArchivo(archivoCabDto);
     }
-
+    
     /**
-     * Obtiene la URL de la imagen de perfil de usuario.
-     * Sino existe, retorna la imagen por defecto.
-     * @param idRef
-     * @return 
-     */
-    public String getUrlImagenPerfilUsuario(String idRef) {
-        // Construimos el archivo para buscar
-        ArchivoCabDto archivoPerfilUsuario = Builder.buildArchivoImagenPerfilUsuario(idRef);
-        
-        // Verificamos si existe
-        ArchivoCabDto archivoAux = getArchivo(archivoPerfilUsuario);
-        if ( !Util.isEmpty(archivoAux) ) 
-            return archivoAux.getArchivosDetDto().iterator().next().getUrl();
-        else
-            return Constants.IMG_PERFIL_USUARIO_SERVER_URL + Constants.IMG_PERFIL_USUARIO_DEFAULT;
-    }
-
-    /**
-     * 
+     * Metodo que guarda un solo archivo para un registro.
+     * Cuando ya existe un registro, elimina el archivo anterior y crea uno nuevo.
      * @param input
-     * @param idRef
+     * @param archivableDto
      * @return 
-     * @throws java.io.IOException 
      */
-    public ArchivoCabDto saveArchivoImagenPerfilUsuario(MultipartFormDataInput input, String idRef) throws IOException {
+    public ArchivoCabDto saveArchivo(MultipartFormDataInput input, Archivable archivableDto) {
         // Guardamos el archivo en disco
-        Map<String, String> map = Util.saveFileToDisk(input, Constants.IMG_PERFIL_USUARIO_UPLOAD_DIR, idRef);
+        Map<String, String> map = Util.saveFileToDisk(
+                input, 
+                Constants.UPLOAD_DIR + archivableDto.getTipoArchivo().getUploadDir(), 
+                archivableDto.getId().toString()
+        );
         
         // Construimos el archivo para guardar
-        ArchivoCabDto archivoImagenPerfilUsuario = Builder.buildArchivoImagenPerfilUsuario(idRef, map.get("fileName"), map.get("mimeType"));
+        ArchivoCabDto archivoCabDto = Builder.buildArchivo(
+                archivableDto.getTipoArchivo(), 
+                archivableDto.getTableReference(), 
+                archivableDto.getId().toString(), 
+                map.get("fileName"), map.get("mimeType")
+        );
         
         // Verificamos si ya existe un archivo, en ese caso lo borramos
-        ArchivoCabDto archivoAux = getArchivo(archivoImagenPerfilUsuario);
+        ArchivoCabDto archivoAux = getArchivo(archivoCabDto);
         if ( !Util.isEmpty(archivoAux) ) 
             Util.deleteFileFromDisk(archivoAux.getArchivosDetDto().iterator().next().getUbicacion(), 
                     archivoAux.getArchivosDetDto().iterator().next().getNombre());
-
+        
         // Guardamos en la BD
-        return dao.saveArchivoUnDetalle(archivoImagenPerfilUsuario);
+        return dao.saveArchivoUnDetalle(archivoCabDto);
     }
-    
+
     /**
-     * Obtiene la URL de la imagen de perfil de usuario.
-     * Sino existe, retorna la imagen por defecto.
-     * @param idRef
+     * Metodo que guarda multiples archivos para un registro
+     * @param input
+     * @param archivableDto
      * @return 
      */
-    public String getUrlImagenPortadaSucursal(String idRef) {
-        // Construimos el archivo para buscar
-        ArchivoCabDto archivoPortadaSucursal = Builder.buildArchivoImagenPortadaSucursal(idRef);
+    public ArchivoCabDto saveArchivoMultiple(MultipartFormDataInput input, Archivable archivableDto) {
+        // Guardamos el archivo en disco
+        Map<String, String> map = Util.saveFileToDisk(
+                input, 
+                Constants.UPLOAD_DIR + archivableDto.getTipoArchivo().getUploadDir(), 
+                archivableDto.getId().toString()
+        );
         
-        // Verificamos si existe
-        ArchivoCabDto archivoAux = getArchivo(archivoPortadaSucursal);
-        if ( !Util.isEmpty(archivoAux) ) 
-            return archivoAux.getArchivosDetDto().iterator().next().getUrl();
-        else
-            return "";
+        // Construimos el archivo para guardar
+        ArchivoCabDto archivoCabDto = Builder.buildArchivo(
+                archivableDto.getTipoArchivo(), 
+                archivableDto.getTableReference(), 
+                archivableDto.getId().toString(), 
+                map.get("fileName"), map.get("mimeType")
+        );
+        
+        // Guardamos en la BD
+        return dao.saveArchivoMultipleDetalle(archivoCabDto);
     }
     
     /**
      * 
-     * @param input
-     * @param idRef
-     * @return
-     * @throws IOException 
+     * @param idDetalle 
      */
-    public ArchivoCabDto saveArchivoImagenPortadaSucursal(MultipartFormDataInput input, String idRef) throws IOException {
-        // Guardamos el archivo en disco
-        Map<String, String> map = Util.saveFileToDisk(input, Constants.IMG_PORTADA_SUCURSAL_UPLOAD_DIR, idRef);
+    public void deleteArchivo(Integer idDetalle) {
         
-        // Construimos el archivo para guardar
-        ArchivoCabDto archivoImagenPortadaSucursal = Builder.buildArchivoImagenPortadaSucursal(idRef, map.get("fileName"), map.get("mimeType"));
-        
-        // Verificamos si ya existe un archivo, en ese caso lo borramos
-        ArchivoCabDto archivoAux = getArchivo(archivoImagenPortadaSucursal);
+        // Borramos el archivo fisicamente
+        ArchivoDetDto archivoAux = dao.getArchivoDetalle(idDetalle);
         if ( !Util.isEmpty(archivoAux) ) 
-            Util.deleteFileFromDisk(archivoAux.getArchivosDetDto().iterator().next().getUbicacion(), 
-                    archivoAux.getArchivosDetDto().iterator().next().getNombre());
-
-        // Guardamos en la BD
-        return dao.saveArchivoUnDetalle(archivoImagenPortadaSucursal);
-    }
-    
-    /**
-     * Obtiene la URL de la imagen de una publicacion.
-     * @param idRef
-     * @return 
-     */
-    public String getUrlImagenPublicacion(String idRef) {
-        // Construimos el archivo para buscar
-        ArchivoCabDto archivoImagenPublicacion = Builder.buildArchivoImagenPublicacion(idRef);
+            Util.deleteFileFromDisk(archivoAux.getUbicacion(), 
+                    archivoAux.getNombre());
         
-        // Verificamos si existe
-        ArchivoCabDto archivoAux = getArchivo(archivoImagenPublicacion);
-        if ( !Util.isEmpty(archivoAux) ) 
-            return archivoAux.getArchivosDetDto().iterator().next().getUrl();
-        else
-            return "";
-    }
-
-    /**
-     * 
-     * @param input
-     * @param idRef
-     * @return 
-     * @throws java.io.IOException 
-     */
-    public ArchivoCabDto saveArchivoImagenPublicacion(MultipartFormDataInput input, String idRef) throws IOException {
-        // Guardamos el archivo en disco
-        Map<String, String> map = Util.saveFileToDisk(input, Constants.IMG_PUBLICACION_UPLOAD_DIR, idRef);
-        
-        // Construimos el archivo para guardar
-        ArchivoCabDto archivoImagenPublicacion = Builder.buildArchivoImagenPublicacion(idRef, map.get("fileName"), map.get("mimeType"));
-        
-        // Verificamos si ya existe un archivo, en ese caso lo borramos
-        ArchivoCabDto archivoAux = getArchivo(archivoImagenPublicacion);
-        if ( !Util.isEmpty(archivoAux) ) 
-            Util.deleteFileFromDisk(archivoAux.getArchivosDetDto().iterator().next().getUbicacion(), 
-                    archivoAux.getArchivosDetDto().iterator().next().getNombre());
-
-        // Guardamos en la BD
-        return dao.saveArchivoUnDetalle(archivoImagenPublicacion);
+        // Borramos el registro de la BD
+        dao.deleteArchivoDetalle(idDetalle);
     }
 }

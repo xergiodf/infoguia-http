@@ -27,11 +27,11 @@ import javax.ws.rs.core.Response;
  * @version 1 - 02.05.2017
  */
 @Singleton
-@Path("upload")
+@Path("archivos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Api(value = "/upload", description = "REST Service de Upload")
-public class UploadRest {
+@Api(value = "/archivos", description = "REST Service de Archivos")
+public class ArchivoRest {
     
     @LoggedIn
     @Inject
@@ -54,7 +54,7 @@ public class UploadRest {
         LOG.log(Level.INFO, "Eliminando archivo por id: {0}", new Object[]{id});
 
         try {
-//            service.deleteTipoUsuario(id);
+            service.deleteArchivo(id);
 
             LOG.log(Level.INFO, "Archivo {0} eliminado correctamente.", id);
             return Response.ok().build();

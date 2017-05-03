@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,18 +11,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 /**
  *
@@ -36,14 +31,7 @@ import org.hibernate.annotations.NotFoundAction;
 @NamedQueries({
     @NamedQuery(name = "UsuarioPerfil.findAll", query = "SELECT u FROM UsuarioPerfil u"), 
     @NamedQuery(name = "UsuarioPerfil.findById", query = "SELECT u FROM UsuarioPerfil u WHERE u.id = :id"), 
-    @NamedQuery(name = "UsuarioPerfil.findByNombres", query = "SELECT u FROM UsuarioPerfil u WHERE u.nombres = :nombres"), 
-    @NamedQuery(name = "UsuarioPerfil.findByApellidos", query = "SELECT u FROM UsuarioPerfil u WHERE u.apellidos = :apellidos"), 
-    @NamedQuery(name = "UsuarioPerfil.findByFechaNacimiento", query = "SELECT u FROM UsuarioPerfil u WHERE u.fechaNacimiento = :fechaNacimiento"), 
-    @NamedQuery(name = "UsuarioPerfil.findByOcupacion", query = "SELECT u FROM UsuarioPerfil u WHERE u.ocupacion = :ocupacion"), 
-    @NamedQuery(name = "UsuarioPerfil.findByCiudad", query = "SELECT u FROM UsuarioPerfil u WHERE u.ciudad = :ciudad"), 
-    @NamedQuery(name = "UsuarioPerfil.findByAuditUsuario", query = "SELECT u FROM UsuarioPerfil u WHERE u.auditUsuario = :auditUsuario"), 
-    @NamedQuery(name = "UsuarioPerfil.findByAuditFechaInsert", query = "SELECT u FROM UsuarioPerfil u WHERE u.auditFechaInsert = :auditFechaInsert"), 
-    @NamedQuery(name = "UsuarioPerfil.findByAuditFechaUpdate", query = "SELECT u FROM UsuarioPerfil u WHERE u.auditFechaUpdate = :auditFechaUpdate")})
+    @NamedQuery(name = "UsuarioPerfil.findByUsuario", query = "SELECT u FROM UsuarioPerfil u WHERE u.usuario.id = :idUsuario")})
 @ToString
 @EqualsAndHashCode
 public class UsuarioPerfil implements Serializable {

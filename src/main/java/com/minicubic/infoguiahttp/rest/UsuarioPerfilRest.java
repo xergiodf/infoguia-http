@@ -79,16 +79,21 @@ public class UsuarioPerfilRest {
     public Response findById(@PathParam("id") Integer id) {
         LOG.log(Level.INFO, "Obteniendo perfil de usuario por id: {0}", new Object[]{id});
         
-        UsuarioPerfilDto usuarioPerfilDto = service.getUsuarioPerfil(id);
+        return Response.ok().entity(service.getUsuarioPerfil(id)).build();
+    }
+    
+    @GET
+    @Secured
+    @Path("/findByUser/{id}")
+    @ApiOperation(value = "Obtiene un registro de Perfil de Usuario.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 404, message = "Registro de Perfil de Usuario No Encontrado"),
+        @ApiResponse(code = 500, message = "Something wrong in Server")})
+    public Response findById(@PathParam("id") Long id) {
+        LOG.log(Level.INFO, "Obteniendo perfil de usuario por id: {0}", new Object[]{id});
         
-        if ( Util.isEmpty(usuarioPerfilDto) ) {
-            LOG.log(Level.WARNING, "Registro vacio");
-            return Response.status(Response.Status.NOT_FOUND).entity(Constants.MSG_ERROR_DEFAULT).build();
-        }
-        
-        usuarioPerfilDto.setImagenPerfil(archivoService.getUrlImagenPerfilUsuario(id.toString()));
-        
-        return Response.ok().entity(usuarioPerfilDto).build();
+        return Response.ok().entity(service.getUsuarioPerfilByUsuario(id)).build();
     }
     
     @POST
@@ -192,7 +197,7 @@ public class UsuarioPerfilRest {
             }
             
             // Guardamos la informacion en DB
-            ArchivoCabDto archivoCabDto = archivoService.saveArchivoImagenPerfilUsuario(input, usuarioPerfilDto.getId().toString());
+            ArchivoCabDto archivoCabDto = archivoService.saveArchivoMultiple(input, usuarioPerfilDto);
 
             LOG.log(Level.INFO, "Imagen de Perfil {0} agregada correctamente.", id);
             return Response.ok().entity(archivoCabDto).build();

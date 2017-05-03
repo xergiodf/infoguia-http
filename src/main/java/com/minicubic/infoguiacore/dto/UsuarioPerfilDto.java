@@ -1,10 +1,13 @@
 package com.minicubic.infoguiacore.dto;
 
+import com.minicubic.infoguiacore.enums.TableReference;
+import com.minicubic.infoguiacore.enums.TipoArchivo;
 import java.util.Date;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,9 +54,17 @@ public class UsuarioPerfilDto implements Archivable {
     
     @Getter
     @Setter
-    private String imagenPerfil;
-    
-    @Getter
-    @Setter
     private List<ArchivoDto> archivos;
+    
+    @Override
+    @XmlTransient
+    public TipoArchivo getTipoArchivo() {
+        return TipoArchivo.USUARIO_PERFIL;
+    }
+
+    @Override
+    @XmlTransient
+    public TableReference getTableReference() {
+        return TableReference.USUARIO_PERFIL;
+    }
 }

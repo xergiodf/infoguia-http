@@ -234,7 +234,7 @@ public class PublicacionRest {
             }
             
             // Guardamos la informacion en DB
-            ArchivoCabDto archivoCabDto = archivoService.saveArchivoImagenPublicacion(input, clientePublicacionDto.getId().toString());
+            ArchivoCabDto archivoCabDto = archivoService.saveArchivoMultiple(input, clientePublicacionDto);
 
             LOG.log(Level.INFO, "Imagen de Publicacion {0} agregada correctamente.", id);
             return Response.ok().entity(archivoCabDto).build();

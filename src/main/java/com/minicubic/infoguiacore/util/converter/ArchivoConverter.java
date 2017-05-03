@@ -2,6 +2,7 @@ package com.minicubic.infoguiacore.util.converter;
 
 import com.minicubic.infoguiacore.dto.ArchivoCabDto;
 import com.minicubic.infoguiacore.dto.ArchivoDetDto;
+import com.minicubic.infoguiacore.dto.ArchivoDto;
 import com.minicubic.infoguiacore.model.ArchivoCab;
 import com.minicubic.infoguiacore.model.ArchivoDet;
 import com.minicubic.infoguiacore.util.Util;
@@ -122,7 +123,7 @@ public class ArchivoConverter {
      * @throws IllegalAccessException
      * @throws InvocationTargetException 
      */
-    private List<ArchivoDetDto> getArchivosDetDto(List<ArchivoDet> archivosDet) 
+    public List<ArchivoDetDto> getArchivosDetDto(List<ArchivoDet> archivosDet) 
             throws IllegalAccessException, InvocationTargetException {
         List<ArchivoDetDto> archivosDetDto = new ArrayList<>();
         
@@ -140,7 +141,7 @@ public class ArchivoConverter {
      * @throws IllegalAccessException
      * @throws InvocationTargetException 
      */
-    private List<ArchivoDet> getArchivosDet(List<ArchivoDetDto> archivosDetDto, ArchivoCab archivoCab) 
+    public List<ArchivoDet> getArchivosDet(List<ArchivoDetDto> archivosDetDto, ArchivoCab archivoCab) 
             throws IllegalAccessException, InvocationTargetException {
         List<ArchivoDet> archivosDet = new ArrayList<>();
         
@@ -158,7 +159,7 @@ public class ArchivoConverter {
      * @throws IllegalAccessException
      * @throws InvocationTargetException 
      */
-    private ArchivoDet getArchivoDet(ArchivoDetDto archivoDetDto, ArchivoCab archivoCab) 
+    public ArchivoDet getArchivoDet(ArchivoDetDto archivoDetDto, ArchivoCab archivoCab) 
             throws IllegalAccessException, InvocationTargetException {
         ArchivoDet archivoDet = new ArchivoDet();
         
@@ -174,7 +175,14 @@ public class ArchivoConverter {
         return archivoDet;
     }
     
-    private ArchivoDetDto getArchivoDetDto(ArchivoDet archivoDet) 
+    /**
+     * 
+     * @param archivoDet
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException 
+     */
+    public ArchivoDetDto getArchivoDetDto(ArchivoDet archivoDet) 
             throws IllegalAccessException, InvocationTargetException {
         ArchivoDetDto archivoDetDto = new ArchivoDetDto();
         
@@ -186,5 +194,30 @@ public class ArchivoConverter {
         }
         
         return archivoDetDto;
+    }
+    
+    /**
+     * Obtiene una lista de ArchivoDto en base a un ArchivoCabDto
+     * @param archivoCabDto
+     * @return 
+     */
+    public List<ArchivoDto> getArchivoDto(ArchivoCabDto archivoCabDto) {
+        
+        if ( Util.isEmpty(archivoCabDto) )
+            return null;
+        
+        ArchivoDto archivoDto;
+        List<ArchivoDto> archivosDto = new ArrayList<>();
+        
+        for ( ArchivoDetDto archivoDetDto : archivoCabDto.getArchivosDetDto() ) {
+            archivoDto = new ArchivoDto();
+
+            archivoDto.setId(archivoDetDto.getId());
+            archivoDto.setUrl(archivoDetDto.getUrl());
+            
+            archivosDto.add(archivoDto);
+        }
+        
+        return archivosDto;
     }
 }

@@ -9,7 +9,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- *
+ * DTO exclusivo para ser incrustado en las clases que implementan la interfaz
+ * Archivable
  * @author xergio
  * @version 1 - 02.05.2017
  */
@@ -18,14 +19,10 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class ArchivoDto {
-
-    @Getter
-    @Setter
-    private Integer cabId;
     
     @Getter
     @Setter
-    private Integer detId;
+    private Integer id;
     
     @Getter
     @Setter
