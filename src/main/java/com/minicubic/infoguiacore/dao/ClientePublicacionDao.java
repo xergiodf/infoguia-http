@@ -82,7 +82,6 @@ public class ClientePublicacionDao {
             
             // TODO: Buscar algun patron de disenho que mejore esto
             // Cargamos las imagenes (si tiene)
-            
             for ( ClientePublicacionDto clientePublicacionDto : clientePublicacionesDto ) {
                 clientePublicacionDto.setArchivos(
                         archivoConverter.getArchivoDto(
@@ -110,11 +109,27 @@ public class ClientePublicacionDao {
      */
     public List<ClientePublicacionDto> getClientePublicacionesByTipoPublicacion(Integer tipoPublicacionId) {
         try {
-            List<ClientePublicacion> clientePublicaciones = em.createNamedQuery("ClientePublicacion.findByTipoPublicacion")
-                    .setParameter("tipoPublicacionId", tipoPublicacionId)
-                    .getResultList();
+            List<ClientePublicacionDto> clientePublicacionesDto = converter.getClientePublicacionesDto(
+                    em.createNamedQuery("ClientePublicacion.findByTipoPublicacion")
+                        .setParameter("tipoPublicacionId", tipoPublicacionId)
+                        .getResultList()
+            );
 
-            return converter.getClientePublicacionesDto(clientePublicaciones);
+            // TODO: Buscar algun patron de disenho que mejore esto
+            // Cargamos las imagenes (si tiene)
+            for ( ClientePublicacionDto clientePublicacionDto : clientePublicacionesDto ) {
+                clientePublicacionDto.setArchivos(
+                        archivoConverter.getArchivoDto(
+                                archivoDao.getArchivo(
+                                        TableReference.CLIENTE_PUBLICACION.getTableName(), 
+                                        TableReference.CLIENTE_PUBLICACION.getIdColumnName(), 
+                                        clientePublicacionDto.getId().toString()
+                                )
+                        )
+                );
+            }
+            
+            return clientePublicacionesDto;
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -129,11 +144,27 @@ public class ClientePublicacionDao {
      */
     public List<ClientePublicacionDto> getClientePublicacionesByCliente(Long clienteId) {
         try {
-            List<ClientePublicacion> clientePublicaciones = em.createNamedQuery("ClientePublicacion.findByCliente")
-                    .setParameter("clienteId", clienteId)
-                    .getResultList();
+            List<ClientePublicacionDto> clientePublicacionesDto = converter.getClientePublicacionesDto(
+                    em.createNamedQuery("ClientePublicacion.findByCliente")
+                        .setParameter("clienteId", clienteId)
+                        .getResultList()
+            );
+            
+            // TODO: Buscar algun patron de disenho que mejore esto
+            // Cargamos las imagenes (si tiene)
+            for ( ClientePublicacionDto clientePublicacionDto : clientePublicacionesDto ) {
+                clientePublicacionDto.setArchivos(
+                        archivoConverter.getArchivoDto(
+                                archivoDao.getArchivo(
+                                        TableReference.CLIENTE_PUBLICACION.getTableName(), 
+                                        TableReference.CLIENTE_PUBLICACION.getIdColumnName(), 
+                                        clientePublicacionDto.getId().toString()
+                                )
+                        )
+                );
+            }
 
-            return converter.getClientePublicacionesDto(clientePublicaciones);
+            return clientePublicacionesDto;
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);

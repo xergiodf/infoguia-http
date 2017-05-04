@@ -123,12 +123,14 @@ public class PublicacionRest {
     @GET
     @Secured
     @Path("/publicidades/{tipoPublicidad}")
-    @ApiOperation(value = "Obtiene una lista de Publicidades. No implementado aun.")
+    @ApiOperation(value = "Obtiene una lista de Publicidades en base a un tipo de publicidad")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response findPublicidad(@PathParam("tipoPublicidad") String tipoPublicidad) {
-        return null;
+    public Response findPublicidad(@PathParam("tipoPublicidad") Integer tipoPublicidad) {
+        LOG.log(Level.INFO, "Obteniendo publicidad por tipo de publicidad: {0}", new Object[]{tipoPublicidad});
+
+        return Response.ok().entity(service.getClientePublicacionesByTipoPublicacion(tipoPublicidad)).build();
     }
 
     @POST

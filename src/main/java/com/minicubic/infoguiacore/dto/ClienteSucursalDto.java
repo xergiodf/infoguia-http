@@ -53,6 +53,14 @@ public class ClienteSucursalDto implements Archivable {
     
     @Getter
     @Setter
+    private String sitioWeb;
+    
+    @Getter
+    @Setter
+    private String horarioAtencion;
+    
+    @Getter
+    @Setter
     private List<ArchivoDto> archivos;
     
     @Override

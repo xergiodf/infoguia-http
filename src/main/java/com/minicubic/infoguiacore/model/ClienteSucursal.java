@@ -83,6 +83,16 @@ public class ClienteSucursal implements Serializable {
     @Setter
     private String emails;
     
+    @Column(name = "sitio_web")
+    @Getter
+    @Setter
+    private String sitioWeb;
+    
+    @Column(name = "horario_atencion")
+    @Getter
+    @Setter
+    private String horarioAtencion;
+    
     @Column(name = "audit_usuario")
     @Getter
     @Setter
@@ -103,22 +113,11 @@ public class ClienteSucursal implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteSucursal", fetch = FetchType.LAZY)
     private List<SucursalValoracionCab> sucursalValoracionCabs;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clienteSucursal", fetch = FetchType.LAZY)
-    private List<SucursalHorarioCab> sucursalHorariosCabs;
-
     @XmlTransient
     public List<SucursalValoracionCab> getSucursalValoracionCabs() {
         return sucursalValoracionCabs;
     }
     public void setSucursalValoracionCabs(List<SucursalValoracionCab> sucursalValoracionCabs) {
         this.sucursalValoracionCabs = sucursalValoracionCabs;
-    }
-
-    @XmlTransient
-    public List<SucursalHorarioCab> getSucursalHorariosCabs() {
-        return sucursalHorariosCabs;
-    }
-    public void setSucursalHorariosCabs(List<SucursalHorarioCab> sucursalHorariosCabs) {
-        this.sucursalHorariosCabs = sucursalHorariosCabs;
     }
 }
