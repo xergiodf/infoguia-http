@@ -197,7 +197,7 @@ public class UsuarioPerfilRest {
             }
             
             // Guardamos la informacion en DB
-            ArchivoCabDto archivoCabDto = archivoService.saveArchivoMultiple(input, usuarioPerfilDto);
+            ArchivoCabDto archivoCabDto = archivoService.saveArchivo(input, usuarioPerfilDto);
 
             LOG.log(Level.INFO, "Imagen de Perfil {0} agregada correctamente.", id);
             return Response.ok().entity(archivoCabDto).build();

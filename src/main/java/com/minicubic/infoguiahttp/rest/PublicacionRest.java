@@ -94,49 +94,48 @@ public class PublicacionRest {
         return Response.ok().entity(service.getClientePublicacionesByCliente(id)).build();
     }
     
-    @GET
-    @Secured
-    @Path("/novedades/all")
-    @ApiOperation(value = "Obtiene una lista de Novedades")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "OK"),
-        @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response findNovedades() {
-        LOG.log(Level.INFO, "Obteniendo lista de Novedades");
+//    @GET
+//    @Secured
+//    @Path("/novedades/all")
+//    @ApiOperation(value = "Obtiene una lista de Novedades")
+//    @ApiResponses(value = {
+//        @ApiResponse(code = 200, message = "OK"),
+//        @ApiResponse(code = 500, message = "Something wrong in Server")})
+//    public Response findNovedades() {
+//        LOG.log(Level.INFO, "Obteniendo lista de Novedades");
+//
+//        return Response.ok().entity(service.getNovedades()).build();
+//    }
+//    
+//    @GET
+//    @Secured
+//    @Path("/promociones/all")
+//    @ApiOperation(value = "Obtiene una lista de Promociones")
+//    @ApiResponses(value = {
+//        @ApiResponse(code = 200, message = "OK"),
+//        @ApiResponse(code = 500, message = "Something wrong in Server")})
+//    public Response findPromociones() {
+//        LOG.log(Level.INFO, "Obteniendo lista de Promociones");
+//
+//        return Response.ok().entity(service.getPromociones()).build();
+//    }
 
-        return Response.ok().entity(service.getNovedades()).build();
-    }
-    
     @GET
-    @Secured
-    @Path("/promociones/all")
-    @ApiOperation(value = "Obtiene una lista de Promociones")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "OK"),
-        @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response findPromociones() {
-        LOG.log(Level.INFO, "Obteniendo lista de Promociones");
-
-        return Response.ok().entity(service.getPromociones()).build();
-    }
-
-    @GET
-    @Secured
-    @Path("/publicidades/{tipoPublicidad}")
+    @Path("/findByTipo/{tipoPublicacion}")
     @ApiOperation(value = "Obtiene una lista de Publicidades en base a un tipo de publicidad")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response findPublicidad(@PathParam("tipoPublicidad") Integer tipoPublicidad) {
-        LOG.log(Level.INFO, "Obteniendo publicidad por tipo de publicidad: {0}", new Object[]{tipoPublicidad});
+    public Response findByTipo(@PathParam("tipoPublicacion") Integer tipoPublicacion) {
+        LOG.log(Level.INFO, "Obteniendo publicidad por tipo de publicacion: {0}", new Object[]{tipoPublicacion});
 
-        return Response.ok().entity(service.getClientePublicacionesByTipoPublicacion(tipoPublicidad)).build();
+        return Response.ok().entity(service.getClientePublicacionesByTipoPublicacion(tipoPublicacion)).build();
     }
 
     @POST
     @Secured
     @Path("/add")
-    @ApiOperation(value = "Agrega un registro de Publicacion de Cliente. En el parametro debe venir especificado el tipo de publicacion (Novedad o Promocion.")
+    @ApiOperation(value = "Agrega un registro de Publicacion de Cliente. En el parametro debe venir especificado el tipo de publicacion.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 406, message = "Error de Validacion"),

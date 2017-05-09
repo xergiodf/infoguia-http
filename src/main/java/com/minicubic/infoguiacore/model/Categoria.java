@@ -78,25 +78,25 @@ public class Categoria implements Serializable {
     @Setter
     private Date auditFechaUpdate;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria", fetch = FetchType.LAZY)
-    private Collection<ClienteCategoria> clienteCategorias;
-    
-    @ManyToMany(mappedBy = "categorias")
-    private Collection<Cliente> clientes;
-
-    @XmlTransient
-    public Collection<Cliente> getClientes() {
-        return clientes;
-    }
-    public void setClientes(Collection<Cliente> clientes) {
-        this.clientes = clientes;
-    }
-
-    @XmlTransient
-    public Collection<ClienteCategoria> getClienteCategorias() {
-        return clienteCategorias;
-    }
-    public void setClienteCategorias(Collection<ClienteCategoria> clienteCategorias) {
-        this.clienteCategorias = clienteCategorias;
-    }
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria", fetch = FetchType.LAZY)
+//    private Collection<ClienteCategoria> clienteCategorias;
+//    
+//    @ManyToMany(mappedBy = "categorias")
+//    private Collection<Cliente> clientes;
+//
+//    @XmlTransient
+//    public Collection<Cliente> getClientes() {
+//        return clientes;
+//    }
+//    public void setClientes(Collection<Cliente> clientes) {
+//        this.clientes = clientes;
+//    }
+//
+//    @XmlTransient
+//    public Collection<ClienteCategoria> getClienteCategorias() {
+//        return clienteCategorias;
+//    }
+//    public void setClienteCategorias(Collection<ClienteCategoria> clienteCategorias) {
+//        this.clienteCategorias = clienteCategorias;
+//    }
 }

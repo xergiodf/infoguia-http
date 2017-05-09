@@ -104,87 +104,87 @@ public class Cliente implements Serializable {
     @Setter
     private Date auditFechaUpdate;
     
-    @JoinTable(name = "cliente_categorias", joinColumns = {
-        @JoinColumn(name = "id_cliente", referencedColumnName = "id")
-    }, 
-    inverseJoinColumns = {
-        @JoinColumn(name = "id_categoria", referencedColumnName = "id")
-    })
-    @ManyToMany
-    private Collection<Categoria> categorias;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
-    private Collection<Usuario> usuarios;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
-    private Collection<ClientePublicacion> clientePublicaciones;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
-    private Collection<ClienteSucursal> clienteSucursales;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
-    private Collection<ClienteCategoria> clienteCategorias;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
-    private Collection<ClienteSuscripcion> clienteSuscripciones;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
-    private Collection<ClienteOferta> clienteOfertas;
-
-
-    @XmlTransient
-    public Collection<Usuario> getUsuarios() {
-        return usuarios;
-    }
-    public void setUsuarios(Collection<Usuario> usuarios) {
-        this.usuarios = usuarios;
-    }
-    
-    @XmlTransient
-    public Collection<ClienteSucursal> getClienteSucursales() {
-        return clienteSucursales;
-    }
-    public void setClienteSucursales(Collection<ClienteSucursal> clienteSucursales) {
-        this.clienteSucursales = clienteSucursales;
-    }
-
-    @XmlTransient
-    public Collection<ClientePublicacion> getClientePublicaciones() {
-        return clientePublicaciones;
-    }
-    public void setClientePublicaciones(Collection<ClientePublicacion> clientePublicaciones) {
-        this.clientePublicaciones = clientePublicaciones;
-    }
-
-    @XmlTransient
-    public Collection<Categoria> getCategorias() {
-        return categorias;
-    }
-    public void setCategorias(Collection<Categoria> categorias) {
-        this.categorias = categorias;
-    }
-    
-    @XmlTransient
-    public Collection<ClienteCategoria> getClienteCategorias() {
-        return clienteCategorias;
-    }
-    public void setClienteCategorias(Collection<ClienteCategoria> clienteCategorias) {
-        this.clienteCategorias = clienteCategorias;
-    }
-
-    @XmlTransient
-    public Collection<ClienteSuscripcion> getClienteSuscripciones() {
-        return clienteSuscripciones;
-    }
-    public void setClienteSuscripciones(Collection<ClienteSuscripcion> clienteSuscripciones) {
-        this.clienteSuscripciones = clienteSuscripciones;
-    }
-
-    @XmlTransient
-    public Collection<ClienteOferta> getClienteOfertas() {
-        return clienteOfertas;
-    }
-    public void setClienteOfertas(Collection<ClienteOferta> clienteOfertas) {
-        this.clienteOfertas = clienteOfertas;
-    }
+//    @JoinTable(name = "cliente_categorias", joinColumns = {
+//        @JoinColumn(name = "id_cliente", referencedColumnName = "id")
+//    }, 
+//    inverseJoinColumns = {
+//        @JoinColumn(name = "id_categoria", referencedColumnName = "id")
+//    })
+//    @ManyToMany
+//    private Collection<Categoria> categorias;
+//
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+//    private Collection<Usuario> usuarios;
+//    
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+//    private Collection<ClientePublicacion> clientePublicaciones;
+//
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+//    private Collection<ClienteSucursal> clienteSucursales;
+//
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+//    private Collection<ClienteCategoria> clienteCategorias;
+//    
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+//    private Collection<ClienteSuscripcion> clienteSuscripciones;
+//    
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+//    private Collection<ClienteOferta> clienteOfertas;
+//
+//
+//    @XmlTransient
+//    public Collection<Usuario> getUsuarios() {
+//        return usuarios;
+//    }
+//    public void setUsuarios(Collection<Usuario> usuarios) {
+//        this.usuarios = usuarios;
+//    }
+//    
+//    @XmlTransient
+//    public Collection<ClienteSucursal> getClienteSucursales() {
+//        return clienteSucursales;
+//    }
+//    public void setClienteSucursales(Collection<ClienteSucursal> clienteSucursales) {
+//        this.clienteSucursales = clienteSucursales;
+//    }
+//
+//    @XmlTransient
+//    public Collection<ClientePublicacion> getClientePublicaciones() {
+//        return clientePublicaciones;
+//    }
+//    public void setClientePublicaciones(Collection<ClientePublicacion> clientePublicaciones) {
+//        this.clientePublicaciones = clientePublicaciones;
+//    }
+//
+//    @XmlTransient
+//    public Collection<Categoria> getCategorias() {
+//        return categorias;
+//    }
+//    public void setCategorias(Collection<Categoria> categorias) {
+//        this.categorias = categorias;
+//    }
+//    
+//    @XmlTransient
+//    public Collection<ClienteCategoria> getClienteCategorias() {
+//        return clienteCategorias;
+//    }
+//    public void setClienteCategorias(Collection<ClienteCategoria> clienteCategorias) {
+//        this.clienteCategorias = clienteCategorias;
+//    }
+//
+//    @XmlTransient
+//    public Collection<ClienteSuscripcion> getClienteSuscripciones() {
+//        return clienteSuscripciones;
+//    }
+//    public void setClienteSuscripciones(Collection<ClienteSuscripcion> clienteSuscripciones) {
+//        this.clienteSuscripciones = clienteSuscripciones;
+//    }
+//
+//    @XmlTransient
+//    public Collection<ClienteOferta> getClienteOfertas() {
+//        return clienteOfertas;
+//    }
+//    public void setClienteOfertas(Collection<ClienteOferta> clienteOfertas) {
+//        this.clienteOfertas = clienteOfertas;
+//    }
 }

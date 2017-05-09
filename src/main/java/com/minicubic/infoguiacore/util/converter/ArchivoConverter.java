@@ -206,6 +206,9 @@ public class ArchivoConverter {
         if ( Util.isEmpty(archivoCabDto) )
             return null;
         
+        if ( Util.isEmpty(archivoCabDto.getArchivosDetDto()) )
+            return null;
+        
         ArchivoDto archivoDto;
         List<ArchivoDto> archivosDto = new ArrayList<>();
         

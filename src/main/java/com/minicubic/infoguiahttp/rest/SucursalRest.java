@@ -198,7 +198,7 @@ public class SucursalRest {
             }
             
             // Guardamos la informacion en DB
-            ArchivoCabDto archivoCabDto = archivoService.saveArchivoMultiple(input, clienteSucursalDto);
+            ArchivoCabDto archivoCabDto = archivoService.saveArchivo(input, clienteSucursalDto);
 
             LOG.log(Level.INFO, "Imagen de Portada de Sucursal {0} agregada correctamente.", id);
             return Response.ok().entity(archivoCabDto).build();
