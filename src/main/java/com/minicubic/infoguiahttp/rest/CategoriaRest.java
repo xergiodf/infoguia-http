@@ -50,7 +50,6 @@ public class CategoriaRest {
     private static final Logger LOG = Logger.getLogger("CategoriasRest");
 
     @GET
-    @Secured
     @Path("/find/all")
     @ApiOperation(value = "Obtiene una lista de Categorias")
     @ApiResponses(value = {

@@ -3,15 +3,18 @@ package com.minicubic.infoguiahttp.rest;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.dto.ValidatorResponse;
 import com.minicubic.infoguiacore.util.Constants;
+import com.minicubic.infoguiacore.util.PasswordService;
 import com.minicubic.infoguiacore.util.Util;
 import com.minicubic.infoguiacore.util.Validator;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import com.minicubic.infoguiahttp.annotations.Secured;
+import com.minicubic.infoguiahttp.services.AuthService;
 import com.minicubic.infoguiahttp.services.UsuarioService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Singleton;
@@ -45,6 +48,9 @@ public class UsuarioRest {
     
     @Inject
     private UsuarioService service;
+    
+    @Inject
+    private AuthService authService;
     
     private static final Logger LOG = Logger.getLogger("UsuariosRest");
     
@@ -85,6 +91,8 @@ public class UsuarioRest {
         @ApiResponse(code = 500, message = "Something wrong in Server")})
     public Response addUsuario(UsuarioDto usuarioParam) {
         LOG.log(Level.INFO, "Creando nuevo usuario");
+        
+        UsuarioDto usuarioAux;
 
         try {
 
@@ -94,6 +102,29 @@ public class UsuarioRest {
                 LOG.log(Level.WARNING, "Error de validacion");
                 return Response.status(Response.Status.NOT_ACCEPTABLE).entity(validatorResponse.getMensaje()).build();
             }
+            
+            // Validacion de email unico
+            usuarioAux = new UsuarioDto();
+            usuarioAux.setEmail(usuarioParam.getEmail());
+            
+            if ( !Util.isEmpty(authService.getUsuarioByParam(usuarioAux)) ) {
+                LOG.log(Level.WARNING, "Error de validacion: Email ya existe.");
+                return Response.status(Response.Status.NOT_ACCEPTABLE).entity(Constants.VALIDATION_USUARIO_EMAIL_UNIQUE).build();
+            }
+            
+            // Validacion de username unico
+            usuarioAux = new UsuarioDto();
+            usuarioAux.setUsername(usuarioParam.getUsername());
+            
+            if ( !Util.isEmpty(authService.getUsuarioByParam(usuarioAux)) ) {
+                LOG.log(Level.WARNING, "Error de validacion: Username ya existe.");
+                return Response.status(Response.Status.NOT_ACCEPTABLE).entity(Constants.VALIDATION_USUARIO_USERNAME_UNIQUE).build();
+            }
+            
+            // Creamos el usuario
+            PasswordService ps = new PasswordService();
+            usuarioParam.setPassword(ps.encrypt(usuarioParam.getPassword()));
+            usuarioParam.setTokenConfirmacion(UUID.randomUUID().toString());
 
             usuarioParam = service.saveUsuario(usuarioParam);
 

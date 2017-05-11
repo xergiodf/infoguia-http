@@ -3,6 +3,8 @@ package com.minicubic.infoguiacore.util.converter;
 import com.minicubic.infoguiacore.dto.TipoPublicacionDto;
 import com.minicubic.infoguiacore.model.TipoPublicacion;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 
 /**
@@ -13,6 +15,42 @@ import org.apache.commons.beanutils.PropertyUtilsBean;
 public class TipoPublicacionConverter {
 
     private final PropertyUtilsBean beanUtil = new PropertyUtilsBean();
+    
+    /**
+     * 
+     * @param tipoPublicaciones
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException 
+     */
+    public List<TipoPublicacionDto> getTipoPublicacionesDto(List<TipoPublicacion> tipoPublicaciones) 
+            throws IllegalAccessException, InvocationTargetException {
+        List<TipoPublicacionDto> tipoPublicacionsDto = new ArrayList<>();
+        
+        for (TipoPublicacion tipoPublicacion : tipoPublicaciones) {
+            tipoPublicacionsDto.add(getTipoPublicacionDto(tipoPublicacion));
+        }
+        
+        return tipoPublicacionsDto;
+    }
+    
+    /**
+     * 
+     * @param tipoPublicacionesDto
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException 
+     */
+    public List<TipoPublicacion> getTipoPublicaciones(List<TipoPublicacionDto> tipoPublicacionesDto) 
+            throws IllegalAccessException, InvocationTargetException {
+        List<TipoPublicacion> tipoPublicacions = new ArrayList<>();
+        
+        for (TipoPublicacionDto tipoPublicacionDto : tipoPublicacionesDto) {
+            tipoPublicacions.add(getTipoPublicacion(tipoPublicacionDto));
+        }
+        
+        return tipoPublicacions;
+    }
     
     public TipoPublicacion getTipoPublicacion(TipoPublicacionDto tipoPublicacionDto) throws IllegalAccessException, InvocationTargetException {
         TipoPublicacion tipoPublicacion = new TipoPublicacion();

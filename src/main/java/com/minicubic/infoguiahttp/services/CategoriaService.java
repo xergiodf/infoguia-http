@@ -13,7 +13,7 @@ import javax.inject.Inject;
 /**
  *
  * @author xergio
- * @version 1
+ * @version 1 
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)

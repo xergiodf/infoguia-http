@@ -11,31 +11,31 @@ import lombok.ToString;
 /**
  *
  * @author xergio
- * @version 1
+ * @version 1 - 18/04/2017
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 @EqualsAndHashCode
-public class SucursalHorarioDetDto {
+public class ArchivoDetDto {
 
     @Getter
     @Setter
     private Integer id;
+    
+    @Getter
+    @Setter
+    private String mimeType;
 
     @Getter
     @Setter
-    private SucursalHorarioCabDto sucursalHorarioCabDto;
+    private String nombre;
 
     @Getter
     @Setter
-    private String dias;
+    private String ubicacion;
 
     @Getter
     @Setter
-    private String horaDesde;
-
-    @Getter
-    @Setter
-    private String horaHasta;
+    private String url;
 }

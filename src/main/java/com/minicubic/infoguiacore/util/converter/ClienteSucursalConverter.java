@@ -16,15 +16,15 @@ import org.apache.commons.beanutils.PropertyUtilsBean;
 public class ClienteSucursalConverter {
     
     private final PropertyUtilsBean beanUtil = new PropertyUtilsBean();
-    
+
     /**
-     * 
+     *
      * @param clienteSucursales
      * @return
      * @throws IllegalAccessException
-     * @throws InvocationTargetException 
+     * @throws InvocationTargetException
      */
-    public List<ClienteSucursalDto> getClienteSucursalesDto(List<ClienteSucursal> clienteSucursales) 
+    public List<ClienteSucursalDto> getClienteSucursalesDto(List<ClienteSucursal> clienteSucursales)
             throws IllegalAccessException, InvocationTargetException {
         List<ClienteSucursalDto> clienteSucursalesDto = new ArrayList<>();
         
@@ -34,15 +34,15 @@ public class ClienteSucursalConverter {
         
         return clienteSucursalesDto;
     }
-    
+
     /**
-     * 
+     *
      * @param clienteSucursalesDto
      * @return
      * @throws IllegalAccessException
-     * @throws InvocationTargetException 
+     * @throws InvocationTargetException
      */
-    public List<ClienteSucursal> getClienteSucursales(List<ClienteSucursalDto> clienteSucursalesDto) 
+    public List<ClienteSucursal> getClienteSucursales(List<ClienteSucursalDto> clienteSucursalesDto)
             throws IllegalAccessException, InvocationTargetException {
         List<ClienteSucursal> clienteSucursales = new ArrayList<>();
         
@@ -52,56 +52,67 @@ public class ClienteSucursalConverter {
         
         return clienteSucursales;
     }
- 
+
     /**
-     * 
+     *
      * @param clienteSucursalDto
      * @return
      * @throws IllegalAccessException
-     * @throws InvocationTargetException 
+     * @throws InvocationTargetException
      */
-    public ClienteSucursal getClienteSucursal(ClienteSucursalDto clienteSucursalDto) 
+    public ClienteSucursal getClienteSucursal(ClienteSucursalDto clienteSucursalDto)
             throws IllegalAccessException, InvocationTargetException {
         ClienteSucursal clienteSucursal = new ClienteSucursal();
-        
+
         // Copiamos las propiedades simples
         try {
             beanUtil.copyProperties(clienteSucursal, clienteSucursalDto);
         } catch (NoSuchMethodException ex) {
             // No importa
         }
-        
+
         // Copiamos las propiedas complejas
-        if ( !Util.isEmpty(clienteSucursalDto.getClienteDto())) 
+        if (!Util.isEmpty(clienteSucursalDto.getClienteDto())) {
             clienteSucursal.setCliente(new ClienteConverter()
                     .getCliente(clienteSucursalDto.getClienteDto()));
+        }
         
-
+        if (!Util.isEmpty(clienteSucursalDto.getCiudadDto())) {
+            clienteSucursal.setCiudad(new CiudadConverter()
+                    .getCiudad(clienteSucursalDto.getCiudadDto()));
+        }
+        
         return clienteSucursal;
     }
-    
+
     /**
-     * 
+     *
      * @param clienteSucursal
      * @return
      * @throws IllegalAccessException
-     * @throws InvocationTargetException 
+     * @throws InvocationTargetException
      */
-    public ClienteSucursalDto getClienteSucursalDto(ClienteSucursal clienteSucursal) 
+    public ClienteSucursalDto getClienteSucursalDto(ClienteSucursal clienteSucursal)
             throws IllegalAccessException, InvocationTargetException {
         ClienteSucursalDto clienteSucursalDto = new ClienteSucursalDto();
-        
+
         // Copiamos las propiedades simples
         try {
             beanUtil.copyProperties(clienteSucursalDto, clienteSucursal);
         } catch (NoSuchMethodException ex) {
             // No importa
         }
-        
+
         // Copiamos las propiedas complejas
-        if ( !Util.isEmpty(clienteSucursal.getCliente())) 
+        if (!Util.isEmpty(clienteSucursal.getCliente())) {
             clienteSucursalDto.setClienteDto(new ClienteConverter()
                     .getClienteDto(clienteSucursal.getCliente()));
+        }
+        
+        if (!Util.isEmpty(clienteSucursal.getCiudad())) {
+            clienteSucursalDto.setCiudadDto(new CiudadConverter()
+                    .getCiudadDto(clienteSucursal.getCiudad()));
+        }
         
         return clienteSucursalDto;
     }

@@ -1,24 +1,20 @@
 package com.minicubic.infoguiacore.model;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,7 +23,7 @@ import lombok.ToString;
 /**
  *
  * @author xergio
- * @version 1
+ * @version 2 - 07/04/2017
  */
 @Entity
 @Table(name = "categorias")
@@ -52,7 +48,13 @@ public class Categoria implements Serializable {
     @Getter
     @Setter
     private String descripcion;
-
+    
+    @JoinColumn(name = "id_grupo_categoria", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    @Getter
+    @Setter
+    private GrupoCategoria grupoCategoria;
+    
     @Column(name = "audit_usuario")
     @Getter
     @Setter
@@ -70,25 +72,25 @@ public class Categoria implements Serializable {
     @Setter
     private Date auditFechaUpdate;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria", fetch = FetchType.LAZY)
-    private Collection<ClienteCategoria> clienteCategorias;
-    
-    @ManyToMany(mappedBy = "categorias")
-    private Collection<Cliente> clientes;
-
-    @XmlTransient
-    public Collection<Cliente> getClientes() {
-        return clientes;
-    }
-    public void setClientes(Collection<Cliente> clientes) {
-        this.clientes = clientes;
-    }
-
-    @XmlTransient
-    public Collection<ClienteCategoria> getClienteCategorias() {
-        return clienteCategorias;
-    }
-    public void setClienteCategorias(Collection<ClienteCategoria> clienteCategorias) {
-        this.clienteCategorias = clienteCategorias;
-    }
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria", fetch = FetchType.LAZY)
+//    private Collection<ClienteCategoria> clienteCategorias;
+//    
+//    @ManyToMany(mappedBy = "categorias")
+//    private Collection<Cliente> clientes;
+//
+//    @XmlTransient
+//    public Collection<Cliente> getClientes() {
+//        return clientes;
+//    }
+//    public void setClientes(Collection<Cliente> clientes) {
+//        this.clientes = clientes;
+//    }
+//
+//    @XmlTransient
+//    public Collection<ClienteCategoria> getClienteCategorias() {
+//        return clienteCategorias;
+//    }
+//    public void setClienteCategorias(Collection<ClienteCategoria> clienteCategorias) {
+//        this.clienteCategorias = clienteCategorias;
+//    }
 }

@@ -1,7 +1,9 @@
 package com.minicubic.infoguiacore.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,10 +14,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,19 +27,19 @@ import lombok.ToString;
 
 /**
  *
- * @author hectorvillalba
+ * @author xergio
+ * @version 1 - 17/04/2017
  */
 @Entity
-@Table(name = "sucursal_horarios_det")
+@Table(name = "archivos_cab")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SucursalHorarioDet.findAll", query = "SELECT s FROM SucursalHorarioDet s"),
-    @NamedQuery(name = "SucursalHorarioDet.findById", query = "SELECT s FROM SucursalHorarioDet s WHERE s.id = :id"),
-    @NamedQuery(name = "SucursalHorarioDet.findByHoraDesde", query = "SELECT s FROM SucursalHorarioDet s WHERE s.horaDesde = :horaDesde"),
-    @NamedQuery(name = "SucursalHorarioDet.findByHoraHasta", query = "SELECT s FROM SucursalHorarioDet s WHERE s.horaHasta = :horaHasta")})
+    @NamedQuery(name = "ArchivoCab.findAll", query = "SELECT a FROM ArchivoCab a"), 
+    @NamedQuery(name = "ArchivoCab.findById", query = "SELECT a FROM ArchivoCab a WHERE a.id = :id"), 
+    @NamedQuery(name = "ArchivoCab.findByRef", query = "SELECT a FROM ArchivoCab a WHERE a.tablaRef = :tablaRef AND a.columnaRef = :columnaRef AND a.idRef = :idRef")})
 @ToString
 @EqualsAndHashCode
-public class SucursalHorarioDet implements Serializable {
+public class ArchivoCab implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -44,33 +48,33 @@ public class SucursalHorarioDet implements Serializable {
     @Getter
     @Setter
     private Integer id;
+
+    @Column(name = "tabla_ref")
+    @Getter
+    @Setter
+    private String tablaRef;
+
+    @Column(name = "columna_ref")
+    @Getter
+    @Setter
+    private String columnaRef;
+
+    @Column(name = "id_ref")
+    @Getter
+    @Setter
+    private String idRef;
     
-    @JoinColumn(name = "id_sucursal_horario_cab", referencedColumnName = "id")
+    @JoinColumn(name = "id_tipo_archivo", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @Getter
     @Setter
-    private SucursalHorarioCab sucursalHorarioCab;
+    private TipoArchivo tipoArchivo;
     
-    @Column(name = "dias")
-    @Getter
-    @Setter
-    private String dias;
-
-    @Column(name = "hora_desde")
-    @Getter
-    @Setter
-    private String horaDesde;
-
-    @Column(name = "hora_hasta")
-    @Getter
-    @Setter
-    private String horaHasta;
-
     @Column(name = "audit_usuario")
     @Getter
     @Setter
     private String auditUsuario;
-
+    
     @Column(name = "audit_fecha_insert", insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @Getter
@@ -81,5 +85,16 @@ public class SucursalHorarioDet implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Getter
     @Setter
-    private Date auditFechaUpdate;
+    private Date auditFechaUpdate; 
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "archivoCab")
+    private List<ArchivoDet> archivosDet;
+
+    @XmlTransient
+    public List<ArchivoDet> getArchivosDet() {
+        return archivosDet;
+    }
+    public void setArchivosDet(List<ArchivoDet> archivosDet) {
+        this.archivosDet = archivosDet;
+    }
 }

@@ -2,7 +2,9 @@ package com.minicubic.infoguiacore.dao;
 
 import com.minicubic.infoguiacore.dto.ClienteSucursalDto;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
+import com.minicubic.infoguiacore.enums.TableReference;
 import com.minicubic.infoguiacore.model.ClienteSucursal;
+import com.minicubic.infoguiacore.util.converter.ArchivoConverter;
 import com.minicubic.infoguiacore.util.converter.ClienteSucursalConverter;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import java.lang.reflect.InvocationTargetException;
@@ -24,8 +26,12 @@ public class ClienteSucursalDao {
     @LoggedIn
     @Inject
     private UsuarioDto usuarioLogueado;
+    
+    @Inject
+    private ArchivoDao archivoDao;
 
     private final ClienteSucursalConverter converter = new ClienteSucursalConverter();
+    private final ArchivoConverter archivoConverter = new ArchivoConverter();
     private static final Logger LOG = Logger.getLogger("ClienteSucursalDao");
     
     @PersistenceContext(unitName="infoGuiaPU")
@@ -38,11 +44,25 @@ public class ClienteSucursalDao {
      */
     public ClienteSucursalDto getClienteSucursal(Integer id) {
         try {
-            ClienteSucursal clienteSucursal = (ClienteSucursal) em.createNamedQuery("ClienteSucursal.findById")
-                    .setParameter("id", id)
-                    .getSingleResult();
+            ClienteSucursalDto clienteSucursalDto = converter.getClienteSucursalDto(
+                    (ClienteSucursal) em.createNamedQuery("ClienteSucursal.findById")
+                        .setParameter("id", id)
+                        .getSingleResult()
+            );
+            
+            // TODO: Buscar algun patron de disenho que mejore esto
+            // Cargamos las imagenes (si tiene)
+            clienteSucursalDto.setArchivos(
+                    archivoConverter.getArchivoDto(
+                            archivoDao.getArchivo(
+                                    TableReference.CLIENTE_SUCURSAL.getTableName(),
+                                    TableReference.CLIENTE_SUCURSAL.getIdColumnName(),
+                                    id.toString()
+                            )
+                    )
+            );
 
-            return converter.getClienteSucursalDto(clienteSucursal);
+            return clienteSucursalDto;
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -56,10 +76,25 @@ public class ClienteSucursalDao {
      */
     public List<ClienteSucursalDto> getClienteSucursales() {
         try {
-            List<ClienteSucursal> clienteSucursals = em.createNamedQuery("ClienteSucursal.findAll")
-                    .getResultList();
+            List<ClienteSucursalDto> clienteSucursalesDto = converter.getClienteSucursalesDto(
+                    em.createNamedQuery("ClienteSucursal.findAll").getResultList()
+            );
+            
+            // TODO: Buscar algun patron de disenho que mejore esto
+            // Cargamos las imagenes (si tiene)
+            for ( ClienteSucursalDto clienteSucursalDto : clienteSucursalesDto ) {
+                clienteSucursalDto.setArchivos(
+                        archivoConverter.getArchivoDto(
+                                archivoDao.getArchivo(
+                                        TableReference.CLIENTE_SUCURSAL.getTableName(),
+                                        TableReference.CLIENTE_SUCURSAL.getIdColumnName(),
+                                        clienteSucursalDto.getId().toString()
+                                )
+                        )
+                );
+            }
 
-            return converter.getClienteSucursalesDto(clienteSucursals);
+            return clienteSucursalesDto;
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -74,11 +109,28 @@ public class ClienteSucursalDao {
      */
     public List<ClienteSucursalDto> getClienteSucursalesByCliente(Long clienteSucursalId) {
         try {
-            List<ClienteSucursal> clienteSucursals = em.createNamedQuery("ClienteSucursal.findByCliente")
-                    .setParameter("clienteId", clienteSucursalId)
-                    .getResultList();
 
-            return converter.getClienteSucursalesDto(clienteSucursals);
+            List<ClienteSucursalDto> clienteSucursalesDto = converter.getClienteSucursalesDto(
+                    em.createNamedQuery("ClienteSucursal.findByCliente")
+                    .setParameter("clienteId", clienteSucursalId)
+                    .getResultList()
+            );
+            
+            // TODO: Buscar algun patron de disenho que mejore esto
+            // Cargamos las imagenes (si tiene)
+            for ( ClienteSucursalDto clienteSucursalDto : clienteSucursalesDto ) {
+                clienteSucursalDto.setArchivos(
+                        archivoConverter.getArchivoDto(
+                                archivoDao.getArchivo(
+                                        TableReference.CLIENTE_SUCURSAL.getTableName(),
+                                        TableReference.CLIENTE_SUCURSAL.getIdColumnName(),
+                                        clienteSucursalDto.getId().toString()
+                                )
+                        )
+                );
+            }
+
+            return clienteSucursalesDto;
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);

@@ -1,12 +1,11 @@
 package com.minicubic.infoguiacore.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,18 +24,22 @@ import lombok.ToString;
 
 /**
  *
- * @author hectorvillalba
+ * @author xergio
+ * @version 1 - 18/04/2017
  */
 @Entity
-@Table(name = "tipos_horarios")
+@Table(name = "tipos_archivos")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TipoHorario.findAll", query = "SELECT t FROM TipoHorario t"),
-    @NamedQuery(name = "TipoHorario.findById", query = "SELECT t FROM TipoHorario t WHERE t.id = :id"),
-    @NamedQuery(name = "TipoHorario.findByDescripcion", query = "SELECT t FROM TipoHorario t WHERE t.descripcion = :descripcion")})
+    @NamedQuery(name = "TipoArchivo.findAll", query = "SELECT t FROM TipoArchivo t"), 
+    @NamedQuery(name = "TipoArchivo.findById", query = "SELECT t FROM TipoArchivo t WHERE t.id = :id"), 
+    @NamedQuery(name = "TipoArchivo.findByDescripcion", query = "SELECT t FROM TipoArchivo t WHERE t.descripcion = :descripcion"), 
+    @NamedQuery(name = "TipoArchivo.findByAuditUsuario", query = "SELECT t FROM TipoArchivo t WHERE t.auditUsuario = :auditUsuario"), 
+    @NamedQuery(name = "TipoArchivo.findByAuditFechaInsert", query = "SELECT t FROM TipoArchivo t WHERE t.auditFechaInsert = :auditFechaInsert"), 
+    @NamedQuery(name = "TipoArchivo.findByAuditFechaUpdate", query = "SELECT t FROM TipoArchivo t WHERE t.auditFechaUpdate = :auditFechaUpdate")})
 @ToString
 @EqualsAndHashCode
-public class TipoHorario implements Serializable {
+public class TipoArchivo implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -45,7 +48,7 @@ public class TipoHorario implements Serializable {
     @Getter
     @Setter
     private Integer id;
-    
+
     @Column(name = "descripcion")
     @Getter
     @Setter
@@ -55,7 +58,7 @@ public class TipoHorario implements Serializable {
     @Getter
     @Setter
     private String auditUsuario;
-    
+
     @Column(name = "audit_fecha_insert", insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @Getter
@@ -68,14 +71,15 @@ public class TipoHorario implements Serializable {
     @Setter
     private Date auditFechaUpdate;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoHorario", fetch = FetchType.LAZY)
-    private List<SucursalHorarioCab> sucursalHorariosCabs;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoArchivo")
+    private Collection<ArchivoCab> archivoCabCollection;
 
     @XmlTransient
-    public List<SucursalHorarioCab> getSucursalHorariosCabList() {
-        return sucursalHorariosCabs;
+    public Collection<ArchivoCab> getArchivoCabCollection() {
+        return archivoCabCollection;
     }
-    public void setSucursalHorariosCabList(List<SucursalHorarioCab> sucursalHorariosCabList) {
-        this.sucursalHorariosCabs = sucursalHorariosCabList;
+
+    public void setArchivoCabCollection(Collection<ArchivoCab> archivoCabCollection) {
+        this.archivoCabCollection = archivoCabCollection;
     }
 }

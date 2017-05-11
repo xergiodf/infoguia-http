@@ -43,6 +43,15 @@ public class ClientePublicacionService {
     
     /**
      * 
+     * @param tipoPublicacionId
+     * @return 
+     */
+    public List<ClientePublicacionDto> getClientePublicacionesByTipoPublicacion(Integer tipoPublicacionId) {
+        return dao.getClientePublicacionesByTipoPublicacion(tipoPublicacionId);
+    }
+    
+    /**
+     * 
      * @param id
      * @return 
      */

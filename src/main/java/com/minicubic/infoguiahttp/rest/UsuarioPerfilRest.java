@@ -1,5 +1,6 @@
 package com.minicubic.infoguiahttp.rest;
 
+import com.minicubic.infoguiacore.dto.ArchivoCabDto;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.dto.UsuarioPerfilDto;
 import com.minicubic.infoguiacore.dto.ValidatorResponse;
@@ -8,6 +9,7 @@ import com.minicubic.infoguiacore.util.Util;
 import com.minicubic.infoguiacore.util.Validator;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import com.minicubic.infoguiahttp.annotations.Secured;
+import com.minicubic.infoguiahttp.services.ArchivoService;
 import com.minicubic.infoguiahttp.services.UsuarioPerfilService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -27,11 +29,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 /**
  *
  * @author xergio
- * @version 1
+ * @version 2 - 20/04/2017
  */
 @Singleton
 @Path("usuarioPerfiles")
@@ -46,6 +49,9 @@ public class UsuarioPerfilRest {
     
     @Inject
     private UsuarioPerfilService service;
+    
+    @Inject
+    private ArchivoService archivoService;
     
     private static final Logger LOG = Logger.getLogger("UsuarioPerfilesRest");
     
@@ -68,11 +74,26 @@ public class UsuarioPerfilRest {
     @ApiOperation(value = "Obtiene un registro de Perfil de Usuario.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 404, message = "Registro de Perfil de Usuario No Encontrado"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
     public Response findById(@PathParam("id") Integer id) {
         LOG.log(Level.INFO, "Obteniendo perfil de usuario por id: {0}", new Object[]{id});
         
         return Response.ok().entity(service.getUsuarioPerfil(id)).build();
+    }
+    
+    @GET
+    @Secured
+    @Path("/findByUser/{id}")
+    @ApiOperation(value = "Obtiene un registro de Perfil de Usuario.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 404, message = "Registro de Perfil de Usuario No Encontrado"),
+        @ApiResponse(code = 500, message = "Something wrong in Server")})
+    public Response findById(@PathParam("id") Long id) {
+        LOG.log(Level.INFO, "Obteniendo perfil de usuario por id: {0}", new Object[]{id});
+        
+        return Response.ok().entity(service.getUsuarioPerfilByUsuario(id)).build();
     }
     
     @POST
@@ -152,5 +173,37 @@ public class UsuarioPerfilRest {
             LOG.log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
         }
+    }
+    
+    @POST
+    @Secured
+    @Path("/upload/{id}")
+    @Consumes("multipart/form-data")
+    @ApiOperation(value = "Carga un archivo en el servidor.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 404, message = "Registro de Perfil de Usuario No Encontrado"),
+        @ApiResponse(code = 500, message = "Something wrong in Server")})
+    public Response uploadImagenPerfil(@PathParam("id") Integer id, MultipartFormDataInput input) {
+        LOG.log(Level.INFO, "Guardando una Imagen de Perfil");
+        
+        try {
+            // Verificamos que exista el ID de Perfil de Usuario
+            UsuarioPerfilDto usuarioPerfilDto = service.getUsuarioPerfil(id);
+            
+            if ( Util.isEmpty(usuarioPerfilDto) ) {
+                LOG.log(Level.WARNING, "Registro vacio");
+                return Response.status(Response.Status.NOT_FOUND).entity(Constants.MSG_ERROR_DEFAULT).build();
+            }
+            
+            // Guardamos la informacion en DB
+            ArchivoCabDto archivoCabDto = archivoService.saveArchivo(input, usuarioPerfilDto);
+
+            LOG.log(Level.INFO, "Imagen de Perfil {0} agregada correctamente.", id);
+            return Response.ok().entity(archivoCabDto).build();
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
+        }        
     }
 }

@@ -82,6 +82,13 @@ public class UsuarioDao {
         try {
             Usuario usuario = converter.getUsuario(usuarioDto);
 
+            if ( !Util.isEmpty(usuario.getId()) && Util.isEmpty(usuario.getPassword()) ) {
+                Usuario usuarioAux = (Usuario) em.createNamedQuery("Usuario.findById")
+                    .setParameter("id", usuarioDto.getId())
+                    .getSingleResult();
+                usuario.setPassword(usuarioAux.getPassword());
+            }
+            
             usuario.setAuditUsuario(usuarioLogueado.getUsername());
             usuario = em.merge(usuario);
             em.flush();

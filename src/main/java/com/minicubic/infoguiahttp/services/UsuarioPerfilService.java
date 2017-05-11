@@ -34,6 +34,15 @@ public class UsuarioPerfilService {
     
     /**
      * 
+     * @param idUsuario
+     * @return 
+     */
+    public UsuarioPerfilDto getUsuarioPerfilByUsuario(Long idUsuario) {
+        return dao.getUsuarioPerfilByUsuario(idUsuario);
+    }
+    
+    /**
+     * 
      * @return 
      */
     public List<UsuarioPerfilDto> getUsuarioPerfiles() {

@@ -1,17 +1,14 @@
 package com.minicubic.infoguiacore.model;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -27,36 +24,31 @@ import lombok.ToString;
 
 /**
  *
- * @author hectorvillalba
+ * @author xergio
+ * @version 1 - 09.05.2017
  */
 @Entity
-@Table(name = "sucursal_horarios_cab")
+@Table(name = "departamentos")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SucursalHorarioCab.findAll", query = "SELECT s FROM SucursalHorarioCab s"),
-    @NamedQuery(name = "SucursalHorarioCab.findById", query = "SELECT s FROM SucursalHorarioCab s WHERE s.id = :id")})
+    @NamedQuery(name = "Departamento.findAll", query = "SELECT d FROM Departamento d"), 
+    @NamedQuery(name = "Departamento.findById", query = "SELECT d FROM Departamento d WHERE d.id = :id")})
 @ToString
 @EqualsAndHashCode
-public class SucursalHorarioCab implements Serializable {
-    
+public class Departamento implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @Getter
+    @Setter
     private Integer id;
     
-    @JoinColumn(name = "id_tipo_horario", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @Column(name = "descripcion")
     @Getter
     @Setter
-    private TipoHorario tipoHorario;
-    
-    @JoinColumn(name = "id_cliente_sucursal", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @Getter
-    @Setter
-    private ClienteSucursal clienteSucursal;
+    private String descripcion;
     
     @Column(name = "audit_usuario")
     @Getter
@@ -75,14 +67,15 @@ public class SucursalHorarioCab implements Serializable {
     @Setter
     private Date auditFechaUpdate;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sucursalHorarioCab", fetch = FetchType.LAZY)
-    private Collection<SucursalHorarioDet> sucursalHorariosDets;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departamento")
+    private List<Ciudad> ciudadList;
 
     @XmlTransient
-    public Collection<SucursalHorarioDet> getSucursalHorariosDets() {
-        return sucursalHorariosDets;
+    public List<Ciudad> getCiudadList() {
+        return ciudadList;
     }
-    public void setSucursalHorariosDetList(Collection<SucursalHorarioDet> sucursalHorariosDets) {
-        this.sucursalHorariosDets = sucursalHorariosDets;
+
+    public void setCiudadList(List<Ciudad> ciudadList) {
+        this.ciudadList = ciudadList;
     }
 }

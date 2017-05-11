@@ -1,6 +1,5 @@
 package com.minicubic.infoguiacore.dto;
 
-import javax.persistence.Column;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -12,22 +11,19 @@ import lombok.ToString;
 /**
  *
  * @author xergio
- * @version 1
+ * @version 1 - 11.05.2017
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 @EqualsAndHashCode
-public class SucursalHorarioCabDto {
+public class DepartamentoDto {
 
-    @Column(name = "id")
+    @Getter
+    @Setter
     private Integer id;
 
     @Getter
     @Setter
-    private TipoHorarioDto tipoHorarioDto;
-
-    @Getter
-    @Setter
-    private ClienteSucursalDto clienteSucursalDto;
+    private String descripcion;
 }

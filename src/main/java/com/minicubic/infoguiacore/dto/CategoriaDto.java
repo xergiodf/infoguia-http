@@ -11,7 +11,7 @@ import lombok.ToString;
 /**
  *
  * @author xergio
- * @version 1
+ * @version 2 - 07/04/2017
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -25,4 +25,8 @@ public class CategoriaDto {
     @Getter
     @Setter
     private String descripcion;
+    
+    @Getter
+    @Setter
+    private GrupoCategoriaDto grupoCategoriaDto;
 }
