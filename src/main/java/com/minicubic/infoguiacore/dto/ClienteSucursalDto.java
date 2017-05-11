@@ -61,6 +61,10 @@ public class ClienteSucursalDto implements Archivable {
     
     @Getter
     @Setter
+    private CiudadDto ciudadDto;
+    
+    @Getter
+    @Setter
     private List<ArchivoDto> archivos;
     
     @Override
