@@ -4,8 +4,8 @@
 
     <groupId>com.minicubic</groupId>
     <artifactId>infoguia-http</artifactId>
-    <!-- Fixed Cliente Categoria -->
-    <version>2.2.2</version>
+    <!-- Added Departamento y Ciudad -->
+    <version>2.2.3</version>
     <packaging>war</packaging>
 
     <name>infoguia-http</name>

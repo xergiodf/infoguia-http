@@ -1,9 +1,11 @@
 package com.minicubic.infoguiacore.util;
 
 import com.minicubic.infoguiacore.dto.CategoriaDto;
+import com.minicubic.infoguiacore.dto.CiudadDto;
 import com.minicubic.infoguiacore.dto.ClienteDto;
 import com.minicubic.infoguiacore.dto.ClientePublicacionDto;
 import com.minicubic.infoguiacore.dto.ClienteSucursalDto;
+import com.minicubic.infoguiacore.dto.DepartamentoDto;
 import com.minicubic.infoguiacore.dto.EstadoPublicacionDto;
 import com.minicubic.infoguiacore.dto.EstadoUsuarioDto;
 import com.minicubic.infoguiacore.dto.TipoPublicacionDto;
@@ -275,6 +277,11 @@ public class Validator {
         return response;
     }
     
+    /**
+     * 
+     * @param estadoUsuarioDto
+     * @return 
+     */
     public ValidatorResponse<Boolean> validateAddEstadoUsuario(EstadoUsuarioDto estadoUsuarioDto) {
         ValidatorResponse<Boolean> response = new ValidatorResponse<>();
         response.setData(true);
@@ -282,6 +289,40 @@ public class Validator {
         if (Util.isEmpty(estadoUsuarioDto.getDescripcion())) {
             response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_GENERIC_DESCRIPCION));
+        }
+        
+        return response;
+    }
+    
+    /**
+     * 
+     * @param departamentoDto
+     * @return 
+     */
+    public ValidatorResponse<Boolean> validateAddDepartamento(DepartamentoDto departamentoDto) {
+        ValidatorResponse<Boolean> response = new ValidatorResponse<>();
+        response.setData(true);
+        
+        if (Util.isEmpty(departamentoDto.getDescripcion())) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_GENERIC_DESCRIPCION));
+        }
+        
+        return response;
+    }
+    
+    public ValidatorResponse<Boolean> validateAddCiudad(CiudadDto ciudadDto) {
+        ValidatorResponse<Boolean> response = new ValidatorResponse<>();
+        response.setData(true);
+        
+        if (Util.isEmpty(ciudadDto.getDescripcion())) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_GENERIC_DESCRIPCION));
+        }
+        
+        if (Util.isEmpty(ciudadDto.getDepartamentoDto())) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_CIUDAD_DEPARTAMENTO));
         }
         
         return response;

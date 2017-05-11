@@ -10,7 +10,6 @@ import com.minicubic.infoguiacore.util.converter.ArchivoConverter;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
