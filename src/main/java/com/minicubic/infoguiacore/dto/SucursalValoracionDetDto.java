@@ -22,7 +22,7 @@ public class SucursalValoracionDetDto {
     @Getter
     @Setter
     private Integer id;
-
+    
     @Getter
     @Setter
     private SucursalValoracionCabDto sucursalValoracionCabDto;

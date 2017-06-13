@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +32,7 @@ import lombok.ToString;
 @NamedQueries({
     @NamedQuery(name = "SucursalValoracionDet.findAll", query = "SELECT s FROM SucursalValoracionDet s"), 
     @NamedQuery(name = "SucursalValoracionDet.findById", query = "SELECT s FROM SucursalValoracionDet s WHERE s.id = :id"), 
-    @NamedQuery(name = "SucursalValoracionDet.findByPuntaje", query = "SELECT s FROM SucursalValoracionDet s WHERE s.puntaje = :puntaje"), 
+    @NamedQuery(name = "SucursalValoracionDet.findByUsuario", query = "SELECT s FROM SucursalValoracionDet s WHERE s.usuario.id = :idUsuario"), 
     @NamedQuery(name = "SucursalValoracionDet.findByAuditUsuario", query = "SELECT s FROM SucursalValoracionDet s WHERE s.auditUsuario = :auditUsuario"), 
     @NamedQuery(name = "SucursalValoracionDet.findByAuditFechaInsert", query = "SELECT s FROM SucursalValoracionDet s WHERE s.auditFechaInsert = :auditFechaInsert"), 
     @NamedQuery(name = "SucursalValoracionDet.findByAuditFechaUpdate", query = "SELECT s FROM SucursalValoracionDet s WHERE s.auditFechaUpdate = :auditFechaUpdate")})
@@ -48,7 +49,7 @@ public class SucursalValoracionDet implements Serializable {
     private Integer id;
     
     @JoinColumn(name = "id_sucursal_valoracion_cab", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @Getter
     @Setter
     private SucursalValoracionCab sucursalValoracionCab;

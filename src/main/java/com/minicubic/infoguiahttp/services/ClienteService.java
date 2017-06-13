@@ -49,6 +49,10 @@ public class ClienteService {
         return dao.getClientes();
     }
     
+    public List<ClienteDto> getClientesByParams(String params) {
+        return dao.getClientesByParams(params);
+    }
+    
     /**
      * 
      * @param clienteDto

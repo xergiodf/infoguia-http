@@ -1,8 +1,8 @@
 package com.minicubic.infoguiacore.model;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,9 +34,9 @@ import lombok.ToString;
 @Table(name = "sucursal_valoraciones_cab")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SucursalValoracionCab.findAll", query = "SELECT s FROM SucursalValoracionCab s"), 
+    @NamedQuery(name = "SucursalValoracionCab.findByCliente", query = "SELECT s FROM SucursalValoracionCab s WHERE s.clienteSucursal.cliente.id = :idCliente"), 
     @NamedQuery(name = "SucursalValoracionCab.findById", query = "SELECT s FROM SucursalValoracionCab s WHERE s.id = :id"), 
-    @NamedQuery(name = "SucursalValoracionCab.findByPuntajeTotal", query = "SELECT s FROM SucursalValoracionCab s WHERE s.puntajeTotal = :puntajeTotal"), 
+    @NamedQuery(name = "SucursalValoracionCab.findByClienteSucursal", query = "SELECT s FROM SucursalValoracionCab s WHERE s.clienteSucursal.id = :idClienteSucursal"), 
     @NamedQuery(name = "SucursalValoracionCab.findByAuditUsuario", query = "SELECT s FROM SucursalValoracionCab s WHERE s.auditUsuario = :auditUsuario"), 
     @NamedQuery(name = "SucursalValoracionCab.findByAuditFechaInsert", query = "SELECT s FROM SucursalValoracionCab s WHERE s.auditFechaInsert = :auditFechaInsert"), 
     @NamedQuery(name = "SucursalValoracionCab.findByAuditFechaUpdate", query = "SELECT s FROM SucursalValoracionCab s WHERE s.auditFechaUpdate = :auditFechaUpdate")})
@@ -81,13 +81,13 @@ public class SucursalValoracionCab implements Serializable {
     private Date auditFechaUpdate;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sucursalValoracionCab", fetch = FetchType.LAZY)
-    private Collection<SucursalValoracionDet> sucursalValoracionDets;
+    private List<SucursalValoracionDet> sucursalValoracionesDet;
 
     @XmlTransient
-    public Collection<SucursalValoracionDet> getSucursalValoracionDets() {
-        return sucursalValoracionDets;
+    public List<SucursalValoracionDet> getSucursalValoracionesDet() {
+        return sucursalValoracionesDet;
     }
-    public void setSucursalValoracionDets(Collection<SucursalValoracionDet> sucursalValoracionDets) {
-        this.sucursalValoracionDets = sucursalValoracionDets;
+    public void setSucursalValoracionesDet(List<SucursalValoracionDet> sucursalValoracionDets) {
+        this.sucursalValoracionesDet = sucursalValoracionDets;
     }
 }

@@ -93,8 +93,8 @@ public class ClienteSucursal implements Serializable {
     @Setter
     private String horarioAtencion;
     
-    @JoinColumn(name = "id_ciudad", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_ciudad", referencedColumnName = "id", nullable = true)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @Getter
     @Setter
     private Ciudad ciudad;

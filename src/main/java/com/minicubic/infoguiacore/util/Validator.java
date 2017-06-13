@@ -8,6 +8,7 @@ import com.minicubic.infoguiacore.dto.ClienteSucursalDto;
 import com.minicubic.infoguiacore.dto.DepartamentoDto;
 import com.minicubic.infoguiacore.dto.EstadoPublicacionDto;
 import com.minicubic.infoguiacore.dto.EstadoUsuarioDto;
+import com.minicubic.infoguiacore.dto.SucursalValoracionCabDto;
 import com.minicubic.infoguiacore.dto.TipoPublicacionDto;
 import com.minicubic.infoguiacore.dto.TipoUsuarioDto;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
@@ -311,6 +312,11 @@ public class Validator {
         return response;
     }
     
+    /**
+     * 
+     * @param ciudadDto
+     * @return 
+     */
     public ValidatorResponse<Boolean> validateAddCiudad(CiudadDto ciudadDto) {
         ValidatorResponse<Boolean> response = new ValidatorResponse<>();
         response.setData(true);
@@ -323,6 +329,29 @@ public class Validator {
         if (Util.isEmpty(ciudadDto.getDepartamentoDto())) {
             response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_CIUDAD_DEPARTAMENTO));
+        }
+        
+        return response;
+    }
+    
+    /**
+     * 
+     * @param valoracionDto
+     * @return 
+     */
+    public ValidatorResponse<Boolean> validateAddValoracion(SucursalValoracionCabDto valoracionDto) {
+        ValidatorResponse<Boolean> response = new ValidatorResponse<>();
+        response.setData(true);
+        
+        if (Util.isEmpty(valoracionDto.getClienteSucursalDto())) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_VALORACION_SUCURSAL));
+        }
+        
+        if (Util.isEmpty(valoracionDto.getSucursalValoracionesDetDto()) ||
+                valoracionDto.getSucursalValoracionesDetDto().isEmpty() ) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_VALORACION_PUNTAJE));
         }
         
         return response;

@@ -92,6 +92,25 @@ public class ClienteDao {
         }
         return null;
     }
+    
+    /**
+     * 
+     * @param params
+     * @return 
+     */
+    public List<ClienteDto> getClientesByParams(String params) {
+        try {
+            List<Cliente> clientes = em.createNamedQuery("Cliente.findByParams")
+                    .setParameter("params", ("%" + params.replace(" ", "%") + "%"))
+                    .getResultList();
+
+            return converter.getClientesDto(clientes);
+        } catch (NoResultException nre) {
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     /**
      *

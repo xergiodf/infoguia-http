@@ -67,6 +67,9 @@ public class Constants {
     
     public static final String VALIDATION_CIUDAD_DEPARTAMENTO = "Departamento es un campo requerido \n";
     
+    public static final String VALIDATION_VALORACION_SUCURSAL = "Sucursal de Cliente es un campo requerido \n";
+    public static final String VALIDATION_VALORACION_PUNTAJE = "Puntaje de Usuario es un campo requerido \n";
+    
     public static final String MSG_ERROR_DEFAULT = "Ocurrio un error al procesar la peticion. Revise el log.";
     public static final String MSG_SUCCESS_USUARIO_REGISTRO = "Usuario creado correctamente";
 }

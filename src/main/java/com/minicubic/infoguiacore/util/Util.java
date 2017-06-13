@@ -81,7 +81,7 @@ public final class Util {
      */
     public static Claims getClaims(String token) throws SignatureException, ExpiredJwtException {
 
-        Claims claims = Jwts.parser()
+         Claims claims = Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(Constants.SECRET_KEY))
                 .parseClaimsJws(token).getBody();
 
