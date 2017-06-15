@@ -10,15 +10,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.TemporalType; 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import lombok.EqualsAndHashCode;
@@ -114,42 +111,43 @@ public class Cliente implements Serializable {
     @Setter
     private Date auditFechaUpdate;
     
-    @JoinTable(name = "cliente_categorias", joinColumns = {
-        @JoinColumn(name = "id_cliente", referencedColumnName = "id")
-    }, 
-    inverseJoinColumns = {
-        @JoinColumn(name = "id_categoria", referencedColumnName = "id")
-    })
-    @ManyToMany
-    private List<Categoria> categorias;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
-    private List<Usuario> usuarios;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
-    private List<ClientePublicacion> clientePublicaciones;
-
+    // NO DESCOMENTAR ESTO SI NO SE BORRAN LAS CATEGORIAS AL GUARDAR CLIENTES
+//    @JoinTable(name = "cliente_categorias", joinColumns = {
+//        @JoinColumn(name = "id_cliente", referencedColumnName = "id")
+//    }, 
+//    inverseJoinColumns = {
+//        @JoinColumn(name = "id_categoria", referencedColumnName = "id")
+//    })
+//    @ManyToMany
+//    private List<Categoria> categorias;
+//
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+//    private List<Usuario> usuarios;
+//    
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+//    private List<ClientePublicacion> clientePublicaciones;
+//
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
     private List<ClienteSucursal> clienteSucursales;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
-    private List<ClienteCategoria> clienteCategorias;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
-    private List<ClienteSuscripcion> clienteSuscripciones;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
-    private List<ClienteOferta> clienteOfertas;
-
-
-    @XmlTransient
-    public List<Usuario> getUsuarios() {
-        return usuarios;
-    }
-    public void setUsuarios(List<Usuario> usuarios) {
-        this.usuarios = usuarios;
-    }
-    
+//
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+//    private List<ClienteCategoria> clienteCategorias;
+//    
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+//    private List<ClienteSuscripcion> clienteSuscripciones;
+//    
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente", fetch = FetchType.LAZY)
+//    private List<ClienteOferta> clienteOfertas;
+//
+//
+//    @XmlTransient
+//    public List<Usuario> getUsuarios() {
+//        return usuarios;
+//    }
+//    public void setUsuarios(List<Usuario> usuarios) {
+//        this.usuarios = usuarios;
+//    }
+//    
     @XmlTransient
     public List<ClienteSucursal> getClienteSucursales() {
         return clienteSucursales;
@@ -157,44 +155,44 @@ public class Cliente implements Serializable {
     public void setClienteSucursales(List<ClienteSucursal> clienteSucursales) {
         this.clienteSucursales = clienteSucursales;
     }
-
-    @XmlTransient
-    public List<ClientePublicacion> getClientePublicaciones() {
-        return clientePublicaciones;
-    }
-    public void setClientePublicaciones(List<ClientePublicacion> clientePublicaciones) {
-        this.clientePublicaciones = clientePublicaciones;
-    }
-
-    @XmlTransient
-    public List<Categoria> getCategorias() {
-        return categorias;
-    }
-    public void setCategorias(List<Categoria> categorias) {
-        this.categorias = categorias;
-    }
-    
-    @XmlTransient
-    public List<ClienteCategoria> getClienteCategorias() {
-        return clienteCategorias;
-    }
-    public void setClienteCategorias(List<ClienteCategoria> clienteCategorias) {
-        this.clienteCategorias = clienteCategorias;
-    }
-
-    @XmlTransient
-    public List<ClienteSuscripcion> getClienteSuscripciones() {
-        return clienteSuscripciones;
-    }
-    public void setClienteSuscripciones(List<ClienteSuscripcion> clienteSuscripciones) {
-        this.clienteSuscripciones = clienteSuscripciones;
-    }
-
-    @XmlTransient
-    public List<ClienteOferta> getClienteOfertas() {
-        return clienteOfertas;
-    }
-    public void setClienteOfertas(List<ClienteOferta> clienteOfertas) {
-        this.clienteOfertas = clienteOfertas;
-    }
+//
+//    @XmlTransient
+//    public List<ClientePublicacion> getClientePublicaciones() {
+//        return clientePublicaciones;
+//    }
+//    public void setClientePublicaciones(List<ClientePublicacion> clientePublicaciones) {
+//        this.clientePublicaciones = clientePublicaciones;
+//    }
+//
+//    @XmlTransient
+//    public List<Categoria> getCategorias() {
+//        return categorias;
+//    }
+//    public void setCategorias(List<Categoria> categorias) {
+//        this.categorias = categorias;
+//    }
+//    
+//    @XmlTransient
+//    public List<ClienteCategoria> getClienteCategorias() {
+//        return clienteCategorias;
+//    }
+//    public void setClienteCategorias(List<ClienteCategoria> clienteCategorias) {
+//        this.clienteCategorias = clienteCategorias;
+//    }
+//
+//    @XmlTransient
+//    public List<ClienteSuscripcion> getClienteSuscripciones() {
+//        return clienteSuscripciones;
+//    }
+//    public void setClienteSuscripciones(List<ClienteSuscripcion> clienteSuscripciones) {
+//        this.clienteSuscripciones = clienteSuscripciones;
+//    }
+//
+//    @XmlTransient
+//    public List<ClienteOferta> getClienteOfertas() {
+//        return clienteOfertas;
+//    }
+//    public void setClienteOfertas(List<ClienteOferta> clienteOfertas) {
+//        this.clienteOfertas = clienteOfertas;
+//    }
 }
