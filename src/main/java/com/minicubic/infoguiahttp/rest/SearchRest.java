@@ -1,7 +1,7 @@
 package com.minicubic.infoguiahttp.rest;
 
 import com.minicubic.infoguiahttp.annotations.Secured;
-import com.minicubic.infoguiahttp.services.ClienteService;
+import com.minicubic.infoguiahttp.services.ClienteSucursalService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
@@ -27,9 +27,10 @@ import javax.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 @Api(value = "/search", description = "REST Service de Busqueda")
 public class SearchRest {
+
     
     @Inject
-    private ClienteService clienteService;
+    private ClienteSucursalService clienteSucursalService;
 
     @GET
     @Secured
@@ -41,7 +42,7 @@ public class SearchRest {
         @ApiResponse(code = 400, message = "Error generico"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
     public Response searchClientes(@PathParam("query") String query) {
-        return Response.ok().entity(clienteService.getClientesByParams(query)).build();
+        return Response.ok().entity(clienteSucursalService.getClienteSucursalesByParams(query)).build();
     }
     
     /**
@@ -60,6 +61,6 @@ public class SearchRest {
         @ApiResponse(code = 400, message = "Error generico"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
     public Response searchClientesFiltros(@PathParam("query") String query) {
-        return Response.ok().entity(clienteService.getClientesByParams(query)).build();
+        return Response.ok().entity(clienteSucursalService.getClienteSucursalesByParams(query)).build();
     }
 }

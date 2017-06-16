@@ -4,8 +4,8 @@
 
     <groupId>com.minicubic</groupId>
     <artifactId>infoguia-http</artifactId>
-    <!-- Added Departamento y Ciudad -->
-    <version>2.2.4</version>
+    <!-- Added Search Service -->
+    <version>2.3.1</version>
     <packaging>war</packaging>
 
     <name>infoguia-http</name>

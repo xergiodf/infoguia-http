@@ -1,7 +1,12 @@
 package com.minicubic.infoguiahttp.services;
 
+import com.minicubic.infoguiacore.dao.ClienteCategoriaDao;
 import com.minicubic.infoguiacore.dao.ClienteSucursalDao;
+import com.minicubic.infoguiacore.dto.CategoriaDto;
+import com.minicubic.infoguiacore.dto.ClienteCategoriaDto;
 import com.minicubic.infoguiacore.dto.ClienteSucursalDto;
+import com.minicubic.infoguiacore.dto.SucursalCategoriaDto;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -22,46 +27,76 @@ public class ClienteSucursalService {
 
     @Inject
     private ClienteSucursalDao dao;
-    
+
+    @Inject
+    private ClienteCategoriaDao clienteCategoriaDao;
+
     /**
-     * 
+     *
      * @param id
-     * @return 
+     * @return
      */
     public ClienteSucursalDto getClienteSucursal(Integer id) {
         return dao.getClienteSucursal(id);
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public List<ClienteSucursalDto> getClienteSucursales() {
         return dao.getClienteSucursales();
     }
-    
-    
+
     /**
-     * 
+     *
      * @param clienteId
-     * @return 
+     * @return
      */
     public List<ClienteSucursalDto> getClienteSucursalesByCliente(Long clienteId) {
         return dao.getClienteSucursalesByCliente(clienteId);
     }
-    
+
     /**
-     * 
+     *
+     * @param params
+     * @return
+     */
+    public List<SucursalCategoriaDto> getClienteSucursalesByParams(String params) {
+        SucursalCategoriaDto sucursalCategoriaDto = null;
+        List<ClienteCategoriaDto> clienteCategoriasDto = null;
+        List<SucursalCategoriaDto> sucursalCategoriasDto = new ArrayList<>();
+        
+        List<ClienteSucursalDto> clienteSucursalesDto = dao.getClienteSucursalesByParams(params);
+
+        for (ClienteSucursalDto clienteSucursalDto : clienteSucursalesDto) {
+            sucursalCategoriaDto = new SucursalCategoriaDto();
+            sucursalCategoriaDto.setCategoriasDto(new ArrayList<CategoriaDto>());
+            
+            sucursalCategoriaDto.setSucursalDto(clienteSucursalDto);
+            
+            clienteCategoriasDto = clienteCategoriaDao.getClienteCategoriasByCliente(clienteSucursalDto.getClienteDto().getId());
+            for (ClienteCategoriaDto clienteCategoriaDto : clienteCategoriasDto)
+                sucursalCategoriaDto.getCategoriasDto().add(clienteCategoriaDto.getCategoriaDto());
+
+            sucursalCategoriasDto.add(sucursalCategoriaDto);
+        }
+        
+        return sucursalCategoriasDto;
+    }
+
+    /**
+     *
      * @param clienteSucursalDto
-     * @return 
+     * @return
      */
     public ClienteSucursalDto saveClienteSucursal(ClienteSucursalDto clienteSucursalDto) {
         return dao.saveClienteSucursal(clienteSucursalDto);
     }
-    
+
     /**
-     * 
-     * @param id 
+     *
+     * @param id
      */
     public void deleteClienteSucursal(Integer id) {
         dao.deleteClienteSucursal(id);

@@ -137,6 +137,40 @@ public class ClienteSucursalDao {
         }
         return null;
     }
+    
+    /**
+     * 
+     * @param params
+     * @return 
+     */
+    public List<ClienteSucursalDto> getClienteSucursalesByParams(String params) {
+        try {
+            List<ClienteSucursalDto> clienteSucursalesDto = converter.getClienteSucursalesDto(em.createNamedQuery("ClienteSucursal.findByParams")
+                    .setParameter("params", ("%" + params.replace(" ", "%") + "%"))
+                    .getResultList()
+            );
+
+            // TODO: Buscar algun patron de disenho que mejore esto
+            // Cargamos las imagenes (si tiene)
+            for ( ClienteSucursalDto clienteSucursalDto : clienteSucursalesDto ) {
+                clienteSucursalDto.setArchivos(
+                        archivoConverter.getArchivoDto(
+                                archivoDao.getArchivo(
+                                        TableReference.CLIENTE_SUCURSAL.getTableName(),
+                                        TableReference.CLIENTE_SUCURSAL.getIdColumnName(),
+                                        clienteSucursalDto.getId().toString()
+                                )
+                        )
+                );
+            }
+
+            return clienteSucursalesDto;
+        } catch (NoResultException nre) {
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     /**
      *

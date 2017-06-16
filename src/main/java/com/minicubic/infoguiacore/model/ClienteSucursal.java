@@ -39,7 +39,16 @@ import lombok.ToString;
     @NamedQuery(name = "ClienteSucursal.findByNombreSucursal", query = "SELECT c FROM ClienteSucursal c WHERE c.nombreSucursal = :nombreSucursal"),
     @NamedQuery(name = "ClienteSucursal.findByDireccionFisica", query = "SELECT c FROM ClienteSucursal c WHERE c.direccionFisica = :direccionFisica"),
     @NamedQuery(name = "ClienteSucursal.findByCoordenadas", query = "SELECT c FROM ClienteSucursal c WHERE c.coordenadas = :coordenadas"),
-    @NamedQuery(name = "ClienteSucursal.findByCliente", query = "SELECT c FROM ClienteSucursal c WHERE c.cliente.id = :clienteId")})
+    @NamedQuery(name = "ClienteSucursal.findByCliente", query = "SELECT c FROM ClienteSucursal c WHERE c.cliente.id = :clienteId"),
+    @NamedQuery(name = "ClienteSucursal.findByParams", 
+            query =     "SELECT DISTINCT c "
+                    +   "FROM   ClienteSucursal c "
+                    +   "WHERE  LOWER(c.cliente.nombreCompleto) LIKE LOWER(:params) "
+                    +   "OR     LOWER(c.cliente.nombreCorto) LIKE LOWER(:params) "
+                    +   "OR     LOWER(c.cliente.descripcionCompleta) LIKE LOWER(:params) "
+                    +   "OR     LOWER(c.cliente.descripcionCorta) LIKE LOWER(:params) "
+                    +   "OR     LOWER(c.nombreSucursal) LIKE LOWER(:params)")
+})
 @ToString
 @EqualsAndHashCode
 public class ClienteSucursal implements Serializable {
