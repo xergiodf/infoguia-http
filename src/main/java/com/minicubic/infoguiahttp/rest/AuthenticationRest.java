@@ -60,10 +60,24 @@ public class AuthenticationRest {
         @ApiResponse(code = 404, message = "No coinciden Usuario/Contrase\u00f1a"),
         @ApiResponse(code = 400, message = "Error generico"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response loginUsuario(UsuarioDto usuarioParam) {
+    public Response loginUsuarioAdmin(UsuarioDto usuarioParam) {
+        usuarioParam.setAdmin(Boolean.TRUE);
+        return loginUsuario(usuarioParam);
+    }
+    
+    @POST
+    @Path("public/login")
+    @ApiOperation(value = "Valida las credenciales del usuario y devuelve un token de autorizacion. El usuario debe estar con estado ACTIVO.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 404, message = "No coinciden Usuario/Contrase\u00f1a"),
+        @ApiResponse(code = 400, message = "Error generico"),
+        @ApiResponse(code = 500, message = "Something wrong in Server")})
+    private  Response loginUsuario(UsuarioDto usuarioParam) {
         LOG.log(Level.INFO, "Obteniendo usuario: {0}", usuarioParam.getUsername());
       
         try {
+            
             PasswordService ps = new PasswordService();
             String encryptedPassword = ps.encrypt(usuarioParam.getPassword());
 
@@ -72,6 +86,13 @@ public class AuthenticationRest {
             if (Util.isEmpty(usuarioDto)) {
                 LOG.log(Level.WARNING, "No coinciden usuario/contrase\u00f1a -> {0}:{1}", new Object[]{usuarioParam.getUsername(), encryptedPassword});
                 return Response.status(Response.Status.NOT_FOUND).entity("No coinciden usuario/contraseña").build();
+            }
+            
+            // Verificamos si es admin
+            if (!Util.isEmpty(usuarioParam.getAdmin()) &&
+                    usuarioParam.getAdmin().equals(Boolean.TRUE)) {
+                
+                
             }
             
             // Generamos el token de autorizacion
