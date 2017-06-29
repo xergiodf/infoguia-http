@@ -1,7 +1,7 @@
 package com.minicubic.infoguiahttp.services;
 
-import com.minicubic.infoguiacore.dao.SucursalValoracionDao;
-import com.minicubic.infoguiacore.dto.SucursalValoracionCabDto;
+import com.minicubic.infoguiahttp.dao.SucursalValoracionDao;
+import com.minicubic.infoguiahttp.dto.SucursalValoracionCabDto;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;

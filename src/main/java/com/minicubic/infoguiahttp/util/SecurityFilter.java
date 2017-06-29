@@ -1,7 +1,6 @@
 package com.minicubic.infoguiahttp.util;
 
-import com.minicubic.infoguiacore.dto.UsuarioDto;
-import com.minicubic.infoguiacore.util.Util;
+import com.minicubic.infoguiahttp.dto.UsuarioDto;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import com.minicubic.infoguiahttp.annotations.Secured;
 import java.io.IOException;

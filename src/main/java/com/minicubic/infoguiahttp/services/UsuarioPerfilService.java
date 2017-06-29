@@ -1,7 +1,7 @@
 package com.minicubic.infoguiahttp.services;
 
-import com.minicubic.infoguiacore.dao.UsuarioPerfilDao;
-import com.minicubic.infoguiacore.dto.UsuarioPerfilDto;
+import com.minicubic.infoguiahttp.dao.UsuarioPerfilDao;
+import com.minicubic.infoguiahttp.dto.UsuarioPerfilDto;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;

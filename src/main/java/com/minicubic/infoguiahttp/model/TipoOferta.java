@@ -1,0 +1,85 @@
+package com.minicubic.infoguiahttp.model;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+/**
+ *
+ * @author xergio
+ * @version 1
+ */
+@Entity
+@Table(name = "tipos_ofertas")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "TipoOferta.findAll", query = "SELECT t FROM TipoOferta t"), 
+    @NamedQuery(name = "TipoOferta.findById", query = "SELECT t FROM TipoOferta t WHERE t.id = :id"), 
+    @NamedQuery(name = "TipoOferta.findByDescripcion", query = "SELECT t FROM TipoOferta t WHERE t.descripcion = :descripcion"), 
+    @NamedQuery(name = "TipoOferta.findByAuditUsuario", query = "SELECT t FROM TipoOferta t WHERE t.auditUsuario = :auditUsuario"), 
+    @NamedQuery(name = "TipoOferta.findByAuditFechaInsert", query = "SELECT t FROM TipoOferta t WHERE t.auditFechaInsert = :auditFechaInsert"), 
+    @NamedQuery(name = "TipoOferta.findByAuditFechaUpdate", query = "SELECT t FROM TipoOferta t WHERE t.auditFechaUpdate = :auditFechaUpdate")})
+@ToString
+@EqualsAndHashCode
+public class TipoOferta implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    @Getter
+    @Setter
+    private Integer id;
+
+    @Column(name = "descripcion")
+    @Getter
+    @Setter
+    private String descripcion;
+
+    @Column(name = "audit_usuario")
+    @Getter
+    @Setter
+    private String auditUsuario;
+
+    @Column(name = "audit_fecha_insert", insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Getter
+    @Setter
+    private Date auditFechaInsert;
+    
+    @Column(name = "audit_fecha_update", insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @Getter
+    @Setter
+    private Date auditFechaUpdate;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoOferta", fetch = FetchType.LAZY)
+    private Collection<ClienteOferta> clienteOfertas;
+
+    @XmlTransient
+    public Collection<ClienteOferta> getClienteOfertas() {
+        return clienteOfertas;
+    }
+    public void setClienteOfertas(Collection<ClienteOferta> clienteOfertas) {
+        this.clienteOfertas = clienteOfertas;
+    }
+}

@@ -1,7 +1,7 @@
 package com.minicubic.infoguiahttp.services;
 
-import com.minicubic.infoguiacore.dao.ClienteDao;
-import com.minicubic.infoguiacore.dto.ClienteDto;
+import com.minicubic.infoguiahttp.dao.ClienteDao;
+import com.minicubic.infoguiahttp.dto.ClienteDto;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;

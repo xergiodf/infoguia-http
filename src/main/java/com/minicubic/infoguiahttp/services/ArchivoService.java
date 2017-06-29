@@ -1,12 +1,12 @@
 package com.minicubic.infoguiahttp.services;
 
-import com.minicubic.infoguiacore.dao.ArchivoDao;
-import com.minicubic.infoguiacore.dto.Archivable;
-import com.minicubic.infoguiacore.dto.ArchivoCabDto;
-import com.minicubic.infoguiacore.dto.ArchivoDetDto;
-import com.minicubic.infoguiacore.util.Builder;
-import com.minicubic.infoguiacore.util.Constants;
-import com.minicubic.infoguiacore.util.Util;
+import com.minicubic.infoguiahttp.dao.ArchivoDao;
+import com.minicubic.infoguiahttp.dto.Archivable;
+import com.minicubic.infoguiahttp.dto.ArchivoCabDto;
+import com.minicubic.infoguiahttp.dto.ArchivoDetDto;
+import com.minicubic.infoguiahttp.util.Builder;
+import com.minicubic.infoguiahttp.util.Constants;
+import com.minicubic.infoguiahttp.util.Util;
 import java.util.Map;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;

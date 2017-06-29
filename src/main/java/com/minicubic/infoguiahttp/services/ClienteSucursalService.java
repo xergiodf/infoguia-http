@@ -1,11 +1,11 @@
 package com.minicubic.infoguiahttp.services;
 
-import com.minicubic.infoguiacore.dao.ClienteCategoriaDao;
-import com.minicubic.infoguiacore.dao.ClienteSucursalDao;
-import com.minicubic.infoguiacore.dto.CategoriaDto;
-import com.minicubic.infoguiacore.dto.ClienteCategoriaDto;
-import com.minicubic.infoguiacore.dto.ClienteSucursalDto;
-import com.minicubic.infoguiacore.dto.SucursalCategoriaDto;
+import com.minicubic.infoguiahttp.dao.ClienteCategoriaDao;
+import com.minicubic.infoguiahttp.dao.ClienteSucursalDao;
+import com.minicubic.infoguiahttp.dto.CategoriaDto;
+import com.minicubic.infoguiahttp.dto.ClienteCategoriaDto;
+import com.minicubic.infoguiahttp.dto.ClienteSucursalDto;
+import com.minicubic.infoguiahttp.dto.SucursalCategoriaDto;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;

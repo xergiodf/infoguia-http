@@ -1,6 +1,6 @@
 package com.minicubic.infoguiahttp.util;
 
-import com.minicubic.infoguiacore.dto.UsuarioDto;
+import com.minicubic.infoguiahttp.dto.UsuarioDto;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import com.minicubic.infoguiahttp.services.UsuarioService;
 import javax.enterprise.context.RequestScoped;

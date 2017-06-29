@@ -4,8 +4,8 @@
 
     <groupId>com.minicubic</groupId>
     <artifactId>infoguia-http</artifactId>
-    <!-- Added Security Service -->
-    <version>2.4.2</version>
+    <!-- Major refactor -->
+    <version>2.5.0</version>
     <packaging>war</packaging>
 
     <name>infoguia-http</name>
@@ -23,6 +23,18 @@
             <version>5.2.10.Final</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>4.3.1.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--dependency>
+            <groupId>unknown.binary</groupId>
+            <artifactId>hibernate-jpamodelgen-4.3.1.Final</artifactId>
+            <version>SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency-->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
