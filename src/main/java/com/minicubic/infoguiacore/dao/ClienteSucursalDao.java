@@ -147,6 +147,7 @@ public class ClienteSucursalDao {
         try {
             List<ClienteSucursalDto> clienteSucursalesDto = converter.getClienteSucursalesDto(em.createNamedQuery("ClienteSucursal.findByParams")
                     .setParameter("params", ("%" + params.replace(" ", "%") + "%"))
+                    .setMaxResults(10)
                     .getResultList()
             );
 

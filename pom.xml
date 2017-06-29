@@ -4,8 +4,8 @@
 
     <groupId>com.minicubic</groupId>
     <artifactId>infoguia-http</artifactId>
-    <!-- Added Search Service -->
-    <version>2.3.1</version>
+    <!-- Added Security Service -->
+    <version>2.4.2</version>
     <packaging>war</packaging>
 
     <name>infoguia-http</name>
@@ -13,6 +13,7 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <resteasy.version>3.0.19.Final</resteasy.version>
     </properties>
     
     <dependencies>
@@ -63,7 +64,7 @@
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxrs</artifactId>
-            <version>2.3.1.GA</version>
+            <version>${resteasy.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.scannotation</groupId>
@@ -74,13 +75,13 @@
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxb-provider</artifactId>
-            <version>2.3.1.GA</version>
+            <version>${resteasy.version}</version>
         </dependency> 
         <!-- Multipart support -->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-multipart-provider</artifactId>
-            <version>2.3.1.GA</version>
+            <version>${resteasy.version}</version>
         </dependency>
         <!-- For better I/O control -->
         <dependency>

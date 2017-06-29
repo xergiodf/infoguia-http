@@ -50,7 +50,7 @@ public class ArchivoRest {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Error Generico"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response deleteTipoUsuario(@PathParam("id") Integer id) {
+    public Response delete(@PathParam("id") Integer id) {
         LOG.log(Level.INFO, "Eliminando archivo por id: {0}", new Object[]{id});
 
         try {

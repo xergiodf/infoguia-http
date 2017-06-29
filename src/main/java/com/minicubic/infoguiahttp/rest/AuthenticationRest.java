@@ -123,7 +123,7 @@ public class AuthenticationRest {
             
             // Asumimos que todos los usuarios registrados mediante este metodo
             // son usuarios nuevos de tipo usuario (no admin)
-            usuarioParam.setTipoUsuarioDto(new TipoUsuarioDto(Constants.DB_USR_TIPO_USUARIO_ID));
+            usuarioParam.setTipoUsuarioDto(new TipoUsuarioDto(new Integer(Constants.DB_USR_TIPO_USUARIO_ID)));
             usuarioParam.setEstadoUsuarioDto(new EstadoUsuarioDto(Constants.DB_USR_ESTADO_FALTA_ACTIVAR_ID));
             
             // Validacion global
@@ -192,7 +192,7 @@ public class AuthenticationRest {
             
             // Asumimos que todos los usuarios registrados mediante este metodo
             // son usuarios nuevos de tipo usuario (no admin)
-            usuarioParam.setTipoUsuarioDto(new TipoUsuarioDto(Constants.DB_USR_TIPO_USUARIO_ID));
+            usuarioParam.setTipoUsuarioDto(new TipoUsuarioDto(new Integer(Constants.DB_USR_TIPO_USUARIO_ID)));
             usuarioParam.setEstadoUsuarioDto(new EstadoUsuarioDto(Constants.DB_USR_ESTADO_ACTIVO_ID));
             
             // Validacion global

@@ -1,6 +1,8 @@
 package com.minicubic.infoguiahttp.rest;
 
+import com.minicubic.infoguiacore.dto.ArchivoCabDto;
 import com.minicubic.infoguiacore.dto.ClienteDto;
+import com.minicubic.infoguiacore.dto.ClienteSucursalDto;
 import com.minicubic.infoguiacore.dto.UsuarioDto;
 import com.minicubic.infoguiacore.dto.ValidatorResponse;
 import com.minicubic.infoguiacore.util.Constants;
@@ -8,6 +10,7 @@ import com.minicubic.infoguiacore.util.Util;
 import com.minicubic.infoguiacore.util.Validator;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import com.minicubic.infoguiahttp.annotations.Secured;
+import com.minicubic.infoguiahttp.services.ArchivoService;
 import com.minicubic.infoguiahttp.services.ClienteService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -27,6 +30,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 /**
  *
@@ -46,6 +50,9 @@ public class ClienteRest {
 
     @Inject
     private ClienteService service;
+    
+    @Inject
+    private ArchivoService archivoService;
 
     private static final Logger LOG = Logger.getLogger("ClientesRest");
 
@@ -165,5 +172,37 @@ public class ClienteRest {
             LOG.log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
         }
+    }
+    
+    @POST
+    @Secured
+    @Path("/upload/{id}")
+    @Consumes("multipart/form-data")
+    @ApiOperation(value = "Carga un archivo en el servidor.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 404, message = "Registro de Cliente No Encontrado"),
+        @ApiResponse(code = 500, message = "Something wrong in Server")})
+    public Response uploadImagenPerfil(@PathParam("id") Long id, MultipartFormDataInput input) {
+        LOG.log(Level.INFO, "Guardando una Imagen de Perfil de Cliente");
+        
+        try {
+            // Verificamos que exista el ID de Perfil de Usuario
+            ClienteDto clienteDto = service.getCliente(id);
+            
+            if ( Util.isEmpty(clienteDto) ) {
+                LOG.log(Level.WARNING, "Registro vacio");
+                return Response.status(Response.Status.NOT_FOUND).entity(Constants.MSG_ERROR_DEFAULT).build();
+            }
+            
+            // Guardamos la informacion en DB
+            ArchivoCabDto archivoCabDto = archivoService.saveArchivo(input, clienteDto);
+
+            LOG.log(Level.INFO, "Imagen de Portada de Sucursal {0} agregada correctamente.", id);
+            return Response.ok().entity(archivoCabDto).build();
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
+        }        
     }
 }

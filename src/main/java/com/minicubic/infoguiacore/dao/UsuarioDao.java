@@ -122,7 +122,7 @@ public class UsuarioDao {
         try {
             
             if( !Util.isEmpty(usuario.getTipoUsuarioDto()) ) {
-                if ( Constants.DB_USR_TIPO_ADMIN_ID.equals(usuario.getTipoUsuarioDto().getId()) ) {
+                if ( Constants.DB_USR_TIPO_ADMIN_ID.equals(usuario.getTipoUsuarioDto().getId().toString()) ) {
                     return true;
                 }
             }            

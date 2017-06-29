@@ -12,7 +12,8 @@ public enum TableReference {
 
     USUARIO_PERFIL("usuario_perfiles", "id"),
     CLIENTE_SUCURSAL("cliente_sucursales", "id"),
-    CLIENTE_PUBLICACION("cliente_publicaciones", "id");
+    CLIENTE_PUBLICACION("cliente_publicaciones", "id"),
+    CLIENTE("clientes", "id");
 
     private final String tableName;
     private final String idColumnName;

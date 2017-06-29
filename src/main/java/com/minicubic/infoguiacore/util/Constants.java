@@ -22,8 +22,8 @@ public class Constants {
     public static final String UPLOAD_DIR = "/usr/share/nginx/html";
 //    public static final String UPLOAD_DIR = "/home/xergio/Documents/Projects/InfoGuia/Dev/Backend/uploads";
     
-    public static final Integer DB_USR_TIPO_ADMIN_ID = 1;
-    public static final Integer DB_USR_TIPO_USUARIO_ID = 2;
+    public static final String DB_USR_TIPO_ADMIN_ID = "1";
+    public static final String DB_USR_TIPO_USUARIO_ID = "2";
     
     public static final Integer DB_USR_ESTADO_ACTIVO_ID = 1;
     public static final Integer DB_USR_ESTADO_INACTIVO_ID = 2;

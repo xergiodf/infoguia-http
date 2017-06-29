@@ -9,7 +9,7 @@ public enum TipoArchivo {
     
     USUARIO_PERFIL(1, "/usuarioPerfiles/"), 
     CLIENTE_SUCURSAL(2, "/clienteSucursales/"), 
-    GALERIA_PERFIL_CLIENTE(3, ""),
+    CLIENTE_PERFIL(3, "/clientePerfiles/"),
     CLIENTE_PUBLICACION(4, "/clientePublicaciones/");
     
     private final Integer id;
