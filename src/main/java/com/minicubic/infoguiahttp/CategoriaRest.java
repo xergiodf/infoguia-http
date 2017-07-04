@@ -162,4 +162,18 @@ public class CategoriaRest {
             return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
         }
     }
+    
+    @GET
+    @Secured
+    @Path("/grupos/find/all")
+    @PermitAll
+    @ApiOperation(value = "Obtiene una lista de Grupos de Categoria")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Something wrong in Server")})
+    public Response gruposFindAll() {
+        LOG.log(Level.INFO, "Obteniendo listado de categorias");
+
+        return Response.ok().entity(service.getGruposCategoria()).build();
+    }
 }

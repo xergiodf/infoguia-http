@@ -5,6 +5,9 @@ import com.minicubic.infoguiahttp.dto.UsuarioDto;
 import com.minicubic.infoguiahttp.model.Categoria;
 import com.minicubic.infoguiahttp.util.converter.CategoriaConverter;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
+import com.minicubic.infoguiahttp.dto.GrupoCategoriaDto;
+import com.minicubic.infoguiahttp.model.GrupoCategoria;
+import com.minicubic.infoguiahttp.util.converter.GrupoCategoriaConverter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.logging.Level;
@@ -98,5 +101,18 @@ public class CategoriaDao {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public List<GrupoCategoriaDto> getGruposCategorias() {
+        try {
+            List<GrupoCategoria> grupoCategorias = em.createNamedQuery("GrupoCategoria.findAll")
+                    .getResultList();
+
+            return (new GrupoCategoriaConverter()).getGrupoCategoriasDto(grupoCategorias);
+        } catch (NoResultException nre) {
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }

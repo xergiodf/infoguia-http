@@ -4,8 +4,8 @@
 
     <groupId>com.minicubic</groupId>
     <artifactId>infoguia-http</artifactId>
-    <!-- Major refactor -->
-    <version>2.5.0</version>
+    <!-- Added Grupos Categorias -->
+    <version>2.5.1</version>
     <packaging>war</packaging>
 
     <name>infoguia-http</name>

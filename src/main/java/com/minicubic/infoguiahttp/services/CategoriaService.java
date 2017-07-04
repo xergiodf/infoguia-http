@@ -2,6 +2,7 @@ package com.minicubic.infoguiahttp.services;
 
 import com.minicubic.infoguiahttp.dao.CategoriaDao;
 import com.minicubic.infoguiahttp.dto.CategoriaDto;
+import com.minicubic.infoguiahttp.dto.GrupoCategoriaDto;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -55,5 +56,9 @@ public class CategoriaService {
      */
     public void deleteCategoria(Integer id) {
         dao.deleteCategoria(id);
+    }
+    
+    public List<GrupoCategoriaDto> getGruposCategoria() {
+        return dao.getGruposCategorias();
     }
 }
