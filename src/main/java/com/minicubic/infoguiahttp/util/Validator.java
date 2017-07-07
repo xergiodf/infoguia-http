@@ -8,6 +8,8 @@ import com.minicubic.infoguiahttp.dto.ClienteSucursalDto;
 import com.minicubic.infoguiahttp.dto.DepartamentoDto;
 import com.minicubic.infoguiahttp.dto.EstadoPublicacionDto;
 import com.minicubic.infoguiahttp.dto.EstadoUsuarioDto;
+import com.minicubic.infoguiahttp.dto.SucursalHorarioCabDto;
+import com.minicubic.infoguiahttp.dto.SucursalHorarioDetDto;
 import com.minicubic.infoguiahttp.dto.SucursalValoracionCabDto;
 import com.minicubic.infoguiahttp.dto.TipoHorarioDto;
 import com.minicubic.infoguiahttp.dto.TipoPublicacionDto;
@@ -370,6 +372,50 @@ public class Validator {
         if (Util.isEmpty(tipoHorarioDto.getDescripcion())) {
             response.setData(false);
             response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_GENERIC_DESCRIPCION));
+        }
+        
+        return response;
+    }
+    
+    /**
+     * 
+     * @param sucursalHorarioCabDto
+     * @return 
+     */
+    public ValidatorResponse<Boolean> validateAddHorarioCab(SucursalHorarioCabDto sucursalHorarioCabDto) {
+        ValidatorResponse<Boolean> response = new ValidatorResponse<>();
+        response.setData(true);
+        
+        if (Util.isEmpty(sucursalHorarioCabDto.getTipoHorarioDto())) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_HORARIOCAB_TIPOHORARIO));
+        }
+        
+        if (Util.isEmpty(sucursalHorarioCabDto.getClienteSucursalDto())) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_HORARIOCAB_SUCURSAL));
+        }
+        
+        return response;
+    }
+    
+    /**
+     * 
+     * @param sucursalHorarioDetDto
+     * @return 
+     */
+    public ValidatorResponse<Boolean> validateAddHorarioDet(SucursalHorarioDetDto sucursalHorarioDetDto) {
+        ValidatorResponse<Boolean> response = new ValidatorResponse<>();
+        response.setData(true);
+        
+        if (Util.isEmpty(sucursalHorarioDetDto.getTipoHorarioDto())) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_HORARIOCAB_TIPOHORARIO));
+        }
+        
+        if (Util.isEmpty(sucursalHorarioDetDto.getClienteSucursalDto())) {
+            response.setData(false);
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_HORARIOCAB_SUCURSAL));
         }
         
         return response;
