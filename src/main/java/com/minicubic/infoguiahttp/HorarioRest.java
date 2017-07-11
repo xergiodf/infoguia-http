@@ -7,8 +7,10 @@ import com.minicubic.infoguiahttp.dao.SucursalHorarioDetDao;
 import com.minicubic.infoguiahttp.dto.SucursalHorarioCabDto;
 import com.minicubic.infoguiahttp.dto.UsuarioDto;
 import com.minicubic.infoguiahttp.dto.ValidatorResponse;
+import com.minicubic.infoguiahttp.model.SucursalHorarioCab;
 import com.minicubic.infoguiahttp.util.Constants;
 import com.minicubic.infoguiahttp.util.Validator;
+import com.minicubic.infoguiahttp.util.converter.SucursalHorarioCabConverter;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
@@ -79,13 +81,13 @@ public class HorarioRest {
         return manageHorario(horarioParam, Boolean.FALSE);
     }
     
-    private Response manageHorario(SucursalHorarioCabDto evaluacionParam, Boolean isNew) {
+    private Response manageHorario(SucursalHorarioCabDto sucursalHorarioCabDto, Boolean isNew) {
         LOG.log(Level.INFO, "{0} horario", isNew ? "Registrando" : "Modificando");
         
         try {
             
             // Validacion global
-            ValidatorResponse<Boolean> validatorResponse = Validator.getInstance().validateAddHorarioCab(evaluacionParam);
+            ValidatorResponse<Boolean> validatorResponse = Validator.getInstance().validateAddHorarioCab(sucursalHorarioCabDto);
             
             if ( !validatorResponse.getData() ) {
                 LOG.log(Level.WARNING, "Error de validacion");
@@ -93,19 +95,19 @@ public class HorarioRest {
             }
             
             // Creamos el evaluacion
-            EvaluacionCab evaluacion = EvaluacionCabConverter.getInstance().getEvaluacionCab(evaluacionParam);
-            evaluacion.setAuditUsuario(usuarioLogueado.getUsername());
+            SucursalHorarioCab sucursalHorarioCab = SucursalHorarioCabConverter.getInstance().getSucursalHorarioCab(sucursalHorarioCabDto);
+            sucursalHorarioCab.setAuditUsuario(usuarioLogueado.getUsername());
             if (isNew)
-                evaluacionCabDao.create(evaluacion);
+                sucursalHorarioCabDao.create(sucursalHorarioCab);
             else  
-                evaluacion = evaluacionCabDao.edit(evaluacion);
+                sucursalHorarioCab = sucursalHorarioCabDao.edit(sucursalHorarioCab);
             
-            LOG.log(Level.INFO, "Evaluacion {0} " + (isNew ? "registado" : "modificado") + " correctamente.", evaluacion.getId());
+            LOG.log(Level.INFO, "Horario {0} " + (isNew ? "registado" : "modificado") + " correctamente.", sucursalHorarioCab.getId());
             
-            return Response.ok().entity(EvaluacionCabConverter.getInstance().getEvaluacionCabDto(evaluacion)).build();
+            return Response.ok().entity(SucursalHorarioCabConverter.getInstance().getSucursalHorarioCabDto(sucursalHorarioCab)).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
-            return Response.status(Response.Status.BAD_REQUEST).entity(ValidatorMessages.MSG_ERROR_DEFAULT).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
         }
     }
 
@@ -120,24 +122,25 @@ public class HorarioRest {
         @ApiResponse(code = 400, message = "Error generico"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
     public Response remove(@PathParam("id") Integer id) {
-        LOG.log(Level.INFO, "Eliminando Evaluacion por ID {0}", id);
+        LOG.log(Level.INFO, "Eliminando Horario por ID {0}", id);
         
         try {
             
 //            evaluacionCabDao.remove(evaluacionCabDao.find(id));
-            evaluacionCabDao.delete(id);
+            sucursalHorarioCabDao.delete(id);
             
-            LOG.log(Level.INFO, "Evaluacion borrado correctamente");
+            LOG.log(Level.INFO, "Horario borrado correctamente");
             
             return Response.ok().build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
-            return Response.status(Response.Status.BAD_REQUEST).entity(ValidatorMessages.MSG_ERROR_DEFAULT).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
         }
     }
 
     @GET
     @Path("{id}")
+    @PermitAll
     @ApiOperation(value = "Obtiene un evaluacion.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -146,14 +149,15 @@ public class HorarioRest {
         @ApiResponse(code = 500, message = "Something wrong in Server")})
     public Response findEvaluacion(@PathParam("id") Integer id) {
         try {
-            return Response.ok(EvaluacionCabConverter.getInstance().getEvaluacionCabDto(evaluacionCabDao.find(id))).build();
+            return Response.ok(SucursalHorarioCabConverter.getInstance().getSucursalHorarioCabDto(sucursalHorarioCabDao.find(id))).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
-            return Response.status(Response.Status.BAD_REQUEST).entity(ValidatorMessages.MSG_ERROR_DEFAULT).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
         }
     }
 
     @GET
+    @PermitAll
     @ApiOperation(value = "Obtiene una lista de evaluacions.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -162,15 +166,16 @@ public class HorarioRest {
         @ApiResponse(code = 500, message = "Something wrong in Server")})
     public Response findEvaluacions() {
         try {
-            return Response.ok(EvaluacionCabConverter.getInstance().getEvaluacionCabsDto(evaluacionCabDao.findAll())).build();
+            return Response.ok(SucursalHorarioCabConverter.getInstance().getSucursalHorarioCabsDto(sucursalHorarioCabDao.findAll())).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
-            return Response.status(Response.Status.BAD_REQUEST).entity(ValidatorMessages.MSG_ERROR_DEFAULT).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
         }
     }
 
     @GET
     @Path("{from}/{to}")
+    @PermitAll
     @ApiOperation(value = "Obtiene una lista de evaluacions por rango.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -179,10 +184,10 @@ public class HorarioRest {
         @ApiResponse(code = 500, message = "Something wrong in Server")})
     public Response findRangeEvaluacion(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         try {
-            return Response.ok(EvaluacionCabConverter.getInstance().getEvaluacionCabsDto(evaluacionCabDao.findRange(new int[]{from, to}))).build();
+            return Response.ok(SucursalHorarioCabConverter.getInstance().getSucursalHorarioCabsDto(sucursalHorarioCabDao.findRange(new int[]{from, to}))).build();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
-            return Response.status(Response.Status.BAD_REQUEST).entity(ValidatorMessages.MSG_ERROR_DEFAULT).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
         }
     }
 }

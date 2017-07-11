@@ -40,6 +40,8 @@ public class SucursalHorarioCab implements Serializable {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     @Column(name = "id") 
+    @Getter 
+    @Setter 
     private Integer id; 
      
     @JoinColumn(name = "id_tipo_horario", referencedColumnName = "id") 
