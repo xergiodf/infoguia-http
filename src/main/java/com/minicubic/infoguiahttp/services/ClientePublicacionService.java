@@ -91,4 +91,13 @@ public class ClientePublicacionService {
     public void deleteClientePublicacion(Integer id) {
         dao.deleteClientePublicacion(id);
     }
+    
+    /**
+     * 
+     * @param codigo
+     * @return 
+     */
+    public List<ClientePublicacionDto> getClientePublicacionesByCodigo(String codigo) {
+        return dao.getClientePublicacionesByCodigo(codigo);
+    }
 }

@@ -73,6 +73,8 @@ public class Constants {
     public static final String VALIDATION_HORARIOCAB_TIPOHORARIO = "Tipo Horario es un campo requerido \n";
     public static final String VALIDATION_HORARIOCAB_SUCURSAL = "Sucursal es un campo requerido \n";
     
+    public static final String VALIDATION_HORARIODET_CAB = "Cabecera es un campo requerido \n";
+    
     public static final String MSG_ERROR_DEFAULT = "Ocurrio un error al procesar la peticion. Revise el log.";
     public static final String MSG_SUCCESS_USUARIO_REGISTRO = "Usuario creado correctamente";
 }

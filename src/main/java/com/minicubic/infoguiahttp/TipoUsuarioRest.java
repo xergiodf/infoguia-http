@@ -15,7 +15,8 @@ import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Singleton;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -33,7 +34,6 @@ import javax.ws.rs.core.Response;
  * @author xergio
  * @version 1 - 27.04.2017
  */
-@Singleton
 @Path("tiposUsuarios")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -52,6 +52,7 @@ public class TipoUsuarioRest {
     @GET
     @Secured
     @Path("/find/all")
+    @PermitAll
     @ApiOperation(value = "Obtiene una lista de TipoUsuarios")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -65,6 +66,7 @@ public class TipoUsuarioRest {
     @GET
     @Secured
     @Path("/find/{id}")
+    @PermitAll
     @ApiOperation(value = "Obtiene un registro de TipoUsuarios en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -78,6 +80,7 @@ public class TipoUsuarioRest {
     @POST
     @Secured
     @Path("/add")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Agrega un registro de Publicacion de TipoUsuario")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -114,6 +117,7 @@ public class TipoUsuarioRest {
     @PUT
     @Secured
     @Path("/update")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Actualiza un registro de TipoUsuarios en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -137,6 +141,7 @@ public class TipoUsuarioRest {
     @DELETE
     @Secured
     @Path("/delete/{id}")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Borra un registro de TipoUsuarios en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),

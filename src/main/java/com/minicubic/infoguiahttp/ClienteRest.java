@@ -17,7 +17,8 @@ import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Singleton;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -36,7 +37,6 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
  * @author xergio
  * @version 1
  */
-@Singleton
 @Path("clientes")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -58,6 +58,7 @@ public class ClienteRest {
     @GET
     @Secured
     @Path("/find/all")
+    @PermitAll
     @ApiOperation(value = "Obtiene una lista de Clientes")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -71,6 +72,7 @@ public class ClienteRest {
     @GET
     @Secured
     @Path("/find/{id}")
+    @PermitAll
     @ApiOperation(value = "Obtiene un registro de Clientes en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -84,6 +86,7 @@ public class ClienteRest {
     @POST
     @Secured
     @Path("/add")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Agrega un registro de Publicacion de Cliente")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -131,6 +134,7 @@ public class ClienteRest {
     @PUT
     @Secured
     @Path("/update")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Actualiza un registro de Clientes en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -154,6 +158,7 @@ public class ClienteRest {
     @DELETE
     @Secured
     @Path("/delete/{id}")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Borra un registro de Clientes en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -176,6 +181,7 @@ public class ClienteRest {
     @POST
     @Secured
     @Path("/upload/{id}")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @Consumes("multipart/form-data")
     @ApiOperation(value = "Carga un archivo en el servidor.")
     @ApiResponses(value = {

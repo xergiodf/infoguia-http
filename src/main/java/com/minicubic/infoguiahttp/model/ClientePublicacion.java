@@ -38,6 +38,7 @@ import lombok.ToString;
     @NamedQuery(name = "ClientePublicacion.findByFechaDesde", query = "SELECT c FROM ClientePublicacion c WHERE c.fechaDesde = :fechaDesde"),
     @NamedQuery(name = "ClientePublicacion.findByFechaHasta", query = "SELECT c FROM ClientePublicacion c WHERE c.fechaHasta = :fechaHasta"),
     @NamedQuery(name = "ClientePublicacion.findByTipoPublicacion", query = "SELECT c FROM ClientePublicacion c WHERE c.tipoPublicacion.id = :tipoPublicacionId AND CURRENT_DATE BETWEEN c.fechaDesde AND c.fechaHasta"),
+    @NamedQuery(name = "ClientePublicacion.findByCodigo", query = "SELECT c FROM ClientePublicacion c WHERE c.tipoPublicacion.codigo = :codigo AND CURRENT_DATE BETWEEN c.fechaDesde AND c.fechaHasta"),
     @NamedQuery(name = "ClientePublicacion.findByCliente", query = "SELECT c FROM ClientePublicacion c WHERE c.cliente.id = :clienteId")})
 @ToString
 @EqualsAndHashCode

@@ -17,7 +17,8 @@ import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Singleton;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -36,7 +37,6 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
  * @author xergio
  * @version 2 - 20/04/2017
  */
-@Singleton
 @Path("usuarioPerfiles")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -58,6 +58,7 @@ public class UsuarioPerfilRest {
     @GET
     @Secured
     @Path("/find/all")
+    @PermitAll
     @ApiOperation(value = "Obtiene una lista de Perfiles de Usuario.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -71,6 +72,7 @@ public class UsuarioPerfilRest {
     @GET
     @Secured
     @Path("/find/{id}")
+    @PermitAll
     @ApiOperation(value = "Obtiene un registro de Perfil de Usuario.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -85,6 +87,7 @@ public class UsuarioPerfilRest {
     @GET
     @Secured
     @Path("/findByUser/{id}")
+    @PermitAll
     @ApiOperation(value = "Obtiene un registro de Perfil de Usuario.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -99,6 +102,7 @@ public class UsuarioPerfilRest {
     @POST
     @Secured
     @Path("/add")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Agrega un registro de Perfil de Usuario")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -135,6 +139,7 @@ public class UsuarioPerfilRest {
     @PUT
     @Secured
     @Path("/update")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Actualiza un registro de Usuario. Servicio no implementado aun.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -157,6 +162,7 @@ public class UsuarioPerfilRest {
     @DELETE
     @Secured
     @Path("/delete/{id}")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Elimina un registro de Perfil de Usuario.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -178,6 +184,7 @@ public class UsuarioPerfilRest {
     @POST
     @Secured
     @Path("/upload/{id}")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @Consumes("multipart/form-data")
     @ApiOperation(value = "Carga un archivo en el servidor.")
     @ApiResponses(value = {

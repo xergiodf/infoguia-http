@@ -8,7 +8,6 @@ import com.minicubic.infoguiahttp.dto.UsuarioDto;
 import com.minicubic.infoguiahttp.dto.ValidatorResponse;
 import com.minicubic.infoguiahttp.model.TipoHorario;
 import com.minicubic.infoguiahttp.util.Constants;
-import com.minicubic.infoguiahttp.util.Util;
 import com.minicubic.infoguiahttp.util.Validator;
 import com.minicubic.infoguiahttp.util.converter.TipoHorarioConverter;
 import com.wordnik.swagger.annotations.Api;
@@ -17,8 +16,8 @@ import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -35,7 +34,6 @@ import javax.ws.rs.core.Response;
  *
  * @author sedf
  */
-@Singleton
 @Path("tiposHorarios")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -53,6 +51,7 @@ public class TipoHorarioRest {
     @GET
     @Secured
     @Path("/find/all")
+    @PermitAll
     @ApiOperation(value = "Obtiene una lista de TipoHorarios")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -71,6 +70,7 @@ public class TipoHorarioRest {
     @GET
     @Secured
     @Path("/find/{id}")
+    @PermitAll
     @ApiOperation(value = "Obtiene un registro de TipoHorario en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -89,6 +89,7 @@ public class TipoHorarioRest {
     @POST
     @Secured
     @Path("/add")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Agrega un registro de Publicacion de TipoHorario")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -102,6 +103,7 @@ public class TipoHorarioRest {
     @PUT
     @Secured
     @Path("/update")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Actualiza un registro de TipoHorarios en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -144,6 +146,7 @@ public class TipoHorarioRest {
     @DELETE
     @Secured
     @Path("/delete/{id}")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Borra un registro de TipoHorarios en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),

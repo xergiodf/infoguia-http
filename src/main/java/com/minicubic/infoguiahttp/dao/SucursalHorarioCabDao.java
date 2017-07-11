@@ -18,7 +18,7 @@ import javax.persistence.PersistenceContext;
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class SucursalHorarioCabDao extends GenericDao<SucursalHorarioCab> {
     
-    @PersistenceContext(unitName = "checkitPU")
+    @PersistenceContext(unitName = "infoGuiaPU")
     private EntityManager em;
     
     public SucursalHorarioCabDao() {

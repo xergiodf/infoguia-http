@@ -14,8 +14,8 @@ import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -32,7 +32,6 @@ import javax.ws.rs.core.Response;
  * @author xergio
  * @version 1
  */
-@Singleton
 @Path("clienteCategorias")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -51,6 +50,7 @@ public class ClienteCategoriaRest {
     @GET
     @Secured
     @Path("/findByCliente/{id}")
+    @PermitAll
     @ApiOperation(value = "Obtiene una lista de registros de Clientes Categorias en base a un ID de Cliente")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -64,6 +64,7 @@ public class ClienteCategoriaRest {
     @GET
     @Secured
     @Path("/findByCategoria/{id}")
+    @PermitAll
     @ApiOperation(value = "Obtiene una lista de registros de Clientes Categorias en base a un ID de Categoria")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),

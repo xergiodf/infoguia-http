@@ -13,7 +13,8 @@ import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Singleton;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -31,7 +32,6 @@ import javax.ws.rs.core.Response;
  * @author xergio
  * @version 1 - 08.06.2017
  */
-@Singleton
 @Path("valoraciones")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -46,6 +46,7 @@ public class ValoracionRest {
     @GET
     @Secured
     @Path("/find/{id}")
+    @PermitAll
     @ApiOperation(value = "Obtiene un registro de Valoracions en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -59,6 +60,7 @@ public class ValoracionRest {
     @GET
     @Secured
     @Path("/findByCliente/{idCliente}")
+    @PermitAll
     @ApiOperation(value = "Obtiene un registro de Valoracions en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -72,6 +74,7 @@ public class ValoracionRest {
     @GET
     @Secured
     @Path("/findBySucursal/{idClienteSucursal}")
+    @PermitAll
     @ApiOperation(value = "Obtiene un registro de Valoracions en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -85,6 +88,7 @@ public class ValoracionRest {
     @POST
     @Secured
     @Path("/add")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Agrega un registro de Publicacion de Valoracion")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -121,6 +125,7 @@ public class ValoracionRest {
     @PUT
     @Secured
     @Path("/update")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Actualiza un registro de Valoracions en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -144,6 +149,7 @@ public class ValoracionRest {
     @DELETE
     @Secured
     @Path("/delete/{id}")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Borra un registro de Valoracions en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),

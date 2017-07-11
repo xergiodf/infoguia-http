@@ -65,6 +65,14 @@ public class ClienteSucursalDto implements Archivable {
     
     @Getter
     @Setter
+    private Boolean checkRatingUsuario;
+    
+    @Getter
+    @Setter
+    private Boolean checkRatingInfoguia;
+    
+    @Getter
+    @Setter
     private List<ArchivoDto> archivos;
     
     @Override

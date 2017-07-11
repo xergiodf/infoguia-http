@@ -26,4 +26,8 @@ public class TipoPublicacionDto {
     @Getter
     @Setter
     private String descripcion;
+    
+    @Getter
+    @Setter
+    private String codigo;
 }

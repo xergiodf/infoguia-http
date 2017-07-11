@@ -38,7 +38,7 @@ public class SecurityFilter implements ContainerRequestFilter {
 
     @Inject
     @LoggedIn
-    Event<Integer> loggedInEvent;
+    Event<Long> loggedInEvent;
 
     @LoggedIn
     @Inject
@@ -66,7 +66,7 @@ public class SecurityFilter implements ContainerRequestFilter {
                 throw new NotAuthorizedException("401");
             } else {
 
-                loggedInEvent.fire(Integer.valueOf(Util.getClaims(token).getSubject()));
+                loggedInEvent.fire(Long.valueOf(Util.getClaims(token).getSubject()));
             }
 
             ResourceMethodInvoker methodInvoker = (ResourceMethodInvoker) requestContext.getProperty("org.jboss.resteasy.core.ResourceMethodInvoker");

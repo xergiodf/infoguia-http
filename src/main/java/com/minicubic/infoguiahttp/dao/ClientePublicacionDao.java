@@ -192,6 +192,10 @@ public class ClientePublicacionDao {
         }
     }
 
+    /**
+     * 
+     * @param id 
+     */
     public void deleteClientePublicacion(Integer id) {
         try {
             ClientePublicacion clientePublicacion = (ClientePublicacion) em.createNamedQuery("ClientePublicacion.findById")
@@ -205,4 +209,38 @@ public class ClientePublicacionDao {
         }
     }
 
+    /**
+     * 
+     * @param codigo
+     * @return 
+     */
+    public List<ClientePublicacionDto> getClientePublicacionesByCodigo(String codigo) {
+        try {
+            List<ClientePublicacionDto> clientePublicacionesDto = converter.getClientePublicacionesDto(
+                    em.createNamedQuery("ClientePublicacion.findByCodigo")
+                        .setParameter("codigo", codigo)
+                        .getResultList()
+            );
+
+            // TODO: Buscar algun patron de disenho que mejore esto
+            // Cargamos las imagenes (si tiene)
+            for ( ClientePublicacionDto clientePublicacionDto : clientePublicacionesDto ) {
+                clientePublicacionDto.setArchivos(
+                        archivoConverter.getArchivoDto(
+                                archivoDao.getArchivo(
+                                        TableReference.CLIENTE_PUBLICACION.getTableName(), 
+                                        TableReference.CLIENTE_PUBLICACION.getIdColumnName(), 
+                                        clientePublicacionDto.getId().toString()
+                                )
+                        )
+                );
+            }
+            
+            return clientePublicacionesDto;
+        } catch (NoResultException nre) {
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

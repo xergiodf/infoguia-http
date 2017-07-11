@@ -408,15 +408,12 @@ public class Validator {
         ValidatorResponse<Boolean> response = new ValidatorResponse<>();
         response.setData(true);
         
-        if (Util.isEmpty(sucursalHorarioDetDto.getTipoHorarioDto())) {
+        if (Util.isEmpty(sucursalHorarioDetDto.getSucursalHorarioCabDto())) {
             response.setData(false);
-            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_HORARIOCAB_TIPOHORARIO));
+            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_HORARIODET_CAB));
         }
         
-        if (Util.isEmpty(sucursalHorarioDetDto.getClienteSucursalDto())) {
-            response.setData(false);
-            response.setMensaje(response.getMensaje().concat(Constants.VALIDATION_HORARIOCAB_SUCURSAL));
-        }
+        // Agregar mas validacion dependiendo del tipo de horario seleccionado
         
         return response;
     }

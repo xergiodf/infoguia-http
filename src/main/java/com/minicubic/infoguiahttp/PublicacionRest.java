@@ -17,7 +17,8 @@ import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Singleton;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
@@ -36,7 +37,6 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
  * @author xergio
  * @version 1
  */
-@Singleton
 @Path("publicaciones")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -58,6 +58,7 @@ public class PublicacionRest {
     @GET
     @Secured
     @Path("/find/all")
+    @PermitAll
     @ApiOperation(value = "Obtiene una lista de Publicaciones de Clientes")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -71,6 +72,7 @@ public class PublicacionRest {
     @GET
     @Secured
     @Path("/find/{id}")
+    @PermitAll
     @ApiOperation(value = "Obtiene un registro de Publicacion de Cliente en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -84,6 +86,7 @@ public class PublicacionRest {
     @GET
     @Secured
     @Path("/findByCliente/{id}")
+    @PermitAll
     @ApiOperation(value = "Obtiene un registro de Publicacion de Cliente en base a un ID de Cliente")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -122,6 +125,7 @@ public class PublicacionRest {
 
     @GET
     @Path("/findByTipo/{tipoPublicacion}")
+    @PermitAll
     @ApiOperation(value = "Obtiene una lista de Publicidades en base a un tipo de publicidad")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -131,10 +135,24 @@ public class PublicacionRest {
 
         return Response.ok().entity(service.getClientePublicacionesByTipoPublicacion(tipoPublicacion)).build();
     }
+    
+    @GET
+    @Path("/findByCodigo/{codigo}")
+    @PermitAll
+    @ApiOperation(value = "Obtiene una lista de Publicidades en base a un tipo de publicidad")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Something wrong in Server")})
+    public Response findByCodigo(@PathParam("codigo") String codigo) {
+        LOG.log(Level.INFO, "Obteniendo publicidad por tipo de publicacion: {0}", new Object[]{codigo});
+
+        return Response.ok().entity(service.getClientePublicacionesByCodigo(codigo)).build();
+    }
 
     @POST
     @Secured
     @Path("/add")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Agrega un registro de Publicacion de Cliente. En el parametro debe venir especificado el tipo de publicacion.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -171,6 +189,7 @@ public class PublicacionRest {
     @PUT
     @Secured
     @Path("/update")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Actualiza un registro de Publicacion de Cliente en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -194,6 +213,7 @@ public class PublicacionRest {
     @DELETE
     @Secured
     @Path("/delete/{id}")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Borra un registro de Publicacion de Cliente en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -216,6 +236,7 @@ public class PublicacionRest {
     @POST
     @Secured
     @Path("/upload/{id}")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @Consumes("multipart/form-data")
     @ApiOperation(value = "Carga un archivo en el servidor.")
     @ApiResponses(value = {

@@ -19,7 +19,7 @@ import com.wordnik.swagger.annotations.ApiResponses;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Singleton;
+import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -35,12 +35,11 @@ import javax.ws.rs.core.Response;
  * @author xergio
  * @version 3 - 07/04/2017
  */
-
-@Singleton
 @Path("auth")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Api(value = "/auth", description = "REST Service de Autenticacion")
+@PermitAll
 public class AuthenticationRest {
     
     @LoggedIn

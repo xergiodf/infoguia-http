@@ -108,6 +108,16 @@ public class ClienteSucursal implements Serializable {
     @Setter
     private Ciudad ciudad;
     
+    @Column(name = "check_rating_usuarios")
+    @Getter
+    @Setter
+    private Boolean checkRatingUsuario;
+    
+    @Column(name = "check_rating_infoguia")
+    @Getter
+    @Setter
+    private Boolean checkRatingInfoguia;
+    
     @Column(name = "audit_usuario")
     @Getter
     @Setter

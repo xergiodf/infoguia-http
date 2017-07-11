@@ -6,7 +6,7 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
-import javax.ejb.Singleton;
+import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -21,13 +21,11 @@ import javax.ws.rs.core.Response;
  * @author xergio
  * @version 1 - 12.06.2017
  */
-@Singleton
 @Path("search")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Api(value = "/search", description = "REST Service de Busqueda")
 public class SearchRest {
-
     
     @Inject
     private ClienteSucursalService clienteSucursalService;
@@ -35,6 +33,7 @@ public class SearchRest {
     @GET
     @Secured
     @Path("/clientes/{query}")
+    @PermitAll
     @ApiOperation(value = "Busca un registro de Cliente en base al query de busqueda")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -53,6 +52,7 @@ public class SearchRest {
      */
     @GET
     @Secured
+    @PermitAll
     @Path("/clientes/{query}/{filtros}")
     @ApiOperation(value = "Busca un registro de Cliente en base al query de busqueda")
     @ApiResponses(value = {

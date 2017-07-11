@@ -50,6 +50,11 @@ public class TipoPublicacion implements Serializable {
     @Getter
     @Setter
     private String descripcion;
+    
+    @Column(name = "codigo")
+    @Getter
+    @Setter
+    private String codigo;
 
     @Column(name = "audit_usuario")
     @Getter

@@ -6,6 +6,8 @@ import com.minicubic.infoguiahttp.model.Cliente;
 import com.minicubic.infoguiahttp.util.Util;
 import com.minicubic.infoguiahttp.util.converter.ClienteConverter;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
+import com.minicubic.infoguiahttp.enums.TableReference;
+import com.minicubic.infoguiahttp.util.converter.ArchivoConverter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,15 +23,19 @@ import javax.persistence.PersistenceContext;
  * @version 1
  */
 public class ClienteDao {
-    
+
     @LoggedIn
     @Inject
     private UsuarioDto usuarioLogueado;
 
+    @Inject
+    private ArchivoDao archivoDao;
+
     private final ClienteConverter converter = new ClienteConverter();
+    private final ArchivoConverter archivoConverter = new ArchivoConverter();
     private static final Logger LOG = Logger.getLogger("ClienteDao");
-    
-    @PersistenceContext(unitName="infoGuiaPU")
+
+    @PersistenceContext(unitName = "infoGuiaPU")
     private EntityManager em;
 
     /**
@@ -43,60 +49,105 @@ public class ClienteDao {
                     .setParameter("id", id)
                     .getSingleResult();
 
-            return converter.getClienteDto(cliente);
+            ClienteDto clienteDto = converter.getClienteDto(cliente);
+
+            // TODO: Buscar algun patron de disenho que mejore esto
+            // Cargamos las imagenes (si tiene)
+            clienteDto.setArchivos(
+                    archivoConverter.getArchivoDto(
+                            archivoDao.getArchivo(
+                                    TableReference.CLIENTE.getTableName(),
+                                    TableReference.CLIENTE.getIdColumnName(),
+                                    id.toString()
+                            )
+                    )
+            );
+
+            return clienteDto;
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
         return null;
     }
-    
+
     /**
-     * 
-     * @param clienteDto
-     * @return 
+     *
+     * @param clienteParam
+     * @return
      */
-    public ClienteDto getClienteByParam(ClienteDto clienteDto) {
+    public ClienteDto getClienteByParam(ClienteDto clienteParam) {
         try {
-            
+
             Cliente cliente = null;
-                    
-            if ( !Util.isEmpty(clienteDto.getCodigoCliente()) ) {
+            ClienteDto clienteDto = null;
+
+            if (!Util.isEmpty(clienteParam.getCodigoCliente())) {
                 cliente = (Cliente) em.createNamedQuery("Cliente.findByCodigoCliente")
-                    .setParameter("codigoCliente", clienteDto.getCodigoCliente().toUpperCase())
-                    .getSingleResult();
+                        .setParameter("codigoCliente", clienteParam.getCodigoCliente().toUpperCase())
+                        .getSingleResult();
+
+                clienteDto = converter.getClienteDto(cliente);
+
+                // TODO: Buscar algun patron de disenho que mejore esto
+                // Cargamos las imagenes (si tiene)
+                clienteDto.setArchivos(
+                        archivoConverter.getArchivoDto(
+                                archivoDao.getArchivo(
+                                        TableReference.CLIENTE.getTableName(),
+                                        TableReference.CLIENTE.getIdColumnName(),
+                                        clienteDto.getId().toString()
+                                )
+                        )
+                );
             }
 
-            return converter.getClienteDto(cliente);
+            return clienteDto;
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
-        
+
         return null;
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public List<ClienteDto> getClientes() {
         try {
             List<Cliente> clientes = em.createNamedQuery("Cliente.findAll")
                     .getResultList();
 
-            return converter.getClientesDto(clientes);
+            List<ClienteDto> clientesDto = converter.getClientesDto(clientes);
+
+            // TODO: Buscar algun patron de disenho que mejore esto
+            // Cargamos las imagenes (si tiene)
+            for (ClienteDto clienteDto : clientesDto) {
+                clienteDto.setArchivos(
+                        archivoConverter.getArchivoDto(
+                                archivoDao.getArchivo(
+                                        TableReference.CLIENTE.getTableName(),
+                                        TableReference.CLIENTE.getIdColumnName(),
+                                        clienteDto.getId().toString()
+                                )
+                        )
+                );
+            }
+
+            return clientesDto;
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
         return null;
     }
-    
+
     /**
-     * 
+     *
      * @param params
-     * @return 
+     * @return
      */
     public List<ClienteDto> getClientesByParams(String params) {
         try {
@@ -104,7 +155,23 @@ public class ClienteDao {
                     .setParameter("params", ("%" + params.replace(" ", "%") + "%"))
                     .getResultList();
 
-            return converter.getClientesDto(clientes);
+            List<ClienteDto> clientesDto = converter.getClientesDto(clientes);
+
+            // TODO: Buscar algun patron de disenho que mejore esto
+            // Cargamos las imagenes (si tiene)
+            for (ClienteDto clienteDto : clientesDto) {
+                clienteDto.setArchivos(
+                        archivoConverter.getArchivoDto(
+                                archivoDao.getArchivo(
+                                        TableReference.CLIENTE.getTableName(),
+                                        TableReference.CLIENTE.getIdColumnName(),
+                                        clienteDto.getId().toString()
+                                )
+                        )
+                );
+            }
+
+            return clientesDto;
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);

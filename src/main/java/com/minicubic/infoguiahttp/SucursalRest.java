@@ -17,7 +17,8 @@ import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Singleton;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
@@ -36,7 +37,6 @@ import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
  * @author xergio
  * @version 2 - 20/04/2017
  */
-@Singleton
 @Path("sucursales")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -58,6 +58,7 @@ public class SucursalRest {
     @GET
     @Secured
     @Path("/find/all")
+    @PermitAll
     @ApiOperation(value = "Obtiene una lista de Sucursales de Clientes")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -71,6 +72,7 @@ public class SucursalRest {
     @GET
     @Secured
     @Path("/find/{id}")
+    @PermitAll
     @ApiOperation(value = "Obtiene un registro de Sucursal de Cliente en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -85,6 +87,7 @@ public class SucursalRest {
     @GET
     @Secured
     @Path("/findByCliente/{id}")
+    @PermitAll
     @ApiOperation(value = "Obtiene un registro de Sucursal de Cliente en base a un ID de Cliente")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -98,6 +101,7 @@ public class SucursalRest {
     @POST
     @Secured
     @Path("/add")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Agrega un registro de Sucursal de Cliente en base a un ID. En el parametro debe venir especificado el tipo de publicacion (Novedad o Promocion.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -134,6 +138,7 @@ public class SucursalRest {
     @PUT
     @Secured
     @Path("/update")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Actualiza un registro de Sucursal de Cliente en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -157,6 +162,7 @@ public class SucursalRest {
     @DELETE
     @Secured
     @Path("/delete/{id}")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @ApiOperation(value = "Borra un registro de Sucursal de Cliente en base a un ID")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
@@ -179,6 +185,7 @@ public class SucursalRest {
     @POST
     @Secured
     @Path("/upload/{id}")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
     @Consumes("multipart/form-data")
     @ApiOperation(value = "Carga un archivo en el servidor.")
     @ApiResponses(value = {
@@ -207,4 +214,23 @@ public class SucursalRest {
             return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
         }        
     }
+    
+//  ██╗  ██╗ ██████╗ ██████╗  █████╗ ██████╗ ██╗ ██████╗ ███████╗
+//  ██║  ██║██╔═══██╗██╔══██╗██╔══██╗██╔══██╗██║██╔═══██╗██╔════╝
+//  ███████║██║   ██║██████╔╝███████║██████╔╝██║██║   ██║███████╗
+//  ██╔══██║██║   ██║██╔══██╗██╔══██║██╔══██╗██║██║   ██║╚════██║
+//  ██║  ██║╚██████╔╝██║  ██║██║  ██║██║  ██║██║╚██████╔╝███████║
+//  ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝ ╚═════╝ ╚══════╝
+// http://patorjk.com/software/taag/#p=display&c=c%2B%2B&f=ANSI%20Shadow&t=horarios
+    
+    
+//  ██╗     ██╗███████╗████████╗ █████╗     ██████╗ ███████╗███████╗███████╗ ██████╗ 
+//  ██║     ██║██╔════╝╚══██╔══╝██╔══██╗    ██╔══██╗██╔════╝██╔════╝██╔════╝██╔═══██╗
+//  ██║     ██║███████╗   ██║   ███████║    ██║  ██║█████╗  ███████╗█████╗  ██║   ██║
+//  ██║     ██║╚════██║   ██║   ██╔══██║    ██║  ██║██╔══╝  ╚════██║██╔══╝  ██║   ██║
+//  ███████╗██║███████║   ██║   ██║  ██║    ██████╔╝███████╗███████║███████╗╚██████╔╝
+//  ╚══════╝╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝    ╚═════╝ ╚══════╝╚══════╝╚══════╝ ╚═════╝ 
+// http://patorjk.com/software/taag/#p=display&c=c%2B%2B&f=ANSI%20Shadow&t=lista%20deseo
+    
+    
 }
