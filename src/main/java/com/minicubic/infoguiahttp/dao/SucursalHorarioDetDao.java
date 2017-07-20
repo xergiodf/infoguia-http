@@ -1,6 +1,6 @@
 package com.minicubic.infoguiahttp.dao;
 
-import com.minicubic.infoguiahttp.model.SucursalHorarioCab;
+import com.minicubic.infoguiahttp.model.SucursalHorarioDet;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -16,13 +16,13 @@ import javax.persistence.PersistenceContext;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-public class SucursalHorarioDetDao extends GenericDao<SucursalHorarioCab> {
+public class SucursalHorarioDetDao extends GenericDao<SucursalHorarioDet> {
     
     @PersistenceContext(unitName = "infoGuiaPU")
     private EntityManager em;
     
     public SucursalHorarioDetDao() {
-        super(SucursalHorarioCab.class);
+        super(SucursalHorarioDet.class);
     }
 
     @Override

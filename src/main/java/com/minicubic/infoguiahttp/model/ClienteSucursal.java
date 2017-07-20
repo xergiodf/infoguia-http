@@ -77,7 +77,7 @@ public class ClienteSucursal implements Serializable {
     private String coordenadas;
     
     @JoinColumn(name = "id_cliente", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @Getter
     @Setter
     private Cliente cliente;
@@ -103,7 +103,7 @@ public class ClienteSucursal implements Serializable {
     private String horarioAtencion;
     
     @JoinColumn(name = "id_ciudad", referencedColumnName = "id", nullable = true)
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @ManyToOne(optional = true)
     @Getter
     @Setter
     private Ciudad ciudad;

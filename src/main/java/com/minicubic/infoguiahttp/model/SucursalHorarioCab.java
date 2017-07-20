@@ -30,7 +30,9 @@ import lombok.ToString;
 @XmlRootElement 
 @NamedQueries({ 
     @NamedQuery(name = "SucursalHorarioCab.findAll", query = "SELECT s FROM SucursalHorarioCab s"), 
-    @NamedQuery(name = "SucursalHorarioCab.findById", query = "SELECT s FROM SucursalHorarioCab s WHERE s.id = :id")}) 
+    @NamedQuery(name = "SucursalHorarioCab.findById", query = "SELECT s FROM SucursalHorarioCab s WHERE s.id = :id"),
+    @NamedQuery(name = "SucursalHorarioCab.findBySucursal", query = "SELECT s FROM SucursalHorarioCab s WHERE s.clienteSucursal.id = :idSucursal"),
+}) 
 @ToString 
 @EqualsAndHashCode 
 public class SucursalHorarioCab implements Serializable { 
@@ -45,13 +47,13 @@ public class SucursalHorarioCab implements Serializable {
     private Integer id; 
      
     @JoinColumn(name = "id_tipo_horario", referencedColumnName = "id") 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY) 
+    @ManyToOne(optional = false) 
     @Getter 
     @Setter 
     private TipoHorario tipoHorario; 
      
     @JoinColumn(name = "id_cliente_sucursal", referencedColumnName = "id") 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY) 
+    @ManyToOne(optional = false) 
     @Getter 
     @Setter 
     private ClienteSucursal clienteSucursal; 

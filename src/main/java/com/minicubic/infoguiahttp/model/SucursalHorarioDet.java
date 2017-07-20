@@ -42,7 +42,7 @@ public class SucursalHorarioDet implements Serializable {
     private Integer id; 
      
     @JoinColumn(name = "id_sucursal_horario_cab", referencedColumnName = "id") 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY) 
+    @ManyToOne(optional = false) 
     @Getter 
     @Setter 
     private SucursalHorarioCab sucursalHorarioCab; 

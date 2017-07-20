@@ -1,8 +1,6 @@
 package com.minicubic.infoguiahttp.dao;
 
-import com.minicubic.infoguiahttp.model.SucursalHorarioCab;
-import java.util.HashMap;
-import java.util.Map;
+import com.minicubic.infoguiahttp.model.UsuarioAccion;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -18,29 +16,16 @@ import javax.persistence.PersistenceContext;
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-public class SucursalHorarioCabDao extends GenericDao<SucursalHorarioCab> {
-    
+public class UsuarioAccionDao extends GenericDao<UsuarioAccion> {
     @PersistenceContext(unitName = "infoGuiaPU")
     private EntityManager em;
     
-    public SucursalHorarioCabDao() {
-        super(SucursalHorarioCab.class);
+    public UsuarioAccionDao() {
+        super(UsuarioAccion.class);
     }
 
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
-    /**
-     * 
-     * @param idSucursal
-     * @return 
-     */
-    public SucursalHorarioCab findBySucursal(Integer idSucursal) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("idSucursal", idSucursal);
-        return findSingleWithNamedQuery("SucursalHorarioCab.findBySucursal", params);
-    }
-    
 }
