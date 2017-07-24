@@ -2,7 +2,6 @@ package com.minicubic.infoguiahttp.model;
 
 import java.io.Serializable;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,7 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -29,7 +27,20 @@ import lombok.ToString;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "UsuarioAccion.findAll", query = "SELECT u FROM UsuarioAccion u"), 
-    @NamedQuery(name = "UsuarioAccion.findById", query = "SELECT u FROM UsuarioAccion u WHERE u.id = :id")
+    @NamedQuery(name = "UsuarioAccion.findById", query = "SELECT u FROM UsuarioAccion u WHERE u.id = :id"),
+    @NamedQuery(name = "UsuarioAccion.findByAllParams", 
+            query =     "SELECT u "
+                    +   "FROM UsuarioAccion u "
+                    +   "WHERE u.usuario.id = :idUsuario "
+                    +   "AND u.tipoAccion.id = :idTipoAccion "
+                    +   "AND u.tablaRef = :tablaRef "
+                    +   "AND u.colRef = :colRef "
+                    +   "AND u.idRef = :idRef "),
+    @NamedQuery(name = "UsuarioAccion.findByUsuarioTipoAccion", 
+            query =     "SELECT u "
+                    +   "FROM UsuarioAccion u "
+                    +   "WHERE u.usuario.id = :idUsuario "
+                    +   "AND u.tipoAccion.id = :idTipoAccion ")
 })
 @ToString
 @EqualsAndHashCode

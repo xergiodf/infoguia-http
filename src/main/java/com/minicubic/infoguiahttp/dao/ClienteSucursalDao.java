@@ -133,15 +133,21 @@ public class ClienteSucursalDao {
     /**
      *
      * @param params
+     * @param page
      * @return
      */
-    public List<ClienteSucursalDto> getClienteSucursalesByParams(String params) {
+    public List<ClienteSucursalDto> getClienteSucursalesByParams(String params, Integer page) {
         try {
             List<ClienteSucursalDto> clienteSucursalesDto = converter.getClienteSucursalesDto(
                     em.createNamedQuery("ClienteSucursal.findByParams")
                             .setParameter("params", ("%" + params.replace(" ", "%") + "%"))
-                            .setMaxResults(10)
-                            .getResultList()
+                            .setMaxResults(Constants.SEARCH_ROWS_PER_PAGE)
+                                .setFirstResult(
+                                        Util.isEmpty(page)
+                                        ? 0
+                                        : Constants.SEARCH_ROWS_PER_PAGE * page
+                                )
+                                .getResultList()
             );
 
             // TODO: Buscar algun patron de disenho que mejore esto
@@ -186,7 +192,7 @@ public class ClienteSucursalDao {
             }
             return null;
         } else {
-            return getClienteSucursalesByParams(params.getQuery());
+            return getClienteSucursalesByParams(params.getQuery(), params.getPage());
         }
     }
 

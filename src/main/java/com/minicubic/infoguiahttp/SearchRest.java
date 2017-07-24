@@ -32,24 +32,22 @@ public class SearchRest {
     @Inject
     private ClienteSucursalService clienteSucursalService;
 
-    @GET
-    @Secured
-    @Path("/clientes/{query}")
-    @PermitAll
-    @ApiOperation(value = "Busca un registro de Cliente en base al query de busqueda")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "OK"),
-        @ApiResponse(code = 406, message = "Error de Validacion"),
-        @ApiResponse(code = 400, message = "Error generico"),
-        @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response searchClientes(@PathParam("query") String query) {
-        return Response.ok().entity(clienteSucursalService.getClienteSucursalesByParams(query)).build();
-    }
+//    @GET
+//    @Secured
+//    @Path("/clientes/{query}")
+//    @PermitAll
+//    @ApiOperation(value = "Busca un registro de Cliente en base al query de busqueda")
+//    @ApiResponses(value = {
+//        @ApiResponse(code = 200, message = "OK"),
+//        @ApiResponse(code = 406, message = "Error de Validacion"),
+//        @ApiResponse(code = 400, message = "Error generico"),
+//        @ApiResponse(code = 500, message = "Something wrong in Server")})
+//    public Response searchClientes(@PathParam("query") String query) {
+//        return Response.ok().entity(clienteSucursalService.getClienteSucursalesByParams(query)).build();
+//    }
     
     /**
-     * Los filtros vienen de esta manera:
-     * categoria:valor|cliente:valor
-     * @param query
+     * @param searchDto
      * @return 
      */
     @POST
