@@ -18,4 +18,5 @@ public interface Archivable {
     public TableReference getTableReference();
     
     public List<ArchivoDto> getArchivos();
+    public void setArchivos(List<ArchivoDto> archivos);
 }

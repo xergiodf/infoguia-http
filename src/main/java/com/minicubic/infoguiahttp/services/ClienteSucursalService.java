@@ -5,6 +5,7 @@ import com.minicubic.infoguiahttp.dao.ClienteSucursalDao;
 import com.minicubic.infoguiahttp.dto.CategoriaDto;
 import com.minicubic.infoguiahttp.dto.ClienteCategoriaDto;
 import com.minicubic.infoguiahttp.dto.ClienteSucursalDto;
+import com.minicubic.infoguiahttp.dto.SearchDto;
 import com.minicubic.infoguiahttp.dto.SucursalCategoriaDto;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,29 @@ public class ClienteSucursalService {
      * @return
      */
     public List<SucursalCategoriaDto> getClienteSucursalesByParams(String params) {
+        SucursalCategoriaDto sucursalCategoriaDto = null;
+        List<ClienteCategoriaDto> clienteCategoriasDto = null;
+        List<SucursalCategoriaDto> sucursalCategoriasDto = new ArrayList<>();
+        
+        List<ClienteSucursalDto> clienteSucursalesDto = dao.getClienteSucursalesByParams(params);
+
+        for (ClienteSucursalDto clienteSucursalDto : clienteSucursalesDto) {
+            sucursalCategoriaDto = new SucursalCategoriaDto();
+            sucursalCategoriaDto.setCategoriasDto(new ArrayList<CategoriaDto>());
+            
+            sucursalCategoriaDto.setSucursalDto(clienteSucursalDto);
+            
+            clienteCategoriasDto = clienteCategoriaDao.getClienteCategoriasByCliente(clienteSucursalDto.getClienteDto().getId());
+            for (ClienteCategoriaDto clienteCategoriaDto : clienteCategoriasDto)
+                sucursalCategoriaDto.getCategoriasDto().add(clienteCategoriaDto.getCategoriaDto());
+
+            sucursalCategoriasDto.add(sucursalCategoriaDto);
+        }
+        
+        return sucursalCategoriasDto;
+    }
+    
+    public List<SucursalCategoriaDto> getClienteSucursalesByParams(SearchDto params) {
         SucursalCategoriaDto sucursalCategoriaDto = null;
         List<ClienteCategoriaDto> clienteCategoriasDto = null;
         List<SucursalCategoriaDto> sucursalCategoriasDto = new ArrayList<>();

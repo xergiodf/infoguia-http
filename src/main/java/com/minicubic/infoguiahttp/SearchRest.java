@@ -1,6 +1,7 @@
 package com.minicubic.infoguiahttp;
 
 import com.minicubic.infoguiahttp.annotations.Secured;
+import com.minicubic.infoguiahttp.dto.SearchDto;
 import com.minicubic.infoguiahttp.services.ClienteSucursalService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -10,6 +11,7 @@ import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -50,17 +52,17 @@ public class SearchRest {
      * @param query
      * @return 
      */
-    @GET
+    @POST
     @Secured
     @PermitAll
-    @Path("/clientes/{query}/{filtros}")
+    @Path("/clientes")
     @ApiOperation(value = "Busca un registro de Cliente en base al query de busqueda")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 406, message = "Error de Validacion"),
         @ApiResponse(code = 400, message = "Error generico"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response searchClientesFiltros(@PathParam("query") String query) {
-        return Response.ok().entity(clienteSucursalService.getClienteSucursalesByParams(query)).build();
+    public Response searchClientesFiltros(SearchDto searchDto) {
+        return Response.ok().entity(clienteSucursalService.getClienteSucursalesByParams(searchDto)).build();
     }
 }

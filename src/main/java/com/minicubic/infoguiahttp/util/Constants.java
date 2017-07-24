@@ -15,8 +15,8 @@ public class Constants {
     
     public static final String HOST_NAME_SMTP = "server1.hostipy.com";
     public static final String PUERT0_SMTP = "465";
-    public static final String USER_NAME_SMTP = "noreply@enemedu.com";
-    public static final String PASS_SMTP = ".NoReply.*";
+    public static final String USER_NAME_SMTP = "noreply@minicubic.com";
+    public static final String PASS_SMTP = ".noreply.80*";
     
     public static final String FILE_FORM_NAME = "fileData";
     public static final String UPLOAD_DIR = "/usr/share/nginx/html";
@@ -31,6 +31,8 @@ public class Constants {
     
     public static final Integer DB_PUB_TIPO_NOVED_ID = 2;
     public static final Integer DB_PUB_TIPO_PROMO_ID = 1;
+    
+    public static final Integer SEARCH_ROWS_PER_PAGE = 10;
     
     public static final String VALIDATION_GENERIC_DESCRIPCION = "Descripcion es un campo requerido \n";
     

@@ -7,6 +7,15 @@ import com.minicubic.infoguiahttp.model.ClienteSucursal;
 import com.minicubic.infoguiahttp.util.converter.ArchivoConverter;
 import com.minicubic.infoguiahttp.util.converter.ClienteSucursalConverter;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
+import com.minicubic.infoguiahttp.dto.ArchivoDto;
+import com.minicubic.infoguiahttp.dto.SearchDto;
+import com.minicubic.infoguiahttp.dto.SucursalValoracionCabDto;
+import com.minicubic.infoguiahttp.dto.TipoHorarioDto;
+import com.minicubic.infoguiahttp.model.SucursalHorarioCab;
+import com.minicubic.infoguiahttp.model.SucursalHorarioDet;
+import com.minicubic.infoguiahttp.util.Constants;
+import com.minicubic.infoguiahttp.util.Util;
+import com.minicubic.infoguiahttp.util.converter.SucursalValoracionConverter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.logging.Level;
@@ -22,21 +31,28 @@ import javax.persistence.PersistenceContext;
  * @version 1
  */
 public class ClienteSucursalDao {
-    
+
     @LoggedIn
     @Inject
     private UsuarioDto usuarioLogueado;
-    
+
     @Inject
     private ArchivoDao archivoDao;
 
+    @Inject
+    private SucursalHorarioCabDao horarioCabDao;
+
+    @Inject
+    private SucursalValoracionDao valoracionDao;
+
     private final ClienteSucursalConverter converter = new ClienteSucursalConverter();
     private final ArchivoConverter archivoConverter = new ArchivoConverter();
+    private final SucursalValoracionConverter valoracionConverter = new SucursalValoracionConverter();
     private static final Logger LOG = Logger.getLogger("ClienteSucursalDao");
-    
-    @PersistenceContext(unitName="infoGuiaPU")
+
+    @PersistenceContext(unitName = "infoGuiaPU")
     private EntityManager em;
-    
+
     /**
      *
      * @param id
@@ -46,21 +62,13 @@ public class ClienteSucursalDao {
         try {
             ClienteSucursalDto clienteSucursalDto = converter.getClienteSucursalDto(
                     (ClienteSucursal) em.createNamedQuery("ClienteSucursal.findById")
-                        .setParameter("id", id)
-                        .getSingleResult()
+                            .setParameter("id", id)
+                            .getSingleResult()
             );
-            
+
             // TODO: Buscar algun patron de disenho que mejore esto
             // Cargamos las imagenes (si tiene)
-            clienteSucursalDto.setArchivos(
-                    archivoConverter.getArchivoDto(
-                            archivoDao.getArchivo(
-                                    TableReference.CLIENTE_SUCURSAL.getTableName(),
-                                    TableReference.CLIENTE_SUCURSAL.getIdColumnName(),
-                                    id.toString()
-                            )
-                    )
-            );
+            setExtra(clienteSucursalDto);
 
             return clienteSucursalDto;
         } catch (NoResultException nre) {
@@ -69,29 +77,21 @@ public class ClienteSucursalDao {
         }
         return null;
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public List<ClienteSucursalDto> getClienteSucursales() {
         try {
             List<ClienteSucursalDto> clienteSucursalesDto = converter.getClienteSucursalesDto(
                     em.createNamedQuery("ClienteSucursal.findAll").getResultList()
             );
-            
+
             // TODO: Buscar algun patron de disenho que mejore esto
             // Cargamos las imagenes (si tiene)
-            for ( ClienteSucursalDto clienteSucursalDto : clienteSucursalesDto ) {
-                clienteSucursalDto.setArchivos(
-                        archivoConverter.getArchivoDto(
-                                archivoDao.getArchivo(
-                                        TableReference.CLIENTE_SUCURSAL.getTableName(),
-                                        TableReference.CLIENTE_SUCURSAL.getIdColumnName(),
-                                        clienteSucursalDto.getId().toString()
-                                )
-                        )
-                );
+            for (ClienteSucursalDto clienteSucursalDto : clienteSucursalesDto) {
+                setExtra(clienteSucursalDto);
             }
 
             return clienteSucursalesDto;
@@ -101,33 +101,25 @@ public class ClienteSucursalDao {
         }
         return null;
     }
-    
+
     /**
-     * 
+     *
      * @param clienteSucursalId
-     * @return 
+     * @return
      */
     public List<ClienteSucursalDto> getClienteSucursalesByCliente(Long clienteSucursalId) {
         try {
 
             List<ClienteSucursalDto> clienteSucursalesDto = converter.getClienteSucursalesDto(
                     em.createNamedQuery("ClienteSucursal.findByCliente")
-                    .setParameter("clienteId", clienteSucursalId)
-                    .getResultList()
+                            .setParameter("clienteId", clienteSucursalId)
+                            .getResultList()
             );
-            
+
             // TODO: Buscar algun patron de disenho que mejore esto
             // Cargamos las imagenes (si tiene)
-            for ( ClienteSucursalDto clienteSucursalDto : clienteSucursalesDto ) {
-                clienteSucursalDto.setArchivos(
-                        archivoConverter.getArchivoDto(
-                                archivoDao.getArchivo(
-                                        TableReference.CLIENTE_SUCURSAL.getTableName(),
-                                        TableReference.CLIENTE_SUCURSAL.getIdColumnName(),
-                                        clienteSucursalDto.getId().toString()
-                                )
-                        )
-                );
+            for (ClienteSucursalDto clienteSucursalDto : clienteSucursalesDto) {
+                setExtra(clienteSucursalDto);
             }
 
             return clienteSucursalesDto;
@@ -137,32 +129,25 @@ public class ClienteSucursalDao {
         }
         return null;
     }
-    
+
     /**
-     * 
+     *
      * @param params
-     * @return 
+     * @return
      */
     public List<ClienteSucursalDto> getClienteSucursalesByParams(String params) {
         try {
-            List<ClienteSucursalDto> clienteSucursalesDto = converter.getClienteSucursalesDto(em.createNamedQuery("ClienteSucursal.findByParams")
-                    .setParameter("params", ("%" + params.replace(" ", "%") + "%"))
-                    .setMaxResults(10)
-                    .getResultList()
+            List<ClienteSucursalDto> clienteSucursalesDto = converter.getClienteSucursalesDto(
+                    em.createNamedQuery("ClienteSucursal.findByParams")
+                            .setParameter("params", ("%" + params.replace(" ", "%") + "%"))
+                            .setMaxResults(10)
+                            .getResultList()
             );
 
             // TODO: Buscar algun patron de disenho que mejore esto
             // Cargamos las imagenes (si tiene)
-            for ( ClienteSucursalDto clienteSucursalDto : clienteSucursalesDto ) {
-                clienteSucursalDto.setArchivos(
-                        archivoConverter.getArchivoDto(
-                                archivoDao.getArchivo(
-                                        TableReference.CLIENTE_SUCURSAL.getTableName(),
-                                        TableReference.CLIENTE_SUCURSAL.getIdColumnName(),
-                                        clienteSucursalDto.getId().toString()
-                                )
-                        )
-                );
+            for (ClienteSucursalDto clienteSucursalDto : clienteSucursalesDto) {
+                setExtra(clienteSucursalDto);
             }
 
             return clienteSucursalesDto;
@@ -171,6 +156,38 @@ public class ClienteSucursalDao {
             LOG.log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public List<ClienteSucursalDto> getClienteSucursalesByParams(SearchDto params) {
+        if (Util.isEmpty(params.getQuery()) && !Util.isEmpty(params.getCategoryId())) {
+            try {
+                List<ClienteSucursalDto> clienteSucursalesDto = converter.getClienteSucursalesDto(
+                        em.createNamedQuery("ClienteSucursal.findByCategoria")
+                                .setParameter("idCategoria", params.getCategoryId())
+                                .setMaxResults(Constants.SEARCH_ROWS_PER_PAGE)
+                                .setFirstResult(
+                                        Util.isEmpty(params.getPage())
+                                        ? 0
+                                        : Constants.SEARCH_ROWS_PER_PAGE * params.getPage()
+                                )
+                                .getResultList()
+                );
+
+                // TODO: Buscar algun patron de disenho que mejore esto
+                // Cargamos las imagenes (si tiene)
+                for (ClienteSucursalDto clienteSucursalDto : clienteSucursalesDto) {
+                    setExtra(clienteSucursalDto);
+                }
+
+                return clienteSucursalesDto;
+            } catch (NoResultException nre) {
+            } catch (Exception ex) {
+                LOG.log(Level.SEVERE, null, ex);
+            }
+            return null;
+        } else {
+            return getClienteSucursalesByParams(params.getQuery());
+        }
     }
 
     /**
@@ -204,5 +221,63 @@ public class ClienteSucursalDao {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void setExtra(ClienteSucursalDto obj) {
+        // Imagenes
+        obj.setArchivos(getArchivos(obj));
+
+        // Horarios
+        obj.setHorarioAtencion(getHorario(obj));
+
+        // Valoracion
+        obj.setValoracion(getValoracion(obj));
+    }
+
+    private List<ArchivoDto> getArchivos(ClienteSucursalDto obj) {
+        return archivoConverter.getArchivoDto(
+                archivoDao.getArchivo(
+                        TableReference.CLIENTE_SUCURSAL.getTableName(),
+                        TableReference.CLIENTE_SUCURSAL.getIdColumnName(),
+                        obj.getId().toString()
+                )
+        );
+    }
+
+    private String getHorario(ClienteSucursalDto obj) {
+        String horario = "";
+
+        SucursalHorarioCab horarioCab = horarioCabDao.findBySucursal(obj.getId());
+
+        if (!Util.isEmpty(horarioCab)) {
+            if (TipoHorarioDto.TIPOS.DIAS_ESPECIFICOS.getId().equals(
+                    horarioCab.getTipoHorario().getId())) {
+
+                List<SucursalHorarioDet> horarioDets = horarioCab.getSucursalHorariosDets();
+
+                for (SucursalHorarioDet horarioDet : horarioDets) {
+                    horario += horarioDet.getDias() + ", ";
+                    horario += "Desde: " + horarioDet.getHoraDesde() + " ";
+                    horario += "Hasta: " + horarioDet.getHoraHasta();
+                }
+            } else {
+                horario = horarioCab.getTipoHorario().getDescripcion();
+            }
+        } else {
+            horario = "HORARIO NO DISPONIBLE";
+        }
+
+        return horario;
+    }
+
+    private SucursalValoracionCabDto getValoracion(ClienteSucursalDto obj) {
+        try {
+            return valoracionDao.getSucursalValoracionesCabByClienteSucursal(obj.getId()).iterator().next();
+        } catch (NoResultException nre) {
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+
+        return null;
     }
 }

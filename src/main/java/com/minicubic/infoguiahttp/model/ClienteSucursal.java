@@ -41,14 +41,21 @@ import lombok.ToString;
     @NamedQuery(name = "ClienteSucursal.findByCoordenadas", query = "SELECT c FROM ClienteSucursal c WHERE c.coordenadas = :coordenadas"),
     @NamedQuery(name = "ClienteSucursal.findByCliente", query = "SELECT c FROM ClienteSucursal c WHERE c.cliente.id = :clienteId"),
     @NamedQuery(name = "ClienteSucursal.findByParams", 
-            query =     "SELECT DISTINCT c "
-                    +   "FROM   ClienteSucursal c "
-                    +   "WHERE  LOWER(c.cliente.nombreCompleto) LIKE LOWER(:params) "
-                    +   "OR     LOWER(c.cliente.nombreCorto) LIKE LOWER(:params) "
-                    +   "OR     LOWER(c.cliente.descripcionCompleta) LIKE LOWER(:params) "
-                    +   "OR     LOWER(c.cliente.descripcionCorta) LIKE LOWER(:params) "
-                    +   "OR     LOWER(c.nombreSucursal) LIKE LOWER(:params)")
-})
+            query =     "SELECT DISTINCT cs "
+                    +   "FROM   ClienteSucursal cs, ClienteCategoria cc, Categoria c  "
+                    +   "WHERE  (cs.cliente.id = cc.cliente.id AND cc.categoria.id = c.id) "
+                    +   "OR     LOWER(cs.cliente.nombreCompleto) LIKE LOWER(:params) "
+                    +   "OR     LOWER(cs.cliente.nombreCorto) LIKE LOWER(:params) "
+                    +   "OR     LOWER(cs.cliente.descripcionCompleta) LIKE LOWER(:params) "
+                    +   "OR     LOWER(cs.cliente.descripcionCorta) LIKE LOWER(:params) "
+                    +   "OR     LOWER(cs.nombreSucursal) LIKE LOWER(:params) "
+                    +   "OR     LOWER(c.descripcion) LIKE LOWER(:params)"),
+    @NamedQuery(name = "ClienteSucursal.findByCategoria", 
+            query =     "SELECT DISTINCT cs "
+                    +   "FROM   ClienteSucursal cs, ClienteCategoria cc, Categoria c  "
+                    +   "WHERE  (cs.cliente.id = cc.cliente.id AND cc.categoria.id = c.id)"
+                    +   "AND    c.id = :idCategoria")
+ })
 @ToString
 @EqualsAndHashCode
 public class ClienteSucursal implements Serializable {

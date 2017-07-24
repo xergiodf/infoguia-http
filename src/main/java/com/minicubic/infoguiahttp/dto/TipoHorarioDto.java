@@ -26,4 +26,19 @@ public class TipoHorarioDto {
     @Getter 
     @Setter 
     private String descripcion; 
+    
+    public enum TIPOS {
+        
+        NO_DISPONIBLE(1),
+        SIEMPRE_ABIERTO(2),
+        CERRADO_DEFINITIVAMENTE(3),
+        DIAS_ESPECIFICOS(4);
+        
+        @Getter
+        private Integer id;
+        
+        private TIPOS(Integer id) {
+            this.id = id;
+        }
+    }
 } 

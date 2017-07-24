@@ -1,8 +1,8 @@
 package com.minicubic.infoguiahttp.model;
 
 import java.io.Serializable; 
-import java.util.Collection; 
 import java.util.Date; 
+import java.util.List;
 import javax.persistence.CascadeType; 
 import javax.persistence.Column; 
 import javax.persistence.Entity; 
@@ -76,13 +76,13 @@ public class SucursalHorarioCab implements Serializable {
     private Date auditFechaUpdate; 
      
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sucursalHorarioCab", fetch = FetchType.LAZY) 
-    private Collection<SucursalHorarioDet> sucursalHorariosDets; 
+    private List<SucursalHorarioDet> sucursalHorariosDets; 
  
     @XmlTransient 
-    public Collection<SucursalHorarioDet> getSucursalHorariosDets() { 
+    public List<SucursalHorarioDet> getSucursalHorariosDets() { 
         return sucursalHorariosDets; 
     } 
-    public void setSucursalHorariosDetList(Collection<SucursalHorarioDet> sucursalHorariosDets) { 
+    public void setSucursalHorariosDetList(List<SucursalHorarioDet> sucursalHorariosDets) { 
         this.sucursalHorariosDets = sucursalHorariosDets; 
     } 
 } 
