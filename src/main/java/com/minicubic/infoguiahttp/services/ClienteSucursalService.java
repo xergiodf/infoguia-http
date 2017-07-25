@@ -5,8 +5,11 @@ import com.minicubic.infoguiahttp.dao.ClienteSucursalDao;
 import com.minicubic.infoguiahttp.dto.CategoriaDto;
 import com.minicubic.infoguiahttp.dto.ClienteCategoriaDto;
 import com.minicubic.infoguiahttp.dto.ClienteSucursalDto;
-import com.minicubic.infoguiahttp.dto.SearchDto;
+import com.minicubic.infoguiahttp.dto.PagedResponseDto;
+import com.minicubic.infoguiahttp.dto.SearchRequestDto;
 import com.minicubic.infoguiahttp.dto.SucursalCategoriaDto;
+import com.minicubic.infoguiahttp.util.Constants;
+import com.minicubic.infoguiahttp.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -86,12 +89,15 @@ public class ClienteSucursalService {
 //        return sucursalCategoriasDto;
 //    }
     
-    public List<SucursalCategoriaDto> getClienteSucursalesByParams(SearchDto params) {
+    public PagedResponseDto getClienteSucursalesByParams(SearchRequestDto params) {
         SucursalCategoriaDto sucursalCategoriaDto = null;
         List<ClienteCategoriaDto> clienteCategoriasDto = null;
         List<SucursalCategoriaDto> sucursalCategoriasDto = new ArrayList<>();
+        PagedResponseDto<SucursalCategoriaDto> response = new PagedResponseDto<>();
         
         List<ClienteSucursalDto> clienteSucursalesDto = dao.getClienteSucursalesByParams(params);
+        Integer total = dao.getCantidadClienteSucursalesByParams(params);
+        Integer page = Util.isEmpty(params.getPage()) ? 0 : params.getPage();
 
         for (ClienteSucursalDto clienteSucursalDto : clienteSucursalesDto) {
             sucursalCategoriaDto = new SucursalCategoriaDto();
@@ -106,7 +112,14 @@ public class ClienteSucursalService {
             sucursalCategoriasDto.add(sucursalCategoriaDto);
         }
         
-        return sucursalCategoriasDto;
+        response.setPage(page);
+        response.setNext(page + 1);
+        response.setPrevious(page - 1);
+        response.setCurrent(Constants.SEARCH_ROWS_PER_PAGE * page + Constants.SEARCH_ROWS_PER_PAGE);
+        response.setTotal(total);
+        response.setResult(sucursalCategoriasDto);
+        
+        return response;
     }
 
     /**

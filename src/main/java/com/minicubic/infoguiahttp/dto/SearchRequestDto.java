@@ -17,7 +17,7 @@ import lombok.ToString;
 @XmlAccessorType(XmlAccessType.FIELD)
 @ToString
 @EqualsAndHashCode
-public class SearchDto {
+public class SearchRequestDto {
     
     @Getter
     @Setter
@@ -25,7 +25,7 @@ public class SearchDto {
     
     @Getter
     @Setter
-    private Integer idCiudad;
+    private Integer cityId;
     
     @Getter
     @Setter

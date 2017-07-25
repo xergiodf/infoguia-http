@@ -8,7 +8,7 @@ import com.minicubic.infoguiahttp.util.converter.ArchivoConverter;
 import com.minicubic.infoguiahttp.util.converter.ClienteSucursalConverter;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import com.minicubic.infoguiahttp.dto.ArchivoDto;
-import com.minicubic.infoguiahttp.dto.SearchDto;
+import com.minicubic.infoguiahttp.dto.SearchRequestDto;
 import com.minicubic.infoguiahttp.dto.SucursalValoracionCabDto;
 import com.minicubic.infoguiahttp.dto.TipoHorarioDto;
 import com.minicubic.infoguiahttp.model.SucursalHorarioCab;
@@ -17,6 +17,7 @@ import com.minicubic.infoguiahttp.util.Constants;
 import com.minicubic.infoguiahttp.util.Util;
 import com.minicubic.infoguiahttp.util.converter.SucursalValoracionConverter;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -130,25 +131,37 @@ public class ClienteSucursalDao {
         return null;
     }
 
-    /**
-     *
-     * @param params
-     * @param page
-     * @return
-     */
-    public List<ClienteSucursalDto> getClienteSucursalesByParams(String params, Integer page) {
+    public List<ClienteSucursalDto> getClienteSucursalesByParams(SearchRequestDto params) {
+        List<ClienteSucursalDto> clienteSucursalesDto = new ArrayList<>();
+
         try {
-            List<ClienteSucursalDto> clienteSucursalesDto = converter.getClienteSucursalesDto(
-                    em.createNamedQuery("ClienteSucursal.findByParams")
-                            .setParameter("params", ("%" + params.replace(" ", "%") + "%"))
-                            .setMaxResults(Constants.SEARCH_ROWS_PER_PAGE)
+            if (Util.isEmpty(params.getQuery()) && !Util.isEmpty(params.getCategoryId())) {
+
+                clienteSucursalesDto = converter.getClienteSucursalesDto(
+                        em.createNamedQuery("ClienteSucursal.findByCategoria")
+                                .setParameter("idCategoria", params.getCategoryId())
+                                .setMaxResults(Constants.SEARCH_ROWS_PER_PAGE)
                                 .setFirstResult(
-                                        Util.isEmpty(page)
+                                        Util.isEmpty(params.getPage())
                                         ? 0
-                                        : Constants.SEARCH_ROWS_PER_PAGE * page
+                                        : Constants.SEARCH_ROWS_PER_PAGE * params.getPage()
                                 )
                                 .getResultList()
-            );
+                );
+
+            } else {
+                clienteSucursalesDto = converter.getClienteSucursalesDto(
+                        em.createNamedQuery("ClienteSucursal.findByParams")
+                                .setParameter("params", ("%" + params.getQuery().replace(" ", "%") + "%"))
+                                .setMaxResults(Constants.SEARCH_ROWS_PER_PAGE)
+                                .setFirstResult(
+                                        Util.isEmpty(params.getPage()   )
+                                        ? 0
+                                        : Constants.SEARCH_ROWS_PER_PAGE * params.getPage()
+                                )
+                                .getResultList()
+                );
+            }
 
             // TODO: Buscar algun patron de disenho que mejore esto
             // Cargamos las imagenes (si tiene)
@@ -163,37 +176,34 @@ public class ClienteSucursalDao {
         }
         return null;
     }
+    
+    public Integer getCantidadClienteSucursalesByParams(SearchRequestDto params) {
+        List<ClienteSucursalDto> clienteSucursalesDto = new ArrayList<>();
+        
+        try {
+            if (Util.isEmpty(params.getQuery()) && !Util.isEmpty(params.getCategoryId())) {
 
-    public List<ClienteSucursalDto> getClienteSucursalesByParams(SearchDto params) {
-        if (Util.isEmpty(params.getQuery()) && !Util.isEmpty(params.getCategoryId())) {
-            try {
-                List<ClienteSucursalDto> clienteSucursalesDto = converter.getClienteSucursalesDto(
+                clienteSucursalesDto = converter.getClienteSucursalesDto(
                         em.createNamedQuery("ClienteSucursal.findByCategoria")
                                 .setParameter("idCategoria", params.getCategoryId())
-                                .setMaxResults(Constants.SEARCH_ROWS_PER_PAGE)
-                                .setFirstResult(
-                                        Util.isEmpty(params.getPage())
-                                        ? 0
-                                        : Constants.SEARCH_ROWS_PER_PAGE * params.getPage()
-                                )
                                 .getResultList()
                 );
 
-                // TODO: Buscar algun patron de disenho que mejore esto
-                // Cargamos las imagenes (si tiene)
-                for (ClienteSucursalDto clienteSucursalDto : clienteSucursalesDto) {
-                    setExtra(clienteSucursalDto);
-                }
-
-                return clienteSucursalesDto;
-            } catch (NoResultException nre) {
-            } catch (Exception ex) {
-                LOG.log(Level.SEVERE, null, ex);
+            } else {
+                clienteSucursalesDto = converter.getClienteSucursalesDto(
+                        em.createNamedQuery("ClienteSucursal.findByParams")
+                                .setParameter("params", ("%" + params.getQuery().replace(" ", "%") + "%"))
+                                .setMaxResults(Constants.SEARCH_ROWS_PER_PAGE)
+                                .getResultList()
+                );
             }
-            return null;
-        } else {
-            return getClienteSucursalesByParams(params.getQuery(), params.getPage());
+
+            return clienteSucursalesDto.size();
+        } catch (NoResultException nre) {
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
     /**

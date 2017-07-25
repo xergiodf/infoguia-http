@@ -1,7 +1,7 @@
 package com.minicubic.infoguiahttp;
 
 import com.minicubic.infoguiahttp.annotations.Secured;
-import com.minicubic.infoguiahttp.dto.SearchDto;
+import com.minicubic.infoguiahttp.dto.SearchRequestDto;
 import com.minicubic.infoguiahttp.services.ClienteSucursalService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -60,7 +60,7 @@ public class SearchRest {
         @ApiResponse(code = 406, message = "Error de Validacion"),
         @ApiResponse(code = 400, message = "Error generico"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response searchClientesFiltros(SearchDto searchDto) {
+    public Response searchClientesFiltros(SearchRequestDto searchDto) {
         return Response.ok().entity(clienteSucursalService.getClienteSucursalesByParams(searchDto)).build();
     }
 }
