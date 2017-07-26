@@ -116,6 +116,7 @@ public class SucursalValoracionDao {
                 SucursalValoracionDet sucursalValoracionDetDB;
                 try {
                     sucursalValoracionDetDB = (SucursalValoracionDet) em.createNamedQuery("SucursalValoracionDet.findByUsuario")
+                            .setParameter("idCab", sucursalValoracionCabBD.getId())
                             .setParameter("idUsuario", sucursalValoracionCabDto.getSucursalValoracionesDetDto().iterator().next().getUsuarioDto().getId())
                             .getSingleResult();
                 } catch (NoResultException nre) {

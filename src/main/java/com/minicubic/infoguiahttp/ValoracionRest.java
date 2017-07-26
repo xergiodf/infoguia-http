@@ -1,11 +1,13 @@
 package com.minicubic.infoguiahttp;
 
+import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import com.minicubic.infoguiahttp.dto.SucursalValoracionCabDto;
 import com.minicubic.infoguiahttp.dto.ValidatorResponse;
 import com.minicubic.infoguiahttp.util.Constants;
 import com.minicubic.infoguiahttp.util.Util;
 import com.minicubic.infoguiahttp.util.Validator;
 import com.minicubic.infoguiahttp.annotations.Secured;
+import com.minicubic.infoguiahttp.dto.UsuarioDto;
 import com.minicubic.infoguiahttp.services.SucursalValoracionService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -20,7 +22,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -38,6 +39,10 @@ import javax.ws.rs.core.Response;
 @Api(value = "/valoraciones", description = "REST Service de Valoraciones")
 public class ValoracionRest {
 
+    @LoggedIn
+    @Inject
+    private UsuarioDto usuarioLogueado;
+    
     @Inject
     private SucursalValoracionService service;
 
@@ -107,6 +112,7 @@ public class ValoracionRest {
                 return Response.status(Response.Status.NOT_ACCEPTABLE).entity(validatorResponse.getMensaje()).build();
             }
 
+            valoracionParam.getSucursalValoracionesDetDto().iterator().next().setUsuarioDto(usuarioLogueado);
             valoracionParam = service.saveSucursalValoracionCab(valoracionParam);
 
             if (Util.isEmpty(valoracionParam)) {
@@ -122,29 +128,29 @@ public class ValoracionRest {
         }
     }
 
-    @PUT
-    @Secured
-    @Path("/update")
-    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
-    @ApiOperation(value = "Actualiza un registro de Valoracions en base a un ID")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "OK"),
-        @ApiResponse(code = 400, message = "Error Generico"),
-        @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response updateValoracion(SucursalValoracionCabDto valoracionParam) {
-        LOG.log(Level.INFO, "Actualizando valoracion por id: {0}", new Object[]{valoracionParam.getId()});
-
-        try {
-
-            valoracionParam = service.saveSucursalValoracionCab(valoracionParam);
-
-            LOG.log(Level.INFO, "Valoracion {0} actualizado correctamente.", valoracionParam.getId());
-            return Response.ok().entity(valoracionParam).build();
-        } catch (Exception ex) {
-            LOG.log(Level.SEVERE, null, ex);
-            return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
-        }
-    }
+//    @PUT
+//    @Secured
+//    @Path("/update")
+//    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
+//    @ApiOperation(value = "Actualiza un registro de Valoracions en base a un ID")
+//    @ApiResponses(value = {
+//        @ApiResponse(code = 200, message = "OK"),
+//        @ApiResponse(code = 400, message = "Error Generico"),
+//        @ApiResponse(code = 500, message = "Something wrong in Server")})
+//    public Response updateValoracion(SucursalValoracionCabDto valoracionParam) {
+//        LOG.log(Level.INFO, "Actualizando valoracion por id: {0}", new Object[]{valoracionParam.getId()});
+//
+//        try {
+//
+//            valoracionParam = service.saveSucursalValoracionCab(valoracionParam);
+//
+//            LOG.log(Level.INFO, "Valoracion {0} actualizado correctamente.", valoracionParam.getId());
+//            return Response.ok().entity(valoracionParam).build();
+//        } catch (Exception ex) {
+//            LOG.log(Level.SEVERE, null, ex);
+//            return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
+//        }
+//    }
 
     @DELETE
     @Secured

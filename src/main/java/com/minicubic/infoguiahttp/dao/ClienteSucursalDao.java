@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -177,28 +178,33 @@ public class ClienteSucursalDao {
         return null;
     }
     
-    public Integer getCantidadClienteSucursalesByParams(SearchRequestDto params) {
-        List<ClienteSucursalDto> clienteSucursalesDto = new ArrayList<>();
+    public Long getCantidadClienteSucursalesByParams(SearchRequestDto params) {
+        //List<ClienteSucursalDto> clienteSucursalesDto = new ArrayList<>();
+        TypedQuery<Long> query = null;
         
         try {
             if (Util.isEmpty(params.getQuery()) && !Util.isEmpty(params.getCategoryId())) {
 
-                clienteSucursalesDto = converter.getClienteSucursalesDto(
-                        em.createNamedQuery("ClienteSucursal.findByCategoria")
-                                .setParameter("idCategoria", params.getCategoryId())
-                                .getResultList()
-                );
-
+//                clienteSucursalesDto = converter.getClienteSucursalesDto(
+//                        em.createNamedQuery("ClienteSucursal.findByCategoria")
+//                                .setParameter("idCategoria", params.getCategoryId())
+//                                .getResultList()
+//                );
+                query = em.createNamedQuery("ClienteSucursal.findByCategoria.count", Long.class);
+                query.setParameter("idCategoria", params.getCategoryId());
+                
             } else {
-                clienteSucursalesDto = converter.getClienteSucursalesDto(
-                        em.createNamedQuery("ClienteSucursal.findByParams")
-                                .setParameter("params", ("%" + params.getQuery().replace(" ", "%") + "%"))
-                                .setMaxResults(Constants.SEARCH_ROWS_PER_PAGE)
-                                .getResultList()
-                );
+//                clienteSucursalesDto = converter.getClienteSucursalesDto(
+//                        em.createNamedQuery("ClienteSucursal.findByParams")
+//                                .setParameter("params", ("%" + params.getQuery().replace(" ", "%") + "%"))
+//                                .getResultList()
+//                );
+                query = em.createNamedQuery("ClienteSucursal.findByParams.count", Long.class);
+                query.setParameter("params", ("%" + params.getQuery().replace(" ", "%") + "%"));
             }
 
-            return clienteSucursalesDto.size();
+            //return clienteSucursalesDto.size();
+            return query.getSingleResult();
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);

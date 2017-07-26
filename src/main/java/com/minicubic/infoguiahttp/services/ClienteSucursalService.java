@@ -96,7 +96,7 @@ public class ClienteSucursalService {
         PagedResponseDto<SucursalCategoriaDto> response = new PagedResponseDto<>();
         
         List<ClienteSucursalDto> clienteSucursalesDto = dao.getClienteSucursalesByParams(params);
-        Integer total = dao.getCantidadClienteSucursalesByParams(params);
+        //Long total = dao.getCantidadClienteSucursalesByParams(params);
         Integer page = Util.isEmpty(params.getPage()) ? 0 : params.getPage();
 
         for (ClienteSucursalDto clienteSucursalDto : clienteSucursalesDto) {
@@ -116,7 +116,7 @@ public class ClienteSucursalService {
         response.setNext(page + 1);
         response.setPrevious(page - 1);
         response.setCurrent(Constants.SEARCH_ROWS_PER_PAGE * page + Constants.SEARCH_ROWS_PER_PAGE);
-        response.setTotal(total);
+        //response.setTotal(total.intValue());
         response.setResult(sucursalCategoriasDto);
         
         return response;

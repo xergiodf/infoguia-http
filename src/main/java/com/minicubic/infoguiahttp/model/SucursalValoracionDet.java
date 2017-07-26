@@ -32,7 +32,7 @@ import lombok.ToString;
 @NamedQueries({
     @NamedQuery(name = "SucursalValoracionDet.findAll", query = "SELECT s FROM SucursalValoracionDet s"), 
     @NamedQuery(name = "SucursalValoracionDet.findById", query = "SELECT s FROM SucursalValoracionDet s WHERE s.id = :id"), 
-    @NamedQuery(name = "SucursalValoracionDet.findByUsuario", query = "SELECT s FROM SucursalValoracionDet s WHERE s.usuario.id = :idUsuario"), 
+    @NamedQuery(name = "SucursalValoracionDet.findByUsuario", query = "SELECT s FROM SucursalValoracionDet s WHERE s.sucursalValoracionCab.id = :idCab AND s.usuario.id = :idUsuario"), 
     @NamedQuery(name = "SucursalValoracionDet.findByAuditUsuario", query = "SELECT s FROM SucursalValoracionDet s WHERE s.auditUsuario = :auditUsuario"), 
     @NamedQuery(name = "SucursalValoracionDet.findByAuditFechaInsert", query = "SELECT s FROM SucursalValoracionDet s WHERE s.auditFechaInsert = :auditFechaInsert"), 
     @NamedQuery(name = "SucursalValoracionDet.findByAuditFechaUpdate", query = "SELECT s FROM SucursalValoracionDet s WHERE s.auditFechaUpdate = :auditFechaUpdate")})

@@ -29,6 +29,10 @@ public class SearchRequestDto {
     
     @Getter
     @Setter
+    private Integer idCiudad;
+    
+    @Getter
+    @Setter
     private Integer categoryId;
     
     @Getter

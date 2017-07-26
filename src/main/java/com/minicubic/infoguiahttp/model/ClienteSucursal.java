@@ -54,6 +54,21 @@ import lombok.ToString;
             query =     "SELECT DISTINCT cs "
                     +   "FROM   ClienteSucursal cs, ClienteCategoria cc, Categoria c  "
                     +   "WHERE  (cs.cliente.id = cc.cliente.id AND cc.categoria.id = c.id)"
+                    +   "AND    c.id = :idCategoria"),
+    @NamedQuery(name = "ClienteSucursal.findByParams.count", 
+            query =     "SELECT count(DISTINCT cs) "
+                    +   "FROM   ClienteSucursal cs, ClienteCategoria cc, Categoria c  "
+                    +   "WHERE  (cs.cliente.id = cc.cliente.id AND cc.categoria.id = c.id) "
+                    +   "OR     LOWER(cs.cliente.nombreCompleto) LIKE LOWER(:params) "
+                    +   "OR     LOWER(cs.cliente.nombreCorto) LIKE LOWER(:params) "
+                    +   "OR     LOWER(cs.cliente.descripcionCompleta) LIKE LOWER(:params) "
+                    +   "OR     LOWER(cs.cliente.descripcionCorta) LIKE LOWER(:params) "
+                    +   "OR     LOWER(cs.nombreSucursal) LIKE LOWER(:params) "
+                    +   "OR     LOWER(c.descripcion) LIKE LOWER(:params)"),
+    @NamedQuery(name = "ClienteSucursal.findByCategoria.count", 
+            query =     "SELECT count(DISTINCT cs) "
+                    +   "FROM   ClienteSucursal cs, ClienteCategoria cc, Categoria c  "
+                    +   "WHERE  (cs.cliente.id = cc.cliente.id AND cc.categoria.id = c.id)"
                     +   "AND    c.id = :idCategoria")
  })
 @ToString
