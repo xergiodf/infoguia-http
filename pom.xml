@@ -4,8 +4,8 @@
 
     <groupId>com.minicubic</groupId>
     <artifactId>infoguia-http</artifactId>
-    <!-- SearchDto -->
-    <version>2.7.3</version>
+    <!-- Favoritos y Lista Deseo -->
+    <version>2.8.0</version>
     <packaging>war</packaging>
 
     <name>infoguia-http</name>

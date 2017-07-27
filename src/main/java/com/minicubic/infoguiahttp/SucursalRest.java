@@ -511,12 +511,13 @@ public class SucursalRest {
     }
     
 
-//  ███████╗ █████╗ ██╗   ██╗ ██████╗ ██████╗ ██╗████████╗ ██████╗ 
-//  ██╔════╝██╔══██╗██║   ██║██╔═══██╗██╔══██╗██║╚══██╔══╝██╔═══██╗
-//  █████╗  ███████║██║   ██║██║   ██║██████╔╝██║   ██║   ██║   ██║
-//  ██╔══╝  ██╔══██║╚██╗ ██╔╝██║   ██║██╔══██╗██║   ██║   ██║   ██║
-//  ██║     ██║  ██║ ╚████╔╝ ╚██████╔╝██║  ██║██║   ██║   ╚██████╔╝
-//  ╚═╝     ╚═╝  ╚═╝  ╚═══╝   ╚═════╝ ╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝ 
+
+//  ███████╗ █████╗ ██╗   ██╗ ██████╗ ██████╗ ██╗████████╗ ██████╗ ███████╗
+//  ██╔════╝██╔══██╗██║   ██║██╔═══██╗██╔══██╗██║╚══██╔══╝██╔═══██╗██╔════╝
+//  █████╗  ███████║██║   ██║██║   ██║██████╔╝██║   ██║   ██║   ██║███████╗
+//  ██╔══╝  ██╔══██║╚██╗ ██╔╝██║   ██║██╔══██╗██║   ██║   ██║   ██║╚════██║
+//  ██║     ██║  ██║ ╚████╔╝ ╚██████╔╝██║  ██║██║   ██║   ╚██████╔╝███████║
+//  ╚═╝     ╚═╝  ╚═╝  ╚═══╝   ╚═════╝ ╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝ ╚══════╝
 // http://patorjk.com/software/taag/#p=display&c=c%2B%2B&f=ANSI%20Shadow&t=favorito                                                                
 
     @POST
@@ -530,26 +531,57 @@ public class SucursalRest {
         @ApiResponse(code = 400, message = "Error generico"),
         @ApiResponse(code = 500, message = "Something wrong in Server")})
     public Response createFavorito(@PathParam("idClienteSucursal") String idClienteSucursal) {
-        LOG.log(Level.INFO, "Creando lista de deseo");
-        
+        return createUsuarioAccion(idClienteSucursal, com.minicubic.infoguiahttp.enums.TipoAccion.FAVORITO);
+    }
+
+    @DELETE
+    @Secured
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
+    @Path("/favoritos/{idClienteSucursal}")
+    @ApiOperation(value = "Elimina un favorito.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 403, message = "No tiene permisos suficientes"),
+        @ApiResponse(code = 400, message = "Error generico"),
+        @ApiResponse(code = 500, message = "Something wrong in Server")})
+    public Response removeFavorito(@PathParam("idClienteSucursal") String idClienteSucursal) {
+        return removeUsuarioAccion(idClienteSucursal, com.minicubic.infoguiahttp.enums.TipoAccion.FAVORITO);
+    }
+
+    @GET
+    @Secured
+    @Path("/favoritos")
+    @PermitAll
+    @ApiOperation(value = "Obtiene una lista de favoritos.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 403, message = "No tiene permisos suficientes"),
+        @ApiResponse(code = 400, message = "Error generico"),
+        @ApiResponse(code = 500, message = "Something wrong in Server")})
+    public Response findFavoritos() {
+        return findUsuarioAccions(com.minicubic.infoguiahttp.enums.TipoAccion.FAVORITO);
+    }
+    
+    private Response createUsuarioAccion(String idRef, com.minicubic.infoguiahttp.enums.TipoAccion tipoAccionEnum) {
+        LOG.log(Level.INFO, "Insertando UsuarioAccion {0}", tipoAccionEnum.toString());
         try {
             
             // Creamos el registro
             TipoAccion tipoAccion = new TipoAccion();
-            tipoAccion.setId(com.minicubic.infoguiahttp.enums.TipoAccion.FAVORITO.getId());
+            tipoAccion.setId(tipoAccionEnum.getId());
             
             UsuarioAccion usuarioAccion = new UsuarioAccion();
             usuarioAccion.setUsuario(new UsuarioConverter().getUsuario(usuarioLogueado));
             usuarioAccion.setTipoAccion(tipoAccion);
             usuarioAccion.setTablaRef(TableReference.CLIENTE_SUCURSAL.getTableName());
             usuarioAccion.setColRef(TableReference.CLIENTE_SUCURSAL.getIdColumnName());
-            usuarioAccion.setIdRef(idClienteSucursal);
+            usuarioAccion.setIdRef(idRef);
             
             if (favoritoDao.findByAllParams(usuarioAccion).isEmpty()) {
                 favoritoDao.create(usuarioAccion);
             }
             
-            LOG.log(Level.INFO, "Favorito agregado correctamente");
+            LOG.log(Level.INFO, "UsuarioAccion agregado correctamente");
             
             return findFavoritos();
         } catch (Exception ex) {
@@ -557,51 +589,44 @@ public class SucursalRest {
             return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
         }
     }
+    
+    private Response removeUsuarioAccion(String idRef, com.minicubic.infoguiahttp.enums.TipoAccion tipoAccionEnum) {
+        LOG.log(Level.INFO, "Eliminando UsuarioAccion {0}", tipoAccionEnum.toString());
+        
+        try {
 
-//    @DELETE
-//    @Secured
-//    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
-//    @Path("/favoritos/{idSucursal}")
-//    @ApiOperation(value = "Elimina un favorito.")
-//    @ApiResponses(value = {
-//        @ApiResponse(code = 200, message = "OK"),
-//        @ApiResponse(code = 403, message = "No tiene permisos suficientes"),
-//        @ApiResponse(code = 400, message = "Error generico"),
-//        @ApiResponse(code = 500, message = "Something wrong in Server")})
-//    public Response removeFavorito(@PathParam("idSucursal") Integer idSucursal) {
-//        LOG.log(Level.INFO, "Eliminando Favorito por ID {0}", idSucursal);
-//        
-//        try {
-//
-//            List<UsuarioAc
-//            
-//            favoritoDao.delete(id);
-//            
-//            LOG.log(Level.INFO, "Favorito borrado correctamente");
-//            
-//            return Response.ok().build();
-//        } catch (Exception ex) {
-//            LOG.log(Level.SEVERE, null, ex);
-//            return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
-//        }
-//    }
-
-    @GET
-    @Secured
-    @Path("/favoritos")
-    @PermitAll
-    @ApiOperation(value = "Obtiene una lista de horarios.")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "OK"),
-        @ApiResponse(code = 403, message = "No tiene permisos suficientes"),
-        @ApiResponse(code = 400, message = "Error generico"),
-        @ApiResponse(code = 500, message = "Something wrong in Server")})
-    public Response findFavoritos() {
+            // Creamos el registro
+            TipoAccion tipoAccion = new TipoAccion();
+            tipoAccion.setId(tipoAccionEnum.getId());
+            
+            UsuarioAccion usuarioAccion = new UsuarioAccion();
+            usuarioAccion.setUsuario(new UsuarioConverter().getUsuario(usuarioLogueado));
+            usuarioAccion.setTipoAccion(tipoAccion);
+            usuarioAccion.setTablaRef(TableReference.CLIENTE_SUCURSAL.getTableName());
+            usuarioAccion.setColRef(TableReference.CLIENTE_SUCURSAL.getIdColumnName());
+            usuarioAccion.setIdRef(idRef);
+            
+            List<UsuarioAccion> list = favoritoDao.findByAllParams(usuarioAccion);
+            
+            if (!list.isEmpty()) {
+                usuarioAccion = list.iterator().next();
+                favoritoDao.delete(usuarioAccion.getId());
+                
+                LOG.log(Level.INFO, "UsuarioAccion borrado correctamente");
+            }            
+            
+            return Response.ok().build();
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
+        }
+    }
+    
+    private Response findUsuarioAccions(com.minicubic.infoguiahttp.enums.TipoAccion tipoAccionEnum) {
         try {
             
             List<UsuarioAccion> favoritoList = favoritoDao
-                    .findByUsuarioTipoAccion(usuarioLogueado.getId(), 
-                            com.minicubic.infoguiahttp.enums.TipoAccion.FAVORITO.getId());
+                    .findByUsuarioTipoAccion(usuarioLogueado.getId(), tipoAccionEnum.getId());
             
             ClienteSucursalDto clienteFavorito;
             FavoritoDto favoritoDto = new FavoritoDto();

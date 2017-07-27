@@ -9,12 +9,20 @@ import com.minicubic.infoguiahttp.util.Util;
 import com.minicubic.infoguiahttp.util.Validator;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
 import com.minicubic.infoguiahttp.annotations.Secured;
+import com.minicubic.infoguiahttp.dao.UsuarioAccionDao;
+import com.minicubic.infoguiahttp.dto.ListaDeseoDto;
+import com.minicubic.infoguiahttp.enums.TableReference;
+import com.minicubic.infoguiahttp.model.TipoAccion;
+import com.minicubic.infoguiahttp.model.UsuarioAccion;
 import com.minicubic.infoguiahttp.services.ArchivoService;
 import com.minicubic.infoguiahttp.services.ClientePublicacionService;
+import com.minicubic.infoguiahttp.util.converter.UsuarioConverter;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.security.PermitAll;
@@ -52,6 +60,9 @@ public class PublicacionRest {
     
     @Inject
     private ArchivoService archivoService;
+    
+    @Inject
+    private UsuarioAccionDao listaDeseoDao;
 
     private static final Logger LOG = Logger.getLogger("ClientePublicacionesRest");
 
@@ -264,5 +275,137 @@ public class PublicacionRest {
             LOG.log(Level.SEVERE, null, ex);
             return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
         }        
+    }
+    
+//  ██╗     ██╗███████╗████████╗ █████╗     ██████╗ ███████╗███████╗███████╗ ██████╗ 
+//  ██║     ██║██╔════╝╚══██╔══╝██╔══██╗    ██╔══██╗██╔════╝██╔════╝██╔════╝██╔═══██╗
+//  ██║     ██║███████╗   ██║   ███████║    ██║  ██║█████╗  ███████╗█████╗  ██║   ██║
+//  ██║     ██║╚════██║   ██║   ██╔══██║    ██║  ██║██╔══╝  ╚════██║██╔══╝  ██║   ██║
+//  ███████╗██║███████║   ██║   ██║  ██║    ██████╔╝███████╗███████║███████╗╚██████╔╝
+//  ╚══════╝╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝    ╚═════╝ ╚══════╝╚══════╝╚══════╝ ╚═════╝ 
+// http://patorjk.com/software/taag/#p=display&c=c%2B%2B&f=ANSI%20Shadow&t=lista%20deseo                                                                                  
+    
+    @POST
+    @Secured
+    @Path("/listaDeseos/{idClientePublicacion}")
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
+    @ApiOperation(value = "Marca como lista de deseo una publicacion.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 403, message = "No tiene permisos suficientes"),
+        @ApiResponse(code = 400, message = "Error generico"),
+        @ApiResponse(code = 500, message = "Something wrong in Server")})
+    public Response createListaDeseo(@PathParam("idClientePublicacion") String idClientePublicacion) {
+        return createUsuarioAccion(idClientePublicacion, com.minicubic.infoguiahttp.enums.TipoAccion.LISTA_DESEO);
+    }
+
+    @DELETE
+    @Secured
+    @RolesAllowed(Constants.DB_USR_TIPO_ADMIN_ID)
+    @Path("/listaDeseos/{idClientePublicacion}")
+    @ApiOperation(value = "Elimina un item de la lista de deseo.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 403, message = "No tiene permisos suficientes"),
+        @ApiResponse(code = 400, message = "Error generico"),
+        @ApiResponse(code = 500, message = "Something wrong in Server")})
+    public Response removeListaDeseo(@PathParam("idClientePublicacion") String idClientePublicacion) {
+        return removeUsuarioAccion(idClientePublicacion, com.minicubic.infoguiahttp.enums.TipoAccion.LISTA_DESEO);
+    }
+
+    @GET
+    @Secured
+    @Path("/listaDeseos")
+    @PermitAll
+    @ApiOperation(value = "Obtiene una lista de deseos.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 403, message = "No tiene permisos suficientes"),
+        @ApiResponse(code = 400, message = "Error generico"),
+        @ApiResponse(code = 500, message = "Something wrong in Server")})
+    public Response findListaDeseos() {
+        return findUsuarioAccions(com.minicubic.infoguiahttp.enums.TipoAccion.LISTA_DESEO);
+    }
+    
+    private Response createUsuarioAccion(String idRef, com.minicubic.infoguiahttp.enums.TipoAccion tipoAccionEnum) {
+        LOG.log(Level.INFO, "Insertando UsuarioAccion {0}", tipoAccionEnum.toString());
+        try {
+            
+            // Creamos el registro
+            TipoAccion tipoAccion = new TipoAccion();
+            tipoAccion.setId(tipoAccionEnum.getId());
+            
+            UsuarioAccion usuarioAccion = new UsuarioAccion();
+            usuarioAccion.setUsuario(new UsuarioConverter().getUsuario(usuarioLogueado));
+            usuarioAccion.setTipoAccion(tipoAccion);
+            usuarioAccion.setTablaRef(TableReference.CLIENTE_PUBLICACION.getTableName());
+            usuarioAccion.setColRef(TableReference.CLIENTE_PUBLICACION.getIdColumnName());
+            usuarioAccion.setIdRef(idRef);
+            
+            if (listaDeseoDao.findByAllParams(usuarioAccion).isEmpty()) {
+                listaDeseoDao.create(usuarioAccion);
+            }
+            
+            LOG.log(Level.INFO, "UsuarioAccion agregado correctamente");
+            
+            return findListaDeseos();
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
+        }
+    }
+    
+    private Response removeUsuarioAccion(String idRef, com.minicubic.infoguiahttp.enums.TipoAccion tipoAccionEnum) {
+        LOG.log(Level.INFO, "Eliminando UsuarioAccion {0}", tipoAccionEnum.toString());
+        
+        try {
+
+            // Creamos el registro
+            TipoAccion tipoAccion = new TipoAccion();
+            tipoAccion.setId(tipoAccionEnum.getId());
+            
+            UsuarioAccion usuarioAccion = new UsuarioAccion();
+            usuarioAccion.setUsuario(new UsuarioConverter().getUsuario(usuarioLogueado));
+            usuarioAccion.setTipoAccion(tipoAccion);
+            usuarioAccion.setTablaRef(TableReference.CLIENTE_PUBLICACION.getTableName());
+            usuarioAccion.setColRef(TableReference.CLIENTE_PUBLICACION.getIdColumnName());
+            usuarioAccion.setIdRef(idRef);
+            
+            List<UsuarioAccion> list = listaDeseoDao.findByAllParams(usuarioAccion);
+            
+            if (!list.isEmpty()) {
+                usuarioAccion = list.iterator().next();
+                listaDeseoDao.delete(usuarioAccion.getId());
+                
+                LOG.log(Level.INFO, "UsuarioAccion borrado correctamente");
+            }            
+            
+            return Response.ok().build();
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
+        }
+    }
+    
+    private Response findUsuarioAccions(com.minicubic.infoguiahttp.enums.TipoAccion tipoAccionEnum) {
+        try {
+            
+            List<UsuarioAccion> favoritoList = listaDeseoDao
+                    .findByUsuarioTipoAccion(usuarioLogueado.getId(), tipoAccionEnum.getId());
+            
+            ClientePublicacionDto publicacionListaDeseo;
+            ListaDeseoDto listaDeseoDto = new ListaDeseoDto();
+            listaDeseoDto.setListaDeseos(new ArrayList<ClientePublicacionDto>());
+            
+            for (UsuarioAccion favorito : favoritoList) {
+                publicacionListaDeseo = service.getClientePublicacion(Integer.valueOf(favorito.getIdRef()));
+                listaDeseoDto.getListaDeseos().add(publicacionListaDeseo);
+            }
+            
+            return Response.ok(listaDeseoDto).build();
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            return Response.status(Response.Status.BAD_REQUEST).entity(Constants.MSG_ERROR_DEFAULT).build();
+        }
     }
 }
