@@ -11,14 +11,17 @@ import com.minicubic.infoguiahttp.dto.ArchivoDto;
 import com.minicubic.infoguiahttp.dto.SearchRequestDto;
 import com.minicubic.infoguiahttp.dto.SucursalValoracionCabDto;
 import com.minicubic.infoguiahttp.dto.TipoHorarioDto;
+import com.minicubic.infoguiahttp.enums.TipoAccion;
 import com.minicubic.infoguiahttp.model.SucursalHorarioCab;
 import com.minicubic.infoguiahttp.model.SucursalHorarioDet;
+import com.minicubic.infoguiahttp.model.UsuarioAccion;
 import com.minicubic.infoguiahttp.util.Constants;
 import com.minicubic.infoguiahttp.util.Util;
 import com.minicubic.infoguiahttp.util.converter.SucursalValoracionConverter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
@@ -47,9 +50,11 @@ public class ClienteSucursalDao {
     @Inject
     private SucursalValoracionDao valoracionDao;
 
+    @Inject
+    private UsuarioAccionDao favoritoDao;
+
     private final ClienteSucursalConverter converter = new ClienteSucursalConverter();
     private final ArchivoConverter archivoConverter = new ArchivoConverter();
-    private final SucursalValoracionConverter valoracionConverter = new SucursalValoracionConverter();
     private static final Logger LOG = Logger.getLogger("ClienteSucursalDao");
 
     @PersistenceContext(unitName = "infoGuiaPU")
@@ -132,6 +137,12 @@ public class ClienteSucursalDao {
         return null;
     }
 
+    /**
+     * Metodo utilizado para las busquedas de la web
+     *
+     * @param params
+     * @return
+     */
     public List<ClienteSucursalDto> getClienteSucursalesByParams(SearchRequestDto params) {
         List<ClienteSucursalDto> clienteSucursalesDto = new ArrayList<>();
 
@@ -156,7 +167,7 @@ public class ClienteSucursalDao {
                                 .setParameter("params", ("%" + params.getQuery().replace(" ", "%") + "%"))
                                 .setMaxResults(Constants.SEARCH_ROWS_PER_PAGE)
                                 .setFirstResult(
-                                        Util.isEmpty(params.getPage()   )
+                                        Util.isEmpty(params.getPage())
                                         ? 0
                                         : Constants.SEARCH_ROWS_PER_PAGE * params.getPage()
                                 )
@@ -177,11 +188,11 @@ public class ClienteSucursalDao {
         }
         return null;
     }
-    
+
     public Long getCantidadClienteSucursalesByParams(SearchRequestDto params) {
         //List<ClienteSucursalDto> clienteSucursalesDto = new ArrayList<>();
         TypedQuery<Long> query = null;
-        
+
         try {
             if (Util.isEmpty(params.getQuery()) && !Util.isEmpty(params.getCategoryId())) {
 
@@ -192,7 +203,7 @@ public class ClienteSucursalDao {
 //                );
                 query = em.createNamedQuery("ClienteSucursal.findByCategoria.count", Long.class);
                 query.setParameter("idCategoria", params.getCategoryId());
-                
+
             } else {
 //                clienteSucursalesDto = converter.getClienteSucursalesDto(
 //                        em.createNamedQuery("ClienteSucursal.findByParams")
@@ -232,6 +243,10 @@ public class ClienteSucursalDao {
         }
     }
 
+    /**
+     *
+     * @param id
+     */
     public void deleteClienteSucursal(Integer id) {
         try {
             ClienteSucursal clienteSucursal = (ClienteSucursal) em.createNamedQuery("ClienteSucursal.findById")
@@ -245,6 +260,12 @@ public class ClienteSucursalDao {
         }
     }
 
+    /**
+     * En este metodo se invocan todos los metodos para cargar info extra dentro
+     * de la respuesta
+     *
+     * @param obj
+     */
     private void setExtra(ClienteSucursalDto obj) {
         // Imagenes
         obj.setArchivos(getArchivos(obj));
@@ -254,8 +275,17 @@ public class ClienteSucursalDao {
 
         // Valoracion
         obj.setValoracion(getValoracion(obj));
+
+        // Favorito
+        obj.setUsuarioFavorito(getUsuarioFavorito(obj));
     }
 
+    /**
+     * Obtiene los archivos asociados al registro
+     *
+     * @param obj
+     * @return
+     */
     private List<ArchivoDto> getArchivos(ClienteSucursalDto obj) {
         return archivoConverter.getArchivoDto(
                 archivoDao.getArchivo(
@@ -266,6 +296,12 @@ public class ClienteSucursalDao {
         );
     }
 
+    /**
+     * Obtiene los horarios asociados al registro
+     *
+     * @param obj
+     * @return
+     */
     private String getHorario(ClienteSucursalDto obj) {
         String horario = "";
 
@@ -292,14 +328,53 @@ public class ClienteSucursalDao {
         return horario;
     }
 
+    /**
+     * Obtiene las valoraciones asociadas al registro
+     *
+     * @param obj
+     * @return
+     */
     private SucursalValoracionCabDto getValoracion(ClienteSucursalDto obj) {
         try {
             return valoracionDao.getSucursalValoracionesCabByClienteSucursal(obj.getId()).iterator().next();
-        } catch (NoResultException nre) {
+        } catch (NoResultException | NoSuchElementException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
 
         return null;
+    }
+
+    /**
+     * Indica si el registro se encuentra marcado como favorito por el usuario
+     * logueado
+     *
+     * @param obj
+     * @return
+     */
+    private Boolean getUsuarioFavorito(ClienteSucursalDto obj) {
+
+        List<UsuarioAccion> favoritos = favoritoDao.findByUsuarioTipoAccion(usuarioLogueado.getId(), TipoAccion.FAVORITO.getId());
+
+        if (!favoritos.isEmpty()) {
+            ClienteSucursalDto clienteSucursalDto;
+
+            for (UsuarioAccion favObj : favoritos) {
+                try {
+                    clienteSucursalDto = converter.getClienteSucursalDto(
+                            (ClienteSucursal) em.createNamedQuery("ClienteSucursal.findById")
+                                    .setParameter("id", Integer.valueOf(favObj.getIdRef()))
+                                    .getSingleResult()
+                    );
+                    
+                    if (obj.getId().equals(clienteSucursalDto.getId())) {
+                        return true;
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(ClienteSucursalDao.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return false;
     }
 }

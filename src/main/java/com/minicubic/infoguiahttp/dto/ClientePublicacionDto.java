@@ -23,7 +23,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class ClientePublicacionDto implements Archivable {
-    
+
     @Getter
     @Setter
     private Integer id;
@@ -31,7 +31,7 @@ public class ClientePublicacionDto implements Archivable {
     @Getter
     @Setter
     private TipoPublicacionDto tipoPublicacionDto;
-    
+
     @Getter
     @Setter
     private ClienteDto clienteDto;
@@ -47,7 +47,7 @@ public class ClientePublicacionDto implements Archivable {
     @Getter
     @Setter
     private String descripcionCorta;
-    
+
     @Getter
     @Setter
     private String dirImagen;
@@ -67,14 +67,18 @@ public class ClientePublicacionDto implements Archivable {
     @Getter
     @Setter
     private Date fechaHasta;
-    
+
     @Getter
     @Setter
     private Integer tiempoMuestra;
-    
+
     @Getter
     @Setter
     private List<ArchivoDto> archivos;
+
+    @Getter
+    @Setter
+    private Boolean usuarioListaDeseo;
 
     @Override
     @XmlTransient

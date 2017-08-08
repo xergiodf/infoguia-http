@@ -7,6 +7,9 @@ import com.minicubic.infoguiahttp.model.ClientePublicacion;
 import com.minicubic.infoguiahttp.util.converter.ArchivoConverter;
 import com.minicubic.infoguiahttp.util.converter.ClientePublicacionConverter;
 import com.minicubic.infoguiahttp.annotations.LoggedIn;
+import com.minicubic.infoguiahttp.dto.ArchivoDto;
+import com.minicubic.infoguiahttp.enums.TipoAccion;
+import com.minicubic.infoguiahttp.model.UsuarioAccion;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.logging.Level;
@@ -22,21 +25,24 @@ import javax.persistence.PersistenceContext;
  * @version 1
  */
 public class ClientePublicacionDao {
-    
+
     @LoggedIn
     @Inject
     private UsuarioDto usuarioLogueado;
-    
+
     @Inject
     private ArchivoDao archivoDao;
-    
+
+    @Inject
+    private UsuarioAccionDao listaDeseoDao;
+
     private final ClientePublicacionConverter converter = new ClientePublicacionConverter();
     private final ArchivoConverter archivoConverter = new ArchivoConverter();
     private static final Logger LOG = Logger.getLogger("ClientePublicacionDao");
-    
-    @PersistenceContext(unitName="infoGuiaPU")
+
+    @PersistenceContext(unitName = "infoGuiaPU")
     private EntityManager em;
-    
+
     /**
      *
      * @param id
@@ -46,21 +52,13 @@ public class ClientePublicacionDao {
         try {
             ClientePublicacionDto clientePublicacionDto = converter.getClientePublicacionDto(
                     (ClientePublicacion) em.createNamedQuery("ClientePublicacion.findById")
-                        .setParameter("id", id)
-                        .getSingleResult()
+                            .setParameter("id", id)
+                            .getSingleResult()
             );
-            
+
             // TODO: Buscar algun patron de disenho que mejore esto
             // Cargamos las imagenes (si tiene)
-            clientePublicacionDto.setArchivos(
-                    archivoConverter.getArchivoDto(
-                            archivoDao.getArchivo(
-                                    TableReference.CLIENTE_PUBLICACION.getTableName(), 
-                                    TableReference.CLIENTE_PUBLICACION.getIdColumnName(), 
-                                    id.toString()
-                            )
-                    )
-            );
+            setExtra(clientePublicacionDto);
 
             return clientePublicacionDto;
         } catch (NoResultException nre) {
@@ -69,31 +67,23 @@ public class ClientePublicacionDao {
         }
         return null;
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public List<ClientePublicacionDto> getClientePublicaciones() {
         try {
             List<ClientePublicacionDto> clientePublicacionesDto = converter.getClientePublicacionesDto(
                     em.createNamedQuery("ClientePublicacion.findAll").getResultList()
             );
-            
+
             // TODO: Buscar algun patron de disenho que mejore esto
             // Cargamos las imagenes (si tiene)
-            for ( ClientePublicacionDto clientePublicacionDto : clientePublicacionesDto ) {
-                clientePublicacionDto.setArchivos(
-                        archivoConverter.getArchivoDto(
-                                archivoDao.getArchivo(
-                                        TableReference.CLIENTE_PUBLICACION.getTableName(), 
-                                        TableReference.CLIENTE_PUBLICACION.getIdColumnName(), 
-                                        clientePublicacionDto.getId().toString()
-                                )
-                        )
-                );
+            for (ClientePublicacionDto clientePublicacionDto : clientePublicacionesDto) {
+                setExtra(clientePublicacionDto);
             }
-            
+
             return clientePublicacionesDto;
         } catch (NoResultException nre) {
         } catch (Exception ex) {
@@ -101,34 +91,26 @@ public class ClientePublicacionDao {
         }
         return null;
     }
-    
+
     /**
-     * 
+     *
      * @param tipoPublicacionId
-     * @return 
+     * @return
      */
     public List<ClientePublicacionDto> getClientePublicacionesByTipoPublicacion(Integer tipoPublicacionId) {
         try {
             List<ClientePublicacionDto> clientePublicacionesDto = converter.getClientePublicacionesDto(
                     em.createNamedQuery("ClientePublicacion.findByTipoPublicacion")
-                        .setParameter("tipoPublicacionId", tipoPublicacionId)
-                        .getResultList()
+                            .setParameter("tipoPublicacionId", tipoPublicacionId)
+                            .getResultList()
             );
 
             // TODO: Buscar algun patron de disenho que mejore esto
             // Cargamos las imagenes (si tiene)
-            for ( ClientePublicacionDto clientePublicacionDto : clientePublicacionesDto ) {
-                clientePublicacionDto.setArchivos(
-                        archivoConverter.getArchivoDto(
-                                archivoDao.getArchivo(
-                                        TableReference.CLIENTE_PUBLICACION.getTableName(), 
-                                        TableReference.CLIENTE_PUBLICACION.getIdColumnName(), 
-                                        clientePublicacionDto.getId().toString()
-                                )
-                        )
-                );
+            for (ClientePublicacionDto clientePublicacionDto : clientePublicacionesDto) {
+                setExtra(clientePublicacionDto);
             }
-            
+
             return clientePublicacionesDto;
         } catch (NoResultException nre) {
         } catch (Exception ex) {
@@ -136,32 +118,24 @@ public class ClientePublicacionDao {
         }
         return null;
     }
-    
+
     /**
-     * 
+     *
      * @param clienteId
-     * @return 
+     * @return
      */
     public List<ClientePublicacionDto> getClientePublicacionesByCliente(Long clienteId) {
         try {
             List<ClientePublicacionDto> clientePublicacionesDto = converter.getClientePublicacionesDto(
                     em.createNamedQuery("ClientePublicacion.findByCliente")
-                        .setParameter("clienteId", clienteId)
-                        .getResultList()
+                            .setParameter("clienteId", clienteId)
+                            .getResultList()
             );
-            
+
             // TODO: Buscar algun patron de disenho que mejore esto
             // Cargamos las imagenes (si tiene)
-            for ( ClientePublicacionDto clientePublicacionDto : clientePublicacionesDto ) {
-                clientePublicacionDto.setArchivos(
-                        archivoConverter.getArchivoDto(
-                                archivoDao.getArchivo(
-                                        TableReference.CLIENTE_PUBLICACION.getTableName(), 
-                                        TableReference.CLIENTE_PUBLICACION.getIdColumnName(), 
-                                        clientePublicacionDto.getId().toString()
-                                )
-                        )
-                );
+            for (ClientePublicacionDto clientePublicacionDto : clientePublicacionesDto) {
+                setExtra(clientePublicacionDto);
             }
 
             return clientePublicacionesDto;
@@ -193,8 +167,8 @@ public class ClientePublicacionDao {
     }
 
     /**
-     * 
-     * @param id 
+     *
+     * @param id
      */
     public void deleteClientePublicacion(Integer id) {
         try {
@@ -210,37 +184,91 @@ public class ClientePublicacionDao {
     }
 
     /**
-     * 
+     *
      * @param codigo
-     * @return 
+     * @return
      */
     public List<ClientePublicacionDto> getClientePublicacionesByCodigo(String codigo) {
         try {
             List<ClientePublicacionDto> clientePublicacionesDto = converter.getClientePublicacionesDto(
                     em.createNamedQuery("ClientePublicacion.findByCodigo")
-                        .setParameter("codigo", codigo)
-                        .getResultList()
+                            .setParameter("codigo", codigo)
+                            .getResultList()
             );
 
             // TODO: Buscar algun patron de disenho que mejore esto
             // Cargamos las imagenes (si tiene)
-            for ( ClientePublicacionDto clientePublicacionDto : clientePublicacionesDto ) {
-                clientePublicacionDto.setArchivos(
-                        archivoConverter.getArchivoDto(
-                                archivoDao.getArchivo(
-                                        TableReference.CLIENTE_PUBLICACION.getTableName(), 
-                                        TableReference.CLIENTE_PUBLICACION.getIdColumnName(), 
-                                        clientePublicacionDto.getId().toString()
-                                )
-                        )
-                );
+            for (ClientePublicacionDto clientePublicacionDto : clientePublicacionesDto) {
+                setExtra(clientePublicacionDto);
             }
-            
+
             return clientePublicacionesDto;
         } catch (NoResultException nre) {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    /**
+     * En este metodo se invocan todos los metodos para cargar info extra dentro
+     * de la respuesta
+     *
+     * @param obj
+     */
+    private void setExtra(ClientePublicacionDto obj) {
+        // Imagenes
+        obj.setArchivos(getArchivos(obj));
+
+        // Lista deseo
+        obj.setUsuarioListaDeseo(getUsuarioListaDeseo(obj));
+    }
+
+    /**
+     * Obtiene los archivos asociados al registro
+     *
+     * @param obj
+     * @return
+     */
+    private List<ArchivoDto> getArchivos(ClientePublicacionDto obj) {
+        return archivoConverter.getArchivoDto(
+                archivoDao.getArchivo(
+                        TableReference.CLIENTE_PUBLICACION.getTableName(),
+                        TableReference.CLIENTE_PUBLICACION.getIdColumnName(),
+                        obj.getId().toString()
+                )
+        );
+    }
+
+    /**
+     * Indica si el registro se encuentra marcado como favorito por el usuario
+     * logueado
+     *
+     * @param obj
+     * @return
+     */
+    private Boolean getUsuarioListaDeseo(ClientePublicacionDto obj) {
+        List<UsuarioAccion> listaDeseos = listaDeseoDao.findByUsuarioTipoAccion(usuarioLogueado.getId(), TipoAccion.LISTA_DESEO.getId());
+
+        if (!listaDeseos.isEmpty()) {
+            ClientePublicacionDto clientePublicacionDto;
+
+            for (UsuarioAccion listaObj : listaDeseos) {
+                try {
+                    clientePublicacionDto = converter.getClientePublicacionDto(
+                            (ClientePublicacion) em.createNamedQuery("ClientePublicacion.findById")
+                                    .setParameter("id", Integer.valueOf(listaObj.getIdRef()))
+                                    .getSingleResult()
+                    );
+                    
+                    if (obj.getId().equals(clientePublicacionDto.getId())) {
+                        return true;
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(ClientePublicacionDao.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return false;
     }
 }

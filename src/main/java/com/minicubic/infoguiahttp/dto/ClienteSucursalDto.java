@@ -73,6 +73,10 @@ public class ClienteSucursalDto implements Archivable {
     
     @Getter
     @Setter
+    private Boolean usuarioFavorito;
+    
+    @Getter
+    @Setter
     private SucursalValoracionCabDto valoracion;
     
     @Getter
